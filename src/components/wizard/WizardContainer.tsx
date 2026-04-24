@@ -82,6 +82,8 @@ export function WizardContainer() {
         progress={wizard.progress}
         currentStep={wizard.currentStep}
         totalSteps={wizard.totalSteps}
+        visitedSteps={wizard.visitedSteps}
+        onGoTo={wizard.goToStep}
         extraActions={
           <SessionManager
             areal={arealState.areal}
@@ -94,16 +96,14 @@ export function WizardContainer() {
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-6">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
           {renderStep()}
-          {wizard.currentStep < 6 && (
-            <StepNavigation
-              currentStep={wizard.currentStep}
-              totalSteps={wizard.totalSteps}
-              onNext={wizard.nextStep}
-              onPrev={wizard.prevStep}
-              onGoTo={wizard.goToStep}
-              visitedSteps={wizard.visitedSteps}
-            />
-          )}
+          <StepNavigation
+            currentStep={wizard.currentStep}
+            totalSteps={wizard.totalSteps}
+            onNext={wizard.nextStep}
+            onPrev={wizard.prevStep}
+            onGoTo={wizard.goToStep}
+            visitedSteps={wizard.visitedSteps}
+          />
         </div>
       </main>
 
