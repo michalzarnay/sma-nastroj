@@ -38,6 +38,7 @@ export function NumberInput({
           step={step}
           placeholder={placeholder || '0'}
           disabled={disabled}
+          style={unit ? { paddingRight: `${unit.length * 0.6 + 1.5}rem` } : undefined}
           className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none disabled:bg-gray-100 disabled:text-gray-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         {unit && (
