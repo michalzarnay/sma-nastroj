@@ -37,9 +37,10 @@ function calculateMZI(areal: Areal): MZIScore {
     if (p.jazierkoPlocha > 0) opatreniaScore += 4;
     if (p.nadzemneNadobyObjem > 0 || p.podzemneNadobyObjem > 0) opatreniaScore += 5;
     if (p.zelenaStrechaPlocha > 0) opatreniaScore += 5;
-    // Bonus for water directed to vsakovanie
-    if (p.odvodVodyVsakovanie > 20) opatreniaScore += 3;
-    if (p.odvodVodyNerieseny < 30) opatreniaScore += 3;
+    // Bonus for water directed to vsakovanie/retention
+    if ((p.odvodVodyVsakovanie ?? 0) > 20) opatreniaScore += 3;
+    if ((p.odvodVodyRetencnaNadrzou ?? 0) > 0) opatreniaScore += 2;
+    if ((p.odvodVodyNerieseny ?? 0) < 30) opatreniaScore += 3;
   }
   const existujuceOpatrenia = clamp(Math.round(opatreniaScore / pozemky.length), 0, 25);
 
@@ -68,7 +69,7 @@ function calculateMZI(areal: Areal): MZIScore {
   // Unresolved water drainage
   let avgNerieseny = 0;
   for (const p of pozemky) {
-    avgNerieseny += p.odvodVodyNerieseny;
+    avgNerieseny += p.odvodVodyNerieseny ?? 0;
   }
   avgNerieseny /= pozemky.length;
   if (avgNerieseny > 50) potencialScore += 8;

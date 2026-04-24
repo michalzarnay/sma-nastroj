@@ -1,12 +1,14 @@
 import { Leaf } from 'lucide-react';
+import { ReactNode } from 'react';
 
 interface HeaderProps {
   progress: number;
   currentStep: number;
   totalSteps: number;
+  extraActions?: ReactNode;
 }
 
-export function Header({ progress, currentStep, totalSteps }: HeaderProps) {
+export function Header({ progress, currentStep, totalSteps, extraActions }: HeaderProps) {
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
       <div className="max-w-4xl mx-auto px-4 py-3">
@@ -20,9 +22,12 @@ export function Header({ progress, currentStep, totalSteps }: HeaderProps) {
               <p className="text-[10px] text-gray-500">Hodnotenie adaptačných opatrení</p>
             </div>
           </div>
-          <span className="text-xs text-gray-500">
-            Krok {currentStep} z {totalSteps}
-          </span>
+          <div className="flex items-center gap-2">
+            {extraActions}
+            <span className="text-xs text-gray-500">
+              Krok {currentStep} z {totalSteps}
+            </span>
+          </div>
         </div>
         {/* Progress bar */}
         <div className="w-full bg-gray-200 rounded-full h-1.5">

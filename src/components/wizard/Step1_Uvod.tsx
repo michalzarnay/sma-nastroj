@@ -1,14 +1,18 @@
-import { Building2, MapPin } from 'lucide-react';
-import { Areal } from '../../types/areal';
+import { Building2, MapPin, Camera, ClipboardList } from 'lucide-react';
+import { Areal, MediaItem } from '../../types/areal';
 import { TextInput } from '../ui/TextInput';
 import { NumberInput } from '../ui/NumberInput';
+import { MediaUpload } from '../media/MediaUpload';
 
 interface Step1Props {
   areal: Areal;
   updateAreal: (data: Partial<Areal>) => void;
+  addMedia: (item: MediaItem) => void;
+  updateMedia: (id: string, data: Partial<MediaItem>) => void;
+  removeMedia: (id: string) => void;
 }
 
-export function Step1_Uvod({ areal, updateAreal }: Step1Props) {
+export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMedia }: Step1Props) {
   return (
     <div className="space-y-6">
       {/* Welcome */}
@@ -21,6 +25,17 @@ export function Step1_Uvod({ areal, updateAreal }: Step1Props) {
           Zadajte základné údaje o areáli, ktorý chcete vyhodnotiť.
           Areál je súvislé územie s pozemkami a budovami, ktoré patria k sebe.
         </p>
+      </div>
+
+      {/* Workflow info */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+        <p className="text-xs font-semibold text-amber-800 mb-2">Odporúčaný postup mapovania</p>
+        <ol className="text-xs text-amber-700 space-y-1 list-decimal list-inside">
+          <li>Vyplňte polia dostupné z internetu (zrážky, slnečný svit, katastrálna mapa)</li>
+          <li>Uložte si rozrobený formulár pomocou tlačidla <strong>Relácie</strong> v hlavičke</li>
+          <li>Choďte do terénu – robte si poznámky, fotky, videá (nahrajte ich tu dole)</li>
+          <li>Po návrate otvorte uloženú reláciu a doplňte zvyšné polia</li>
+        </ol>
       </div>
 
       {/* Form */}
@@ -73,6 +88,100 @@ export function Step1_Uvod({ areal, updateAreal }: Step1Props) {
         </div>
       </div>
 
+      {/* Záznam z obhliadky */}
+      <div className="space-y-4 pt-2 border-t border-gray-100">
+        <div className="flex items-center gap-2">
+          <ClipboardList className="w-4 h-4 text-[#2D7D46]" />
+          <h3 className="text-sm font-semibold text-gray-800">Záznam z obhliadky</h3>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <TextInput
+            label="Organizácia (zriaďovateľská pôsobnosť)"
+            value={areal.organizaciaVZriadovatelskejPobnonosti}
+            onChange={(v) => updateAreal({ organizaciaVZriadovatelskejPobnonosti: v })}
+            placeholder="napr. Žilinský samosprávny kraj"
+          />
+          <TextInput
+            label="Obhliadku vykonal"
+            value={areal.obhliadkuVykonal}
+            onChange={(v) => updateAreal({ obhliadkuVykonal: v })}
+            placeholder="Meno a priezvisko"
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <TextInput
+            label="Dátum obhliadky"
+            value={areal.datumObhliadky}
+            onChange={(v) => updateAreal({ datumObhliadky: v })}
+            placeholder="napr. 23.4.2026"
+          />
+          <TextInput
+            label="Prítomné osoby"
+            value={areal.pritomnePOSOBY}
+            onChange={(v) => updateAreal({ pritomnePOSOBY: v })}
+            placeholder="Mená účastníkov"
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <TextInput
+            label="Kapacita zariadenia"
+            value={areal.kapacitaZariadenia}
+            onChange={(v) => updateAreal({ kapacitaZariadenia: v })}
+            placeholder="napr. 450 žiakov"
+          />
+          <NumberInput
+            label="Aktuálna obsadenosť"
+            value={areal.aktualnaObsadenost}
+            onChange={(v) => updateAreal({ aktualnaObsadenost: v })}
+            unit="%"
+            max={100}
+          />
+          <NumberInput
+            label="Počet zamestnancov"
+            value={areal.pocetZamestnancov}
+            onChange={(v) => updateAreal({ pocetZamestnancov: v })}
+          />
+        </div>
+      </div>
+
+      {/* Foto a video materiál */}
+      <div className="space-y-3 pt-2 border-t border-gray-100">
+        <div className="flex items-center gap-2">
+          <Camera className="w-4 h-4 text-[#2D7D46]" />
+          <h3 className="text-sm font-semibold text-gray-800">Foto a video materiál</h3>
+          <span className="text-xs text-gray-400">(terénny prieskum)</span>
+        </div>
+        <p className="text-xs text-gray-500">
+          Nahrajte fotky a videá z areálu. Budú priložené k výstupu a pomôžu pri vyplnení formulára.
+        </p>
+        <MediaUpload
+          media={areal.media}
+          onAdd={addMedia}
+          onUpdate={updateMedia}
+          onRemove={removeMedia}
+        />
+      </div>
+
+      {/* Závery */}
+      <div className="space-y-4 pt-2 border-t border-gray-100">
+        <h3 className="text-sm font-semibold text-gray-800">Závery hodnotenia</h3>
+        <p className="text-xs text-gray-500">Tieto polia sa vypĺňajú na záver procesu mapovania (krok 6 a späť).</p>
+        <TextInput
+          label="Záver BG (modro-zelená infraštruktúra)"
+          value={areal.zaverBG}
+          onChange={(v) => updateAreal({ zaverBG: v })}
+          placeholder="Záverečné zhrnutie pre oblasť MZI…"
+          multiline
+        />
+        <TextInput
+          label="Záver OZE (obnoviteľné zdroje energie)"
+          value={areal.zaverOZE}
+          onChange={(v) => updateAreal({ zaverOZE: v })}
+          placeholder="Záverečné zhrnutie pre oblasť OZE…"
+          multiline
+        />
+      </div>
+
       {/* Info box */}
       <div className="bg-blue-50 rounded-lg p-4 flex gap-3">
         <MapPin className="w-5 h-5 text-[#2196F3] flex-shrink-0 mt-0.5" />
@@ -85,8 +194,8 @@ export function Step1_Uvod({ areal, updateAreal }: Step1Props) {
             <li>Zamýšľané B&G opatrenia</li>
           </ul>
           <p className="mt-2 text-xs">
-            Môžete pridať viacero pozemkov a budov. Dáta sa automaticky ukladajú, takže
-            môžete kedykoľvek prerušiť a pokračovať neskôr.
+            Dáta sa automaticky ukladajú v prehliadači. Pre zdieľanie alebo zálohu použite
+            funkciu <strong>Relácie → Uložiť</strong>.
           </p>
         </div>
       </div>

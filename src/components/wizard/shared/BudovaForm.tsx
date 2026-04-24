@@ -171,6 +171,44 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
         </div>
       </Section>
 
+      {/* Ohrozenie záplavami */}
+      <Section title="Ohrozenie budovy záplavami">
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-700">Povodňové riziko (1 = nízke, 5 = vysoké)</label>
+          <select
+            value={budova.povodnovoRiziko}
+            onChange={(e) => onChange({ povodnovoRiziko: Number(e.target.value) })}
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none"
+          >
+            <option value={0}>— nevyplnené —</option>
+            {[1,2,3,4,5].map(v => <option key={v} value={v}>{v}</option>)}
+          </select>
+        </div>
+        <p className="text-xs text-gray-500">Zaznačte, ktoré z nasledujúcich rizikových faktorov sa týkajú budovy:</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {([
+            ['budovaZaplavenaPoslednychRokov', 'Budova bola zaplavená v posledných rokoch'],
+            ['castPodTerenomBezOdcerpania', 'Časť pod terénom bez odčerpávania'],
+            ['technologickeZariadenieSuteren', 'Technologické zariadenia v suteréne'],
+            ['kanalizacneVpusteNadSuterenom', 'Kanalizačné vpuste nie sú nad podlahou suterénu'],
+            ['potrubiaNeSpljajuNormy', 'Potrubia nespĺňajú normy pre spätné klapky'],
+            ['chybajuMriazkyNaVtokoch', 'Chýbajú mriežky na vtokoch'],
+            ['dazdovaKanalizaciaBezZariadenia', 'Dažďová kanalizácia bez spätného zariadenia'],
+            ['pripojkaBezSpatnejKlapky', 'Prípojka bez spätnej klapky'],
+            ['elektrickeZariadeniaSuterenNizko', 'Elektrické zariadenia v suteréne nízko'],
+            ['uzaverPlynuSuteren', 'Chýba uzáver plynu v suteréne'],
+          ] as [keyof typeof budova, string][]).map(([key, label]) => (
+            <SelectCard
+              key={key}
+              label={label}
+              options={YES_NO}
+              value={budova[key] as 0 | 1}
+              onChange={(v) => onChange({ [key]: v as 0 | 1 })}
+            />
+          ))}
+        </div>
+      </Section>
+
       {/* Voda */}
       <Section title="Voda a splašky">
         <SelectCard
@@ -208,10 +246,23 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
           value={budova.oddeleneRozvodyVody}
           onChange={(v) => onChange({ oddeleneRozvodyVody: v as 0 | 1 })}
         />
+        <SelectCard
+          label="Využitie dažďovej vody v objekte"
+          options={YES_NO}
+          value={budova.vyuzitieDazdovejVodyVObjekte}
+          onChange={(v) => onChange({ vyuzitieDazdovejVodyVObjekte: v as 0 | 1 })}
+          tooltipText="Či sa dažďová voda zbiera a používa vnútri budovy (napr. na splachovanie WC, zavlažovanie)."
+        />
       </Section>
 
       {/* Uspory energie */}
       <Section title="Úspory energie">
+        <TextInput
+          label="Materiál obvodových stien"
+          value={budova.obvodoveStenyMaterial}
+          onChange={(v) => onChange({ obvodoveStenyMaterial: v })}
+          placeholder="napr. tehlová murovaná, panelová, ž-b skelet"
+        />
         <SelectCard
           label="Zateplenie fasády"
           options={INSULATION_LEVELS}
@@ -219,14 +270,38 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
           onChange={(v) => onChange({ zateplenieFasady: v as 0 | 1 | 2 })}
           tooltipKey="zateplenieFasadyDef"
         />
+        <ConditionalSection title="Detail zateplenia fasády" show={budova.zateplenieFasady > 0} defaultOpen>
+          <TextInput
+            label="Materiál zateplenia fasády"
+            value={budova.zateplenieFasadyMaterial}
+            onChange={(v) => onChange({ zateplenieFasadyMaterial: v })}
+            placeholder="napr. EPS, minerálna vlna, PIR"
+          />
+        </ConditionalSection>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <NumberInput
+            label="Celková plocha presklenia"
+            value={budova.celkovaPlochaPresklenia}
+            onChange={(v) => onChange({ celkovaPlochaPresklenia: v })}
+            unit="m²"
+            tooltipText="Celková plocha okien a sklenených dverí v budove."
+          />
+          <NumberInput
+            label="Termoizolačné okná/dvere (% zo všetkých otvorov)"
+            value={budova.termoizolacneOkna}
+            onChange={(v) => onChange({ termoizolacneOkna: v })}
+            unit="%"
+            max={100}
+            step={10}
+            tooltipKey="termoizolacneOknaDef"
+          />
+        </div>
         <NumberInput
-          label="Termoizolačné okná/dvere (% zo všetkých otvorov)"
-          value={budova.termoizolacneOkna}
-          onChange={(v) => onChange({ termoizolacneOkna: v })}
-          unit="%"
-          max={100}
-          step={10}
-          tooltipKey="termoizolacneOknaDef"
+          label="Vek termoizolačných okien (rok výmeny)"
+          value={budova.vekTermoizolacnychOkien}
+          onChange={(v) => onChange({ vekTermoizolacnychOkien: v })}
+          placeholder="napr. 2015"
+          tooltipText="Rok, kedy boli termoizolačné okná namontované (vážený priemer pri viacerých etapách)."
         />
         <NumberInput
           label="LED osvetlenie (% zo všetkých svietidiel)"
@@ -236,6 +311,13 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
           max={100}
           step={10}
           tooltipText="Zaokrúhlite na desiatky %. Napr. ak máte 15 svietidiel a 5 je LED, zadajte 30%."
+        />
+        <NumberInput
+          label="Objem vyvetrávaného vzduchu"
+          value={budova.objemVyvetranehoPrezduchu}
+          onChange={(v) => onChange({ objemVyvetranehoPrezduchu: v })}
+          unit="m³/deň"
+          tooltipText="Celkový objem vzduchu, ktorý sa vymení vetraním za deň (projektovaná hodnota alebo meranie)."
         />
       </Section>
 
@@ -458,6 +540,34 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
             tooltipKey="rekuperaciaDef"
           />
         </div>
+        <ConditionalSection title="Detail rekuperácie" show={budova.rekuperacia === 1} defaultOpen>
+          <NumberInput
+            label="Centrálna jednotka – účinnosť"
+            value={budova.rekuperaciaCentralnaUcinnost}
+            onChange={(v) => onChange({ rekuperaciaCentralnaUcinnost: v })}
+            unit="%"
+            max={100}
+            tooltipText="Tepelná účinnosť centrálnej rekuperačnej jednotky (ak existuje). 0 = žiadna centrálna."
+          />
+          <p className="text-xs text-gray-500">Lokálne rekuperačné jednotky (počet kusov podľa účinnosti):</p>
+          <div className="grid grid-cols-3 gap-3">
+            <NumberInput
+              label="do 75%"
+              value={budova.rekuperaciaLokalnaDo75}
+              onChange={(v) => onChange({ rekuperaciaLokalnaDo75: v })}
+            />
+            <NumberInput
+              label="76 – 89%"
+              value={budova.rekuperaciaLokalnaOd76do89}
+              onChange={(v) => onChange({ rekuperaciaLokalnaOd76do89: v })}
+            />
+            <NumberInput
+              label="90% a viac"
+              value={budova.rekuperaciaLokalnaOd90}
+              onChange={(v) => onChange({ rekuperaciaLokalnaOd90: v })}
+            />
+          </div>
+        </ConditionalSection>
       </Section>
 
       {/* Elektricka energia */}
@@ -571,11 +681,22 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
         </ConditionalSection>
       </Section>
 
+      {/* Celkový stav budovy */}
+      <Section title="Celkový stav budovy">
+        <TextInput
+          label="Popis celkového stavu budovy"
+          value={budova.celkovyStavBudovy}
+          onChange={(v) => onChange({ celkovyStavBudovy: v })}
+          placeholder="Voľný popis – konštrukčný stav, viditeľné poruchy, opotrebenie..."
+          multiline
+        />
+      </Section>
+
       {/* Existujuca infrastruktura */}
       <Section title="Už zrealizovaná infraštruktúra">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <NumberInput
-            label="Zelená strecha – plocha"
+            label="Zelená strecha – plocha celkom"
             value={budova.zelenaStrechaPlocha}
             onChange={(v) => onChange({ zelenaStrechaPlocha: v })}
             unit="m²"
@@ -589,6 +710,48 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
             tooltipKey="solarnePanelyDef"
           />
         </div>
+        <ConditionalSection title="Typy zelenej strechy (detail)" show={budova.zelenaStrechaPlocha > 0} defaultOpen>
+          <p className="text-xs text-gray-500">Rozdeľte celkovú plochu zelenej strechy podľa typu (m²):</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <NumberInput
+              label="Extenzívna plochá"
+              value={budova.zelenaStrechaBudovExtenzivnaPloca}
+              onChange={(v) => onChange({ zelenaStrechaBudovExtenzivnaPloca: v })}
+              unit="m²"
+            />
+            <NumberInput
+              label="Extenzívna šikmá"
+              value={budova.zelenaStrechaBudovExtenzivnaSikma}
+              onChange={(v) => onChange({ zelenaStrechaBudovExtenzivnaSikma: v })}
+              unit="m²"
+            />
+            <NumberInput
+              label="Intenzívna"
+              value={budova.zelenaStrechaBudovIntenzivna}
+              onChange={(v) => onChange({ zelenaStrechaBudovIntenzivna: v })}
+              unit="m²"
+            />
+            <NumberInput
+              label="Modrozelená"
+              value={budova.zelenaStrechaBudovModrozelena}
+              onChange={(v) => onChange({ zelenaStrechaBudovModrozelena: v })}
+              unit="m²"
+            />
+            <NumberInput
+              label="Štrková"
+              value={budova.zelenaStrechaBudovStrkova}
+              onChange={(v) => onChange({ zelenaStrechaBudovStrkova: v })}
+              unit="m²"
+            />
+          </div>
+        </ConditionalSection>
+        <NumberInput
+          label="Zelená stena budovy"
+          value={budova.zelenaStenaBudov}
+          onChange={(v) => onChange({ zelenaStenaBudov: v })}
+          unit="m²"
+          tooltipText="Plocha vegetačnej zelenej steny na fasáde budovy."
+        />
       </Section>
     </div>
   );

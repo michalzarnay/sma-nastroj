@@ -1,11 +1,12 @@
-import { BarChart3, Download, FileText, ChevronDown, ChevronRight } from 'lucide-react';
+import { BarChart3, Download, FileText, ChevronDown, ChevronRight, TableProperties, Settings2, Info } from 'lucide-react';
 import { useState } from 'react';
-import { Areal } from '../../types/areal';
+import { Areal, ScoringWeights } from '../../types/areal';
 import { useScoring } from '../../hooks/useScoring';
 import { useRecommendations } from '../../hooks/useRecommendations';
 import { ScoreGauge } from '../ui/ScoreGauge';
 import { getScoreLevel } from '../../types/scoring';
 import { Odporucanie } from '../../types/catalog';
+import { exportToXlsx } from '../../utils/xlsxExport';
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
   ResponsiveContainer,
@@ -13,17 +14,26 @@ import {
 
 interface Step6Props {
   areal: Areal;
+  updateVahy?: (vahy: Partial<ScoringWeights>) => void;
 }
 
-export function Step6_Vysledky({ areal }: Step6Props) {
+export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
   const score = useScoring(areal);
   const recommendations = useRecommendations(areal);
+  const [vahyOpen, setVahyOpen] = useState(false);
 
   const radarData = [
     { subject: 'MZI', value: score.mzi.celkove, fullMark: 100 },
     { subject: 'OZE', value: score.oze.celkove, fullMark: 100 },
     { subject: 'Energia', value: score.energia.celkove, fullMark: 100 },
   ];
+
+  // Vážené celkové skóre
+  const { mzi: wMzi, oze: wOze, energia: wEnergia } = areal.vahy;
+  const sumVah = wMzi + wOze + wEnergia;
+  const vazeneSkore = sumVah > 0
+    ? Math.round((score.mzi.celkove * wMzi + score.oze.celkove * wOze + score.energia.celkove * wEnergia) / sumVah)
+    : score.celkove;
 
   const handleExportCSV = () => {
     const BOM = '\uFEFF';
@@ -33,10 +43,11 @@ export function Step6_Vysledky({ areal }: Step6Props) {
       ['Obec', areal.obec],
       ['Región', areal.region],
       [''],
-      ['Celkové skóre', String(score.celkove)],
-      ['MZI skóre', String(score.mzi.celkove)],
-      ['OZE skóre', String(score.oze.celkove)],
-      ['Energetika skóre', String(score.energia.celkove)],
+      ['Celkové skóre (vážené)', String(vazeneSkore)],
+      ['Celkové skóre (nevážené)', String(score.celkove)],
+      ['MZI skóre', String(score.mzi.celkove), `váha: ${wMzi}`],
+      ['OZE skóre', String(score.oze.celkove), `váha: ${wOze}`],
+      ['Energetika skóre', String(score.energia.celkove), `váha: ${wEnergia}`],
       [''],
       ['Pozemky', String(areal.pozemky.length)],
       ['Budovy', String(areal.budovy.length)],
@@ -52,6 +63,10 @@ export function Step6_Vysledky({ areal }: Step6Props) {
     a.download = `${areal.nazov || 'areal'}-hodnotenie.csv`;
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleExportXLSX = () => {
+    exportToXlsx(areal, score, recommendations);
   };
 
   const handleExportPDF = async () => {
@@ -74,11 +89,36 @@ export function Step6_Vysledky({ areal }: Step6Props) {
     doc.text('Celkove skore', 20, y);
     y += 8;
     doc.setFontSize(24);
-    doc.text(`${score.celkove} / 100`, 20, y);
-    y += 12;
+    doc.text(`${vazeneSkore} / 100`, 20, y);
+    y += 7;
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`(vazene: MZI×${wMzi} OZE×${wOze} Energia×${wEnergia})`, 20, y);
+    doc.setTextColor(0);
+    y += 10;
     doc.setFontSize(11);
     doc.text(`MZI: ${score.mzi.celkove}/100   OZE: ${score.oze.celkove}/100   Energia: ${score.energia.celkove}/100`, 20, y);
     y += 15;
+
+    // Médiá
+    if (areal.media.length > 0) {
+      doc.setFontSize(13);
+      doc.text('Foto a video material', 20, y);
+      y += 7;
+      doc.setFontSize(9);
+      for (const m of areal.media) {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.text(`• ${m.nazov}${m.popis ? ` – ${m.popis}` : ''}`, 22, y);
+        y += 5;
+        if (m.typ === 'foto' && m.dataUrl) {
+          try {
+            doc.addImage(m.dataUrl, 'JPEG', 22, y, 50, 35);
+            y += 40;
+          } catch { /* skip invalid images */ }
+        }
+      }
+      y += 5;
+    }
 
     doc.setFontSize(14);
     doc.text('Odporucania', 20, y);
@@ -103,6 +143,14 @@ export function Step6_Vysledky({ areal }: Step6Props) {
     doc.save(`${areal.nazov || 'areal'}-hodnotenie.pdf`);
   };
 
+  const handleExportXmatik = () => {
+    alert('Integrácia s Xmatik (ŽSK) bude implementovaná po poskytnutí špecifikácie API/formátu exportu.');
+  };
+
+  const handleExportURBIS = () => {
+    alert('Integrácia s URBIS (model majetku obcí) bude implementovaná po poskytnutí špecifikácie exportného formátu.');
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3 pb-3 border-b border-gray-100">
@@ -119,13 +167,64 @@ export function Step6_Vysledky({ areal }: Step6Props) {
 
       {/* Score Gauges */}
       <div className="flex flex-wrap justify-center gap-8">
-        <ScoreGauge score={score.celkove} label="Celkové skóre" size="lg" />
+        <div className="text-center">
+          <ScoreGauge score={vazeneSkore} label="Celkové skóre (vážené)" size="lg" />
+          {sumVah !== 3 && (
+            <p className="text-xs text-gray-400 mt-1">
+              Váhy: MZI×{wMzi} OZE×{wOze} Energia×{wEnergia}
+            </p>
+          )}
+        </div>
       </div>
       <div className="flex flex-wrap justify-center gap-6">
         <ScoreGauge score={score.mzi.celkove} label="Modro-zelená infraštruktúra" size="md" />
         <ScoreGauge score={score.oze.celkove} label="Obnoviteľné zdroje energie" size="md" />
         <ScoreGauge score={score.energia.celkove} label="Energetická efektivita" size="md" />
       </div>
+
+      {/* Váhy nastavenie */}
+      {updateVahy && (
+        <div className="border border-gray-200 rounded-xl overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setVahyOpen(!vahyOpen)}
+            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left"
+          >
+            <Settings2 className="w-4 h-4 text-gray-500" />
+            <span className="text-sm font-medium text-gray-700">Nastavenie váh pre porovnanie areálov</span>
+            {vahyOpen ? <ChevronDown className="w-4 h-4 text-gray-400 ml-auto" /> : <ChevronRight className="w-4 h-4 text-gray-400 ml-auto" />}
+          </button>
+          {vahyOpen && (
+            <div className="px-4 pb-4 border-t border-gray-100 pt-3 space-y-3">
+              <p className="text-xs text-gray-500 flex items-start gap-1.5">
+                <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-blue-400" />
+                Zmeňte váhy pre zvýraznenie dôležitosti konkrétnej oblasti. Vážené skóre použijete pri porovnávaní viacerých areálov v XLSX.
+              </p>
+              <div className="grid grid-cols-3 gap-3">
+                {(['mzi', 'oze', 'energia'] as const).map((oblast) => (
+                  <div key={oblast}>
+                    <label className="block text-xs font-medium text-gray-600 mb-1 uppercase tracking-wide">
+                      {oblast === 'mzi' ? 'MZI' : oblast === 'oze' ? 'OZE' : 'Energia'}
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={10}
+                      step={0.5}
+                      value={areal.vahy[oblast]}
+                      onChange={(e) => updateVahy({ [oblast]: parseFloat(e.target.value) || 0 })}
+                      className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-center focus:outline-none focus:border-[#2D7D46]"
+                    />
+                    <p className="text-xs text-gray-400 text-center mt-1">
+                      {Math.round(score[oblast].celkove * areal.vahy[oblast])} / {Math.round(100 * areal.vahy[oblast])}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Radar Chart */}
       <div className="bg-gray-50 rounded-lg p-4">
@@ -177,6 +276,22 @@ export function Step6_Vysledky({ areal }: Step6Props) {
         />
       </div>
 
+      {/* Médiá prehľad */}
+      {areal.media.length > 0 && (
+        <div className="space-y-2">
+          <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            Priložené médiá ({areal.media.length})
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {areal.media.map((m) => (
+              <div key={m.id} className="flex items-center gap-1.5 text-xs bg-gray-100 rounded-full px-3 py-1 text-gray-600">
+                {m.typ === 'foto' ? '📷' : '🎥'} {m.nazov}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Recommendations */}
       <div className="space-y-3">
         <h3 className="text-sm font-semibold text-gray-800">
@@ -196,21 +311,55 @@ export function Step6_Vysledky({ areal }: Step6Props) {
       </div>
 
       {/* Export */}
-      <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200">
-        <button
-          onClick={handleExportCSV}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#2D7D46] border border-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/5 transition-colors"
-        >
-          <Download className="w-4 h-4" />
-          Exportovať CSV
-        </button>
-        <button
-          onClick={handleExportPDF}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/90 transition-colors"
-        >
-          <FileText className="w-4 h-4" />
-          Stiahnuť PDF report
-        </button>
+      <div className="space-y-3 pt-4 border-t border-gray-200">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Export výsledkov</p>
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={handleExportXLSX}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#2D7D46] rounded-lg hover:bg-[#256939] transition-colors"
+          >
+            <TableProperties className="w-4 h-4" />
+            Exportovať XLSX
+          </button>
+          <button
+            onClick={handleExportPDF}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#2D7D46] border border-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/5 transition-colors"
+          >
+            <FileText className="w-4 h-4" />
+            Stiahnuť PDF
+          </button>
+          <button
+            onClick={handleExportCSV}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            Exportovať CSV
+          </button>
+        </div>
+
+        {/* Integrácie (stub) */}
+        <div className="border border-dashed border-gray-300 rounded-xl p-4 space-y-2">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+            Integrácie (pripravené, čakajú na špecifikáciu)
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={handleExportXmatik}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-700 border border-blue-300 rounded-lg hover:bg-blue-50 transition-colors opacity-70"
+            >
+              Xmatik (ŽSK) →
+            </button>
+            <button
+              onClick={handleExportURBIS}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 transition-colors opacity-70"
+            >
+              URBIS – model majetku →
+            </button>
+          </div>
+          <p className="text-[11px] text-gray-400">
+            Po dodaní API/formátovej špecifikácie bude export implementovaný.
+          </p>
+        </div>
       </div>
 
       <p className="text-xs text-gray-400 text-center italic">
