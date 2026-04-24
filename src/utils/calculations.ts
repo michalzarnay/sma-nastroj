@@ -48,7 +48,7 @@ export function getWeightedWaterDrainage(pozemky: Pozemok[]): {
   for (const p of pozemky) {
     const plocha = p.plochaBezBudov || p.celkovaVymera;
     totalPlocha += plocha;
-    wKan += p.odvodVodyKanalizacia * plocha;
+    wKan += (p.odvodVodyKanalizacia ?? 0) * plocha;
     wVod += p.odvodVodyVodnyTok * plocha;
     wVsak += p.odvodVodyVsakovanie * plocha;
     wNer += p.odvodVodyNerieseny * plocha;

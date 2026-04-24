@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(ts|tsx|js|jsx|json|md\\)$\")",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Read(//c/Users/Žarnay/**)",
+      "Bash(python3 -c ' *)",
+      "Bash(py --version)",
+      "Bash(/c/Users/Žarnay/AppData/Local/Microsoft/WindowsApps/python.exe --version)",
+      "Bash(node -e \"console.log\\('node works'\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(node \"C:/Users/Žarnay/read_excel_temp.js\")",
+      "Bash(node \"C:/Users/Žarnay/read_excel_fields.js\")",
+      "Bash(node \"C:/Users/Žarnay/read_excel_compact.js\")",
+      "Bash(node \"C:/Users/Žarnay/read_fields_json.js\")",
+      "Bash(node \"C:/Users/Žarnay/read_fields_report.js\")"
+    ]
+  }
+}

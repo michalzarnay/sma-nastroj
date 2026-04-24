@@ -9,6 +9,8 @@ import { Step3_Budovy } from './Step3_Budovy';
 import { Step4_IneStavby } from './Step4_IneStavby';
 import { Step5_BGOpatrenia } from './Step5_BGOpatrenia';
 import { Step6_Vysledky } from './Step6_Vysledky';
+import { ChatPanel } from '../chat/ChatPanel';
+import { SessionManager } from '../sessions/SessionManager';
 
 export function WizardContainer() {
   const wizard = useWizard();
@@ -17,7 +19,15 @@ export function WizardContainer() {
   const renderStep = () => {
     switch (wizard.currentStep) {
       case 1:
-        return <Step1_Uvod areal={arealState.areal} updateAreal={arealState.updateAreal} />;
+        return (
+          <Step1_Uvod
+            areal={arealState.areal}
+            updateAreal={arealState.updateAreal}
+            addMedia={arealState.addMedia}
+            updateMedia={arealState.updateMedia}
+            removeMedia={arealState.removeMedia}
+          />
+        );
       case 2:
         return (
           <Step2_Pozemky
@@ -55,7 +65,12 @@ export function WizardContainer() {
           />
         );
       case 6:
-        return <Step6_Vysledky areal={arealState.areal} />;
+        return (
+          <Step6_Vysledky
+            areal={arealState.areal}
+            updateVahy={arealState.updateVahy}
+          />
+        );
       default:
         return null;
     }
@@ -67,6 +82,13 @@ export function WizardContainer() {
         progress={wizard.progress}
         currentStep={wizard.currentStep}
         totalSteps={wizard.totalSteps}
+        extraActions={
+          <SessionManager
+            areal={arealState.areal}
+            onLoad={arealState.setAreal}
+            onNew={arealState.resetAreal}
+          />
+        }
       />
 
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-6">
@@ -86,6 +108,9 @@ export function WizardContainer() {
       </main>
 
       <Footer />
+
+      {/* Chatbot asistent */}
+      <ChatPanel areal={arealState.areal} currentStep={wizard.currentStep} />
     </div>
   );
 }

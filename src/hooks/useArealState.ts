@@ -1,6 +1,6 @@
 import { useReducer, useEffect, useCallback } from 'react';
 import {
-  Areal, Pozemok, Budova, InaStavba, BGOpatrenie,
+  Areal, Pozemok, Budova, InaStavba, BGOpatrenie, MediaItem, ScoringWeights,
   createEmptyAreal, createEmptyPozemok, createEmptyBudova,
   createEmptyInaStavba, createEmptyBGOpatrenie,
 } from '../types/areal';
@@ -21,7 +21,99 @@ type Action =
   | { type: 'ADD_BG_OPATRENIE' }
   | { type: 'UPDATE_BG_OPATRENIE'; payload: { index: number; data: Partial<BGOpatrenie> } }
   | { type: 'REMOVE_BG_OPATRENIE'; payload: number }
+  | { type: 'ADD_MEDIA'; payload: MediaItem }
+  | { type: 'UPDATE_MEDIA'; payload: { id: string; data: Partial<MediaItem> } }
+  | { type: 'REMOVE_MEDIA'; payload: string }
+  | { type: 'UPDATE_VAHY'; payload: Partial<ScoringWeights> }
   | { type: 'RESET' };
+
+function migratePozemok(raw: unknown): Pozemok {
+  const empty = createEmptyPozemok();
+  const d = raw as Pozemok & { odvodVodyKanalizacia?: number };
+  // Migrate old single kanalizácia field to new joint sewer field
+  const legacyKanalizacia = d.odvodVodyKanalizacia ?? 0;
+  return {
+    ...empty,
+    ...d,
+    odvodVodyJednotnaKanalizacia: d.odvodVodyJednotnaKanalizacia ?? legacyKanalizacia,
+    odvodVodySplaskovaKanalizacia: d.odvodVodySplaskovaKanalizacia ?? 0,
+    odvodVodyZrazkovaKanalizacia: d.odvodVodyZrazkovaKanalizacia ?? 0,
+    odvodVodyRetencnaNadrzou: d.odvodVodyRetencnaNadrzou ?? 0,
+    dazdovaZahradaPlochaStrechy: d.dazdovaZahradaPlochaStrechy ?? 0,
+    dazdovaZahradaPlochaTerenu: d.dazdovaZahradaPlochaTerenu ?? 0,
+    jazierkoPrepadRieseny: d.jazierkoPrepadRieseny ?? 0,
+    jazierkoSmerPrepadu: d.jazierkoSmerPrepadu ?? '',
+    kapacitaNadrzSebahodnotenie: d.kapacitaNadrzSebahodnotenie ?? 0,
+    zelenaStrechaExtenzivnaPloca: d.zelenaStrechaExtenzivnaPloca ?? 0,
+    zelenaStrechaExtenzivnaSikma: d.zelenaStrechaExtenzivnaSikma ?? 0,
+    zelenaStrechaIntenzivna: d.zelenaStrechaIntenzivna ?? 0,
+    zelenaStrechaModrozelena: d.zelenaStrechaModrozelena ?? 0,
+    zelenaStrechaStrkova: d.zelenaStrechaStrkova ?? 0,
+    zelenaStenaNaPozemku: d.zelenaStenaNaPozemku ?? 0,
+    vsakovaciaPrehlbenaBezpecnostnyPrepad: d.vsakovaciaPrehlbenaBezpecnostnyPrepad ?? 0,
+    vsakovaciaPrehlbenaRegulovanyOdtok: d.vsakovaciaPrehlbenaRegulovanyOdtok ?? 0,
+    prekorenetelnyPriestorPreStromy: d.prekorenetelnyPriestorPreStromy ?? 0,
+  };
+}
+
+function migrateBudova(raw: unknown): Budova {
+  const empty = createEmptyBudova();
+  const d = raw as Budova;
+  return {
+    ...empty,
+    ...d,
+    povodnovoRiziko: d.povodnovoRiziko ?? 0,
+    budovaZaplavenaPoslednychRokov: d.budovaZaplavenaPoslednychRokov ?? 0,
+    castPodTerenomBezOdcerpania: d.castPodTerenomBezOdcerpania ?? 0,
+    technologickeZariadenieSuteren: d.technologickeZariadenieSuteren ?? 0,
+    kanalizacneVpusteNadSuterenom: d.kanalizacneVpusteNadSuterenom ?? 0,
+    potrubiaNeSpljajuNormy: d.potrubiaNeSpljajuNormy ?? 0,
+    chybajuMriazkyNaVtokoch: d.chybajuMriazkyNaVtokoch ?? 0,
+    dazdovaKanalizaciaBezZariadenia: d.dazdovaKanalizaciaBezZariadenia ?? 0,
+    pripojkaBezSpatnejKlapky: d.pripojkaBezSpatnejKlapky ?? 0,
+    elektrickeZariadeniaSuterenNizko: d.elektrickeZariadeniaSuterenNizko ?? 0,
+    uzaverPlynuSuteren: d.uzaverPlynuSuteren ?? 0,
+    vyuzitieDazdovejVodyVObjekte: d.vyuzitieDazdovejVodyVObjekte ?? 0,
+    obvodoveStenyMaterial: d.obvodoveStenyMaterial ?? '',
+    zateplenieFasadyMaterial: d.zateplenieFasadyMaterial ?? '',
+    celkovaPlochaPresklenia: d.celkovaPlochaPresklenia ?? 0,
+    vekTermoizolacnychOkien: d.vekTermoizolacnychOkien ?? 0,
+    objemVyvetranehoPrezduchu: d.objemVyvetranehoPrezduchu ?? 0,
+    rekuperaciaCentralnaUcinnost: d.rekuperaciaCentralnaUcinnost ?? 0,
+    rekuperaciaLokalnaDo75: d.rekuperaciaLokalnaDo75 ?? 0,
+    rekuperaciaLokalnaOd76do89: d.rekuperaciaLokalnaOd76do89 ?? 0,
+    rekuperaciaLokalnaOd90: d.rekuperaciaLokalnaOd90 ?? 0,
+    celkovyStavBudovy: d.celkovyStavBudovy ?? '',
+    zelenaStrechaBudovExtenzivnaPloca: d.zelenaStrechaBudovExtenzivnaPloca ?? 0,
+    zelenaStrechaBudovExtenzivnaSikma: d.zelenaStrechaBudovExtenzivnaSikma ?? 0,
+    zelenaStrechaBudovIntenzivna: d.zelenaStrechaBudovIntenzivna ?? 0,
+    zelenaStrechaBudovModrozelena: d.zelenaStrechaBudovModrozelena ?? 0,
+    zelenaStrechaBudovStrkova: d.zelenaStrechaBudovStrkova ?? 0,
+    zelenaStenaBudov: d.zelenaStenaBudov ?? 0,
+  };
+}
+
+function migrateAreal(raw: unknown): Areal {
+  const empty = createEmptyAreal();
+  const data = raw as Areal;
+  return {
+    ...empty,
+    ...data,
+    organizaciaVZriadovatelskejPobnonosti: data.organizaciaVZriadovatelskejPobnonosti ?? '',
+    obhliadkuVykonal: data.obhliadkuVykonal ?? '',
+    datumObhliadky: data.datumObhliadky ?? '',
+    pritomnePOSOBY: data.pritomnePOSOBY ?? '',
+    kapacitaZariadenia: data.kapacitaZariadenia ?? '',
+    aktualnaObsadenost: data.aktualnaObsadenost ?? 0,
+    pocetZamestnancov: data.pocetZamestnancov ?? 0,
+    zaverBG: data.zaverBG ?? '',
+    zaverOZE: data.zaverOZE ?? '',
+    pozemky: (data.pozemky ?? [createEmptyPozemok()]).map(migratePozemok),
+    budovy: (data.budovy ?? [createEmptyBudova()]).map(migrateBudova),
+    media: data.media ?? [],
+    vahy: data.vahy ?? { mzi: 1, oze: 1, energia: 1 },
+  };
+}
 
 function computeBudovaFields(budova: Budova): Budova {
   // Auto-calculate category
@@ -141,6 +233,22 @@ function arealReducer(state: Areal, action: Action): Areal {
       return { ...state, bgOpatrenia };
     }
 
+    case 'ADD_MEDIA':
+      return { ...state, media: [...state.media, action.payload] };
+
+    case 'UPDATE_MEDIA': {
+      const media = state.media.map((m) =>
+        m.id === action.payload.id ? { ...m, ...action.payload.data } : m
+      );
+      return { ...state, media };
+    }
+
+    case 'REMOVE_MEDIA':
+      return { ...state, media: state.media.filter((m) => m.id !== action.payload) };
+
+    case 'UPDATE_VAHY':
+      return { ...state, vahy: { ...state.vahy, ...action.payload } };
+
     case 'RESET':
       return createEmptyAreal();
 
@@ -156,7 +264,7 @@ export function useArealState() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved) as Areal;
+        return migrateAreal(JSON.parse(saved));
       }
     } catch { /* ignore */ }
     return createEmptyAreal();
@@ -207,7 +315,22 @@ export function useArealState() {
     dispatch({ type: 'REMOVE_BG_OPATRENIE', payload: index });
   }, []);
 
+  const addMedia = useCallback((item: MediaItem) => {
+    dispatch({ type: 'ADD_MEDIA', payload: item });
+  }, []);
+  const updateMedia = useCallback((id: string, data: Partial<MediaItem>) => {
+    dispatch({ type: 'UPDATE_MEDIA', payload: { id, data } });
+  }, []);
+  const removeMedia = useCallback((id: string) => {
+    dispatch({ type: 'REMOVE_MEDIA', payload: id });
+  }, []);
+
+  const updateVahy = useCallback((data: Partial<ScoringWeights>) => {
+    dispatch({ type: 'UPDATE_VAHY', payload: data });
+  }, []);
+
   const resetAreal = useCallback(() => dispatch({ type: 'RESET' }), []);
+  const setAreal = useCallback((a: Areal) => dispatch({ type: 'SET_AREAL', payload: a }), []);
 
   return {
     areal,
@@ -216,6 +339,9 @@ export function useArealState() {
     addBudova, updateBudova, removeBudova,
     addInaStavba, updateInaStavba, removeInaStavba,
     addBGOpatrenie, updateBGOpatrenie, removeBGOpatrenie,
+    addMedia, updateMedia, removeMedia,
+    updateVahy,
     resetAreal,
+    setAreal,
   };
 }
