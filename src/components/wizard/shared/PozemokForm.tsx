@@ -41,19 +41,22 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <NumberInput
-            label="Celková výmera"
+            label="Celková výmera parcely"
             value={pozemok.celkovaVymera}
             onChange={(v) => onChange({ celkovaVymera: v })}
             unit="m²"
-            tooltipText="Celková výmera parcely podľa katastra."
+            tooltipText="Celková výmera parcely podľa katastra (vrátane plochy pod budovami, ak sú na parcele)."
           />
           <NumberInput
-            label="Plocha pozemku bez budov"
+            label="Plocha bez budov (nezastavaná)"
             value={pozemok.plochaBezBudov}
             onChange={(v) => onChange({ plochaBezBudov: v })}
             unit="m²"
-            tooltipText="Plocha pozemku po odčítaní zastavanej plochy budov."
+            tooltipText="Plocha parcely bez zastavanej časti – teda plocha pozemku, na ktorej nestojí žiadna budova. Táto plocha sa hodnotí v tomto formulári."
           />
+        </div>
+        <div className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-xs text-blue-700">
+          Pozor: pozemok (parcela) <strong>nezahŕňa</strong> zastavanú plochu budov. Údaje o budovách zadajte v kroku Budovy.
         </div>
         <TextInput
           label="Členitosť terénu"
@@ -67,7 +70,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
       {/* Odvod vody — 7 kategórií */}
       <PercentageGroup
         title="Odvod vody z pozemku"
-        tooltipText="Kam odteká dažďová voda z vášho pozemku? Rozdeľte 100% plochy medzi jednotlivé spôsoby odvodu."
+        tooltipText="Kam odteká voda (zrejme najmä dažďová) z vášho pozemku? Rozdeľte 100% plochy medzi jednotlivé spôsoby odvodu."
         fields={[
           { key: 'odvodVodyJednotnaKanalizacia', label: 'Jednotná stokova sieť', tooltipText: 'Kanalizácia spoločná pre splaškovú aj dažďovú vodu.' },
           { key: 'odvodVodySplaskovaKanalizacia', label: 'Delená splašková kanalizácia', tooltipText: 'Samostatná kanalizácia pre splašky (bez dažďovej vody).' },
@@ -196,22 +199,34 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
       {/* Stromy */}
       <div className="space-y-4">
         <h3 className="text-sm font-semibold text-gray-800 border-b border-gray-100 pb-2">Stromy</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <NumberInput
-            label="Podiel mladých stromov"
-            value={pozemok.stromyPodielMladych}
-            onChange={(v) => onChange({ stromyPodielMladych: v })}
-            unit="%" max={100}
-            tooltipText="Koľko percent všetkých stromov sú mladé (menej ako 10–15 rokov)."
-          />
-          <NumberInput
-            label="Podiel nezdravých stromov"
-            value={pozemok.stromyPodielNezdravych}
-            onChange={(v) => onChange({ stromyPodielNezdravych: v })}
-            unit="%" max={100}
-            tooltipText="Koľko percent stromov je poškodených, chorých alebo odumierajúcich."
-          />
-        </div>
+        <p className="text-xs text-gray-500">
+          Do plochy stromov započítajte aj stromy z parciel susediacich s riešenou parcelou, ak ich koruny presahujú
+          cez hranicu na túto parcelu a majú adaptačný význam pre ňu. Zvlášť v prípade, že ide o susedné parcely
+          mimo posudzovaného areálu.
+        </p>
+        {pozemok.priepustnaPlochaStromy > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <NumberInput
+              label="Podiel mladých stromov"
+              value={pozemok.stromyPodielMladych}
+              onChange={(v) => onChange({ stromyPodielMladych: v })}
+              unit="%" max={100}
+              tooltipText="Koľko percent všetkých stromov sú mladé (menej ako 10–15 rokov)."
+            />
+            <NumberInput
+              label="Podiel nezdravých stromov"
+              value={pozemok.stromyPodielNezdravych}
+              onChange={(v) => onChange({ stromyPodielNezdravych: v })}
+              unit="%" max={100}
+              tooltipText="Koľko percent stromov je poškodených, chorých alebo odumierajúcich."
+            />
+          </div>
+        )}
+        {pozemok.priepustnaPlochaStromy === 0 && (
+          <p className="text-xs text-gray-400 italic">
+            Polia pre stromy sú dostupné, keď je podiel stromov na priepustnej ploche väčší ako 0 %.
+          </p>
+        )}
       </div>
 
       {/* Existujuca infrastruktura */}

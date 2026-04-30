@@ -1,4 +1,5 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft } from 'lucide-react';
+import { WIZARD_STEPS } from '../../types/wizard';
 
 interface StepNavigationProps {
   currentStep: number;
@@ -9,37 +10,76 @@ interface StepNavigationProps {
   visitedSteps: number[];
 }
 
-export function StepNavigation({ currentStep, totalSteps, onNext, onPrev, onGoTo }: StepNavigationProps) {
-  return (
-    <div className="mt-6 flex justify-between items-center border-t border-gray-100 pt-4">
-      <button
-        type="button"
-        onClick={onPrev}
-        disabled={currentStep === 1}
-        className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-      >
-        <ChevronLeft className="w-4 h-4" />
-        Späť
-      </button>
+export function StepNavigation({ currentStep, totalSteps, onNext, onPrev, onGoTo, visitedSteps }: StepNavigationProps) {
+  const prevStep = currentStep - 1;
+  const nextStep = currentStep + 1;
+  const prevName = WIZARD_STEPS.find(s => s.id === prevStep)?.nazov;
+  const nextName = WIZARD_STEPS.find(s => s.id === nextStep)?.nazov;
+  const isLast = currentStep === totalSteps;
 
-      {currentStep > 1 && (
-        <button
-          type="button"
-          onClick={() => onGoTo(1)}
-          className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
-        >
-          Na začiatok
-        </button>
+  return (
+    <div className="mt-6 border-t border-gray-100 pt-4 space-y-3">
+      {/* Rýchla navigácia na kroky */}
+      {visitedSteps.length > 1 && (
+        <div className="flex flex-wrap gap-1.5 justify-center">
+          {WIZARD_STEPS.map(step => {
+            const isActive = step.id === currentStep;
+            const isVisited = visitedSteps.includes(step.id);
+            return (
+              <button
+                key={step.id}
+                type="button"
+                onClick={() => isVisited && !isActive && onGoTo(step.id)}
+                disabled={!isVisited || isActive}
+                title={step.nazov}
+                className={`flex items-center gap-1 px-2 py-1 text-xs rounded-md transition-colors
+                  ${isActive
+                    ? 'bg-[#2D7D46] text-white cursor-default font-semibold'
+                    : isVisited
+                      ? 'bg-[#2D7D46]/10 text-[#2D7D46] hover:bg-[#2D7D46]/20 cursor-pointer'
+                      : 'bg-gray-100 text-gray-300 cursor-default'
+                  }`}
+              >
+                <span className="font-bold w-3 text-center">{step.id}</span>
+                <span className="hidden sm:inline">{step.nazov}</span>
+              </button>
+            );
+          })}
+        </div>
       )}
 
-      <button
-        type="button"
-        onClick={onNext}
-        className="flex items-center gap-1 px-6 py-2 text-sm font-medium text-white bg-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/90 transition-colors"
-      >
-        {currentStep === totalSteps ? 'Zobraziť výsledky' : 'Ďalej'}
-        {currentStep < totalSteps && <ChevronRight className="w-4 h-4" />}
-      </button>
+      {/* Hlavné tlačidlá */}
+      <div className="flex justify-between items-center">
+        <button
+          type="button"
+          onClick={onPrev}
+          disabled={currentStep === 1}
+          className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          <span>Späť{prevName ? <span className="hidden sm:inline"> – {prevName}</span> : null}</span>
+        </button>
+
+        {currentStep > 1 && (
+          <button
+            type="button"
+            onClick={() => onGoTo(1)}
+            className="flex items-center gap-1 px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <ChevronsLeft className="w-3.5 h-3.5" />
+            Na začiatok
+          </button>
+        )}
+
+        <button
+          type="button"
+          onClick={onNext}
+          className="flex items-center gap-1.5 px-6 py-2 text-sm font-medium text-white bg-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/90 transition-colors"
+        >
+          {isLast ? 'Zobraziť výsledky' : <>Ďalej{nextName ? <span className="hidden sm:inline"> – {nextName}</span> : null}</>}
+          {!isLast && <ChevronRight className="w-4 h-4" />}
+        </button>
+      </div>
     </div>
   );
 }

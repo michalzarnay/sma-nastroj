@@ -95,11 +95,11 @@ function BGOpatrenieForm({ opatrenie, onChange }: { opatrenie: BGOpatrenie; onCh
         placeholder="napr. 2307, 2308/1"
       />
       <TextInput
-        label="Existencia susednej budovy/pozemku mimo ÚSK"
+        label="Susedná budova/pozemok mimo správy ŽSK (ÚSK)"
         value={opatrenie.inaBudovaMimoUSK}
         onChange={(v) => onChange({ inaBudovaMimoUSK: v })}
         multiline
-        tooltipText="Či existuje susedný pozemok alebo budova vo vlastníctve inom ako ÚSK, ktoré sú potrebné na prípadnú realizáciu B&G infraštruktúry."
+        tooltipText="ÚSK = územie/majetok spravovaný Žilinským samosprávnym krajom (ŽSK). Uveďte, či sa v blízkosti nachádza susedný pozemok alebo budova vo vlastníctve iného subjektu (napr. obce, súkromnej osoby), ktorý by bol potrebný na realizáciu zamýšľaného B&G opatrenia."
       />
       <TextInput
         label="Ochranné pásma a technická infraštruktúra v okolí"

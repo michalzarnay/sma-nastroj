@@ -227,13 +227,47 @@ function calculateEnergia(areal: Areal): EnergiaScore {
   return { celkove, zateplenie, kvalitaOkien, vykurovaciSystem, vetranie };
 }
 
+function calculateMZIPotencial(areal: Areal): number {
+  let skore = 0;
+
+  for (const p of areal.pozemky) {
+    const plocha = p.plochaBezBudov || p.celkovaVymera;
+    const fracKan = ((p.odvodVodyJednotnaKanalizacia || 0) + (p.odvodVodySplaskovaKanalizacia || 0) + (p.odvodVodyZrazkovaKanalizacia || 0)) / 100;
+    skore += fracKan * plocha * 10;
+    skore += (p.odvodVodyVodnyTok / 100) * plocha * 10;
+    skore += (p.odvodVodyNerieseny / 100) * plocha * 5;
+    skore += (p.stromyPodielMladych / 100) * p.priepustnaPlochaCelkom * plocha / 10000 * 3;
+    skore += (p.stromyPodielNezdravych / 100) * p.priepustnaPlochaCelkom * plocha / 10000 * 3;
+    skore -= p.dazdovaZahradaPlocha;
+    skore -= p.jazierkoPlocha;
+    skore -= p.nadzemneNadobyObjem;
+    skore -= p.podzemneNadobyObjem;
+    skore -= p.zelenaStrechaPlocha;
+  }
+
+  for (const b of areal.budovy) {
+    const trebaNovuStrechu = (b.strechaTyp === 1 || b.strechaTyp === 2) &&
+      (b.strechaZateplenie === 0 || b.strechaProblemy === 1);
+    if (trebaNovuStrechu) skore += Math.max(0, b.plochaPodorysu - b.zelenaStrechaPlocha);
+    if (b.zvodyDazdovejVody === 1) {
+      skore += (b.budovaOdvodVodyKanalizacia / 100) * b.plochaPodorysu * 10;
+      skore += (b.budovaOdvodVodyVodnyTok / 100) * b.plochaPodorysu * 10;
+      skore += (b.budovaOdvodVodyNerieseny / 100) * b.plochaPodorysu * 5;
+    }
+    skore -= b.zelenaStrechaPlocha;
+  }
+
+  return Math.max(0, Math.round(skore));
+}
+
 export function useScoring(areal: Areal): ScoreResult {
   return useMemo(() => {
     const mzi = calculateMZI(areal);
     const oze = calculateOZE(areal);
     const energia = calculateEnergia(areal);
     const celkove = Math.round((mzi.celkove + oze.celkove + energia.celkove) / 3);
+    const mziPotencial = calculateMZIPotencial(areal);
 
-    return { celkove, mzi, oze, energia };
+    return { celkove, mzi, oze, energia, mziPotencial };
   }, [areal]);
 }

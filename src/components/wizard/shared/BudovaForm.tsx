@@ -174,29 +174,39 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
       {/* Ohrozenie záplavami */}
       <Section title="Ohrozenie budovy záplavami">
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-gray-700">Povodňové riziko (1 = nízke, 5 = vysoké)</label>
+          <label className="text-sm font-medium text-gray-700 flex items-center gap-1">
+            Povodňové riziko lokality
+            <Tooltip text="Ohodnoťte mieru povodňového rizika podľa polohy budovy: 1 = žiadne riziko (vysoko nad vodným tokom, nezáplavová zóna), 5 = vysoké riziko (blízko vodného toku, v záplavovej zóne Q100). Overte napr. na Povodňovom portáli SVP (povodnovy-portal.sk)." />
+          </label>
           <select
             value={budova.povodnovoRiziko}
             onChange={(e) => onChange({ povodnovoRiziko: Number(e.target.value) })}
             className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none"
           >
             <option value={0}>— nevyplnené —</option>
-            {[1,2,3,4,5].map(v => <option key={v} value={v}>{v}</option>)}
+            <option value={1}>1 – Žiadne riziko</option>
+            <option value={2}>2 – Nízke riziko</option>
+            <option value={3}>3 – Stredné riziko</option>
+            <option value={4}>4 – Vysoké riziko</option>
+            <option value={5}>5 – Veľmi vysoké riziko</option>
           </select>
         </div>
-        <p className="text-xs text-gray-500">Zaznačte, ktoré z nasledujúcich rizikových faktorov sa týkajú budovy:</p>
+        <p className="text-xs text-gray-500">
+          Označte rizikové faktory, ktoré sa týkajú tejto budovy
+          (každý „Áno" zvyšuje zraniteľnosť voči záplavám):
+        </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {([
-            ['budovaZaplavenaPoslednychRokov', 'Budova bola zaplavená v posledných rokoch'],
-            ['castPodTerenomBezOdcerpania', 'Časť pod terénom bez odčerpávania'],
-            ['technologickeZariadenieSuteren', 'Technologické zariadenia v suteréne'],
-            ['kanalizacneVpusteNadSuterenom', 'Kanalizačné vpuste nie sú nad podlahou suterénu'],
-            ['potrubiaNeSpljajuNormy', 'Potrubia nespĺňajú normy pre spätné klapky'],
-            ['chybajuMriazkyNaVtokoch', 'Chýbajú mriežky na vtokoch'],
-            ['dazdovaKanalizaciaBezZariadenia', 'Dažďová kanalizácia bez spätného zariadenia'],
-            ['pripojkaBezSpatnejKlapky', 'Prípojka bez spätnej klapky'],
-            ['elektrickeZariadeniaSuterenNizko', 'Elektrické zariadenia v suteréne nízko'],
-            ['uzaverPlynuSuteren', 'Chýba uzáver plynu v suteréne'],
+            ['budovaZaplavenaPoslednychRokov', 'Budova bola zaplavená v posledných 10 rokoch'],
+            ['castPodTerenomBezOdcerpania', 'Budova má časť pod úrovňou terénu bez možnosti odčerpania'],
+            ['technologickeZariadenieSuteren', 'V suteréne sú technologické zariadenia (kotolňa, rozvádzače…)'],
+            ['kanalizacneVpusteNadSuterenom', 'Kanalizačné vpuste sú pod úrovňou podlahy suterénu'],
+            ['potrubiaNeSpljajuNormy', 'Potrubia nemajú spätné klapky podľa noriem'],
+            ['chybajuMriazkyNaVtokoch', 'Na vtokoch dažďovej kanalizácie chýbajú ochranné mriežky'],
+            ['dazdovaKanalizaciaBezZariadenia', 'Dažďová kanalizácia nemá spätné (protipovodňové) zariadenie'],
+            ['pripojkaBezSpatnejKlapky', 'Kanalizačná prípojka nemá spätnú klapku'],
+            ['elektrickeZariadeniaSuterenNizko', 'Elektrické zariadenia v suteréne sú umiestnené nízko (pod potenciálnou hladinou záplavy)'],
+            ['uzaverPlynuSuteren', 'V suteréne chýba uzáver plynu'],
           ] as [keyof typeof budova, string][]).map(([key, label]) => (
             <SelectCard
               key={key}
@@ -222,6 +232,7 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
           options={GUTTER_TYPES}
           value={budova.zvodyDazdovejVody}
           onChange={(v) => onChange({ zvodyDazdovejVody: v as 1 | 2 })}
+          tooltipText="Vonkajšie = zvody vedené po vonkajšej fasáde (vrátane prípadov, keď sa po zateplení ocitli vo vnútri obvodového plášťa – stále sa považujú za vonkajšie, ak sú dostupné zvonku). Vnútorné = zvody prechádzajú konštrukciou budovy."
         />
         <PercentageGroup
           title="Odvod vody z budovy"
@@ -475,11 +486,12 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
                 unit="kWh"
               />
               <NumberInput
-                label="Cena za 1 kWh"
+                label="Priemerná cena za 1 kWh"
                 value={budova.kurenieCZTCenaKWh}
                 onChange={(v) => onChange({ kurenieCZTCenaKWh: v })}
                 unit="EUR"
                 step={0.01}
+                tooltipText="Priemerná cena tepla za predchádzajúci rok (z faktúry od dodávateľa CZT). Na Slovensku sa pohybuje okolo 0,10–0,14 EUR/kWh v závislosti od mesta a dodávateľa. Údaje ÚRSO: urso.gov.sk."
               />
             </div>
           </ConditionalSection>
