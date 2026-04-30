@@ -3,6 +3,7 @@ export interface ScoreResult {
   mzi: MZIScore;
   oze: OZEScore;
   energia: EnergiaScore;
+  mziPotencial: number; // absolútny potenciál v m²·váha jednotkách (vyššie = viac možností)
 }
 
 export interface MZIScore {

@@ -14,7 +14,10 @@
       "Bash(node \"C:/Users/Žarnay/read_excel_fields.js\")",
       "Bash(node \"C:/Users/Žarnay/read_excel_compact.js\")",
       "Bash(node \"C:/Users/Žarnay/read_fields_json.js\")",
-      "Bash(node \"C:/Users/Žarnay/read_fields_report.js\")"
+      "Bash(node \"C:/Users/Žarnay/read_fields_report.js\")",
+      "Bash(gh pr create --title 'feat: dotazník v2_4 – kompletné rozšírenie formulára' --body ' *)",
+      "Bash(gh pr *)",
+      "WebFetch(domain:sma-nastroj.vercel.app)"
     ]
   }
 }
