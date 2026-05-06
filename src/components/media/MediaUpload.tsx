@@ -2,8 +2,10 @@ import { useRef, useState } from 'react';
 import { Camera, Film, Trash2, Upload, AlertCircle } from 'lucide-react';
 import { MediaItem } from '../../types/areal';
 
-const MAX_FOTO_SIZE_MB = 5;
+const MAX_FOTO_SIZE_MB = 20;
 const MAX_VIDEO_SIZE_MB = 50;
+const COMPRESS_MAX_PX = 1400;   // max width or height after resize
+const COMPRESS_QUALITY = 0.82;  // JPEG quality
 
 interface MediaUploadProps {
   media: MediaItem[];
@@ -39,13 +41,15 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove }: MediaUploadPro
       }
 
       if (jeFoto) {
-        const dataUrl = await nacitajAkoBase64(file);
+        const dataUrl = await compressImage(file);
+        // estimate compressed size from base64 length
+        const compressedSize = Math.round((dataUrl.length - dataUrl.indexOf(',') - 1) * 0.75);
         onAdd({
           id: crypto.randomUUID(),
           nazov: file.name,
           typ: 'foto',
           dataUrl,
-          velkost: file.size,
+          velkost: compressedSize,
           popis: '',
           datumNahratia: new Date().toISOString(),
         });
@@ -66,11 +70,34 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove }: MediaUploadPro
     setLoading(false);
   };
 
-  const nacitajAkoBase64 = (file: File): Promise<string> =>
+  const compressImage = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target?.result as string);
       reader.onerror = reject;
+      reader.onload = (e) => {
+        const src = e.target?.result as string;
+        const img = new Image();
+        img.onerror = reject;
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > COMPRESS_MAX_PX || height > COMPRESS_MAX_PX) {
+            if (width >= height) {
+              height = Math.round((height / width) * COMPRESS_MAX_PX);
+              width = COMPRESS_MAX_PX;
+            } else {
+              width = Math.round((width / height) * COMPRESS_MAX_PX);
+              height = COMPRESS_MAX_PX;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d')!;
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', COMPRESS_QUALITY));
+        };
+        img.src = src;
+      };
       reader.readAsDataURL(file);
     });
 
@@ -114,7 +141,7 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove }: MediaUploadPro
           </button>
         </div>
         <p className="text-xs text-gray-400 mt-2">
-          Foto: max {MAX_FOTO_SIZE_MB} MB · Video: max {MAX_VIDEO_SIZE_MB} MB (iba metadáta)
+          Foto: max {MAX_FOTO_SIZE_MB} MB (automaticky skomprimované) · Video: max {MAX_VIDEO_SIZE_MB} MB (iba metadáta)
         </p>
         <input
           ref={fotoRef}

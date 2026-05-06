@@ -5,6 +5,7 @@ import {
   createEmptyInaStavba, createEmptyBGOpatrenie,
 } from '../types/areal';
 import { FUEL_CONVERSIONS } from '../data/constants';
+import { dbSaveMedia, dbLoadMedia } from '../utils/mediaDb';
 
 type Action =
   | { type: 'SET_AREAL'; payload: Areal }
@@ -270,13 +271,30 @@ export function useArealState() {
     return createEmptyAreal();
   });
 
-  // Save to localStorage on every change
+  // On first mount: reload media with dataUrls from IndexedDB and merge into state
   useEffect(() => {
+    dbLoadMedia().then(items => {
+      if (items.length > 0) {
+        dispatch({ type: 'UPDATE_AREAL', payload: { media: items } });
+      }
+    }).catch(() => { /* IndexedDB unavailable, ignore */ });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Save to localStorage (without dataUrls) + IndexedDB (with dataUrls) on every change
+  useEffect(() => {
+    // localStorage: strip dataUrls to stay within quota
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(areal));
+      const toStore = {
+        ...areal,
+        media: areal.media.map(m => ({ ...m, dataUrl: '' })),
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
     } catch (error) {
       console.warn('Failed to save areal to localStorage:', error);
     }
+    // IndexedDB: full media with dataUrls
+    dbSaveMedia(areal.media).catch(() => { /* ignore */ });
   }, [areal]);
 
   const updateAreal = useCallback((data: Partial<Areal>) => {
