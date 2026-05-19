@@ -8,10 +8,13 @@ import { ConditionalSection } from '../../ui/ConditionalSection';
 import { Tooltip } from '../../ui/Tooltip';
 import { PDFUploadButton } from '../../ui/PDFUploadButton';
 import { ParsedDocument } from '../../../utils/pdfParser';
+import { useState } from 'react';
+import { MapPin, Loader2 } from 'lucide-react';
 
 interface BudovaFormProps {
   budova: Budova;
   onChange: (data: Partial<Budova>) => void;
+  arealAdresa?: { adresa: string; obec: string };
 }
 
 function applyDocToBudova(doc: ParsedDocument, onChange: (data: Partial<Budova>) => void) {
@@ -43,7 +46,40 @@ function applyDocToBudova(doc: ParsedDocument, onChange: (data: Partial<Budova>)
   if (Object.keys(updates).length > 0) onChange(updates);
 }
 
-export function BudovaForm({ budova, onChange }: BudovaFormProps) {
+export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
+  const [svpLoading, setSvpLoading] = useState(false);
+  const [svpMsg, setSvpMsg] = useState<string | null>(null);
+
+  const fetchSvpRiziko = async () => {
+    if (!arealAdresa?.adresa && !arealAdresa?.obec) {
+      setSvpMsg('Najprv vyplňte adresu areálu v kroku 1.');
+      return;
+    }
+    setSvpLoading(true);
+    setSvpMsg(null);
+    try {
+      const query = [arealAdresa.adresa, arealAdresa.obec, 'Slovensko'].filter(Boolean).join(', ');
+      const geoRes = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`,
+        { headers: { 'Accept-Language': 'sk' } },
+      );
+      const geoData = await geoRes.json();
+      if (!geoData.length) { setSvpMsg('Adresa sa nenašla.'); setSvpLoading(false); return; }
+      const lat = parseFloat(geoData[0].lat);
+      const lon = parseFloat(geoData[0].lon);
+
+      const svpRes = await fetch(`/api/svp-flood?lat=${lat}&lon=${lon}`);
+      const svpData = await svpRes.json();
+      if (svpData.error) { setSvpMsg(`Chyba: ${svpData.error}`); setSvpLoading(false); return; }
+
+      onChange({ povodnovoRiziko: svpData.riziko });
+      if (svpData.riziko === 0) setSvpMsg('Lokalita nie je v evidovanej záplavovej zóne SVP.');
+      else setSvpMsg(`Záplavová zóna ${svpData.zona} → riziko ${svpData.riziko}/5`);
+    } catch {
+      setSvpMsg('Chyba pri načítaní zo SVP.');
+    }
+    setSvpLoading(false);
+  };
   return (
     <div className="space-y-6">
       {/* Zakladne info */}
@@ -216,20 +252,35 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
         <div className="flex flex-col gap-1">
           <label className="text-sm font-medium text-gray-700 flex items-center gap-1">
             Povodňové riziko lokality
-            <Tooltip text="Ohodnoťte mieru povodňového rizika podľa polohy budovy: 1 = žiadne riziko (vysoko nad vodným tokom, nezáplavová zóna), 5 = vysoké riziko (blízko vodného toku, v záplavovej zóne Q100). Overte napr. na Povodňovom portáli SVP (povodnovy-portal.sk)." />
+            <Tooltip text="Ohodnoťte mieru povodňového rizika podľa polohy budovy: 1 = žiadne riziko (vysoko nad vodným tokom, nezáplavová zóna), 5 = vysoké riziko (blízko vodného toku, v záplavovej zóne Q100). Zdroj: mapy SVP (mpt.svp.sk)." />
           </label>
-          <select
-            value={budova.povodnovoRiziko}
-            onChange={(e) => onChange({ povodnovoRiziko: Number(e.target.value) })}
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none"
-          >
-            <option value={0}>— nevyplnené —</option>
-            <option value={1}>1 – Žiadne riziko</option>
-            <option value={2}>2 – Nízke riziko</option>
-            <option value={3}>3 – Stredné riziko</option>
-            <option value={4}>4 – Vysoké riziko</option>
-            <option value={5}>5 – Veľmi vysoké riziko</option>
-          </select>
+          <div className="flex items-center gap-2">
+            <select
+              value={budova.povodnovoRiziko}
+              onChange={(e) => onChange({ povodnovoRiziko: Number(e.target.value) })}
+              className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none"
+            >
+              <option value={0}>— nevyplnené —</option>
+              <option value={1}>1 – Žiadne riziko</option>
+              <option value={2}>2 – Nízke riziko</option>
+              <option value={3}>3 – Stredné riziko</option>
+              <option value={4}>4 – Vysoké riziko</option>
+              <option value={5}>5 – Veľmi vysoké riziko</option>
+            </select>
+            <button
+              type="button"
+              onClick={fetchSvpRiziko}
+              disabled={svpLoading}
+              title="Načítať povodňové riziko zo SVP"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-blue-700 border border-blue-300 rounded-lg hover:bg-blue-50 disabled:opacity-50 transition-colors whitespace-nowrap"
+            >
+              {svpLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <MapPin className="w-3.5 h-3.5" />}
+              {svpLoading ? 'Načítava…' : 'Zistiť zo SVP'}
+            </button>
+          </div>
+          {svpMsg && (
+            <p className="text-xs text-blue-600 mt-1">{svpMsg}</p>
+          )}
         </div>
         <p className="text-xs text-gray-500">
           Označte rizikové faktory, ktoré sa týkajú tejto budovy
@@ -374,6 +425,21 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
 
       {/* Vykurovanie */}
       <Section title="Vykurovanie">
+        {/* Nápoveda pre spotrebu */}
+        <details className="group">
+          <summary className="cursor-pointer text-xs text-blue-600 hover:text-blue-800 list-none flex items-center gap-1 select-none">
+            <span className="group-open:rotate-90 transition-transform inline-block">▶</span>
+            Ako odhadnúť ročnú spotrebu?
+          </summary>
+          <div className="mt-2 text-xs text-gray-600 bg-blue-50 rounded-lg p-3 space-y-1.5">
+            <p><strong>Zemný plyn:</strong> m³ × 10,55 = kWh &nbsp;·&nbsp; alebo pozrite „spotreba v kWh" priamo na ročnom vyúčtovaní</p>
+            <p><strong>Elektrina:</strong> kWh je uvedené priamo na faktúre</p>
+            <p><strong>CZT (diaľkové teplo):</strong> GJ × 277,78 = kWh &nbsp;·&nbsp; MWh × 1 000 = kWh</p>
+            <p><strong>Pelety / štiepka:</strong> zadajte kg — aplikácia prepočíta automaticky</p>
+            <p><strong>Uhlie / drevo:</strong> zadajte kg — aplikácia prepočíta automaticky</p>
+            <p className="text-gray-400 pt-1">Tip: sčítajte všetky faktúry za posledný celý kalendárny rok.</p>
+          </div>
+        </details>
         {/* Plyn */}
         <HeatingSource
           title="Kúrenie plynom"

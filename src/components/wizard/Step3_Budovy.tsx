@@ -9,9 +9,10 @@ interface Step3Props {
   addBudova: () => void;
   updateBudova: (index: number, data: Partial<Budova>) => void;
   removeBudova: (index: number) => void;
+  arealAdresa?: { adresa: string; obec: string };
 }
 
-export function Step3_Budovy({ budovy, addBudova, updateBudova, removeBudova }: Step3Props) {
+export function Step3_Budovy({ budovy, addBudova, updateBudova, removeBudova, arealAdresa }: Step3Props) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleRemove = (index: number) => {
@@ -56,6 +57,7 @@ export function Step3_Budovy({ budovy, addBudova, updateBudova, removeBudova }: 
         <BudovaForm
           budova={budovy[activeIndex]}
           onChange={(data) => updateBudova(activeIndex, data)}
+          arealAdresa={arealAdresa}
         />
       )}
     </div>
