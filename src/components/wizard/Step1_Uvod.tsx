@@ -11,6 +11,7 @@ interface Step1Props {
   addMedia: (item: MediaItem) => void;
   updateMedia: (id: string, data: Partial<MediaItem>) => void;
   removeMedia: (id: string) => void;
+  mediaReady: boolean;
 }
 
 async function fetchKlimatickeUdaje(adresa: string, obec: string): Promise<{ zrazky: number; solar: number } | null> {
@@ -48,7 +49,7 @@ async function fetchKlimatickeUdaje(adresa: string, obec: string): Promise<{ zra
   return { zrazky, solar };
 }
 
-export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMedia }: Step1Props) {
+export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMedia, mediaReady }: Step1Props) {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [fetchError, setFetchError] = useState('');
   const [fetchOk, setFetchOk] = useState(false);
@@ -235,6 +236,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
           onAdd={addMedia}
           onUpdate={updateMedia}
           onRemove={removeMedia}
+          mediaReady={mediaReady}
         />
       </div>
 

@@ -26,6 +26,7 @@ export function WizardContainer() {
             addMedia={arealState.addMedia}
             updateMedia={arealState.updateMedia}
             removeMedia={arealState.removeMedia}
+            mediaReady={arealState.mediaReady}
           />
         );
       case 2:

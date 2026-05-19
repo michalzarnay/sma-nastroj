@@ -12,9 +12,10 @@ interface MediaUploadProps {
   onAdd: (item: MediaItem) => void;
   onUpdate: (id: string, data: Partial<MediaItem>) => void;
   onRemove: (id: string) => void;
+  mediaReady?: boolean;
 }
 
-export function MediaUpload({ media, onAdd, onUpdate, onRemove }: MediaUploadProps) {
+export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = true }: MediaUploadProps) {
   const fotoRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLInputElement>(null);
   const [chyba, setChyba] = useState<string | null>(null);
@@ -183,6 +184,7 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove }: MediaUploadPro
               <MediaCard
                 key={item.id}
                 item={item}
+                mediaReady={mediaReady}
                 onPopis={(popis) => onUpdate(item.id, { popis })}
                 onRemove={() => onRemove(item.id)}
                 formatVelkost={formatVelkost}
@@ -197,11 +199,13 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove }: MediaUploadPro
 
 function MediaCard({
   item,
+  mediaReady,
   onPopis,
   onRemove,
   formatVelkost,
 }: {
   item: MediaItem;
+  mediaReady: boolean;
   onPopis: (p: string) => void;
   onRemove: () => void;
   formatVelkost: (b: number) => string;
@@ -216,10 +220,15 @@ function MediaCard({
             alt={item.nazov}
             className="h-full w-full object-cover"
           />
-        ) : item.typ === 'foto' ? (
+        ) : item.typ === 'foto' && !mediaReady ? (
           <div className="flex flex-col items-center gap-1 text-gray-400">
             <Camera className="w-8 h-8" />
             <span className="text-xs">načítava sa…</span>
+          </div>
+        ) : item.typ === 'foto' ? (
+          <div className="flex flex-col items-center gap-1 text-red-300">
+            <Camera className="w-8 h-8" />
+            <span className="text-xs text-center px-1">foto sa stratilo<br/>nahraj znovu</span>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-1 text-gray-400">

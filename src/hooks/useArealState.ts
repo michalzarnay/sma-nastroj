@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useCallback, useRef } from 'react';
+import { useReducer, useEffect, useCallback, useRef, useState } from 'react';
 import {
   Areal, Pozemok, Budova, InaStavba, BGOpatrenie, MediaItem, ScoringWeights,
   createEmptyAreal, createEmptyPozemok, createEmptyBudova,
@@ -263,6 +263,7 @@ const STORAGE_KEY = 'sma-nastroj-areal';
 export function useArealState() {
   // Guard: don't overwrite IndexedDB with empty dataUrls before the initial load completes
   const mediaLoadedRef = useRef(false);
+  const [mediaReady, setMediaReady] = useState(false);
 
   const [areal, dispatch] = useReducer(arealReducer, null, () => {
     try {
@@ -282,9 +283,11 @@ export function useArealState() {
         if (items.length > 0) {
           dispatch({ type: 'UPDATE_AREAL', payload: { media: items } });
         }
+        setMediaReady(true);
       })
       .catch(() => {
         mediaLoadedRef.current = true; // IndexedDB unavailable, allow saves anyway
+        setMediaReady(true);
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -362,6 +365,7 @@ export function useArealState() {
 
   return {
     areal,
+    mediaReady,
     updateAreal,
     addPozemok, updatePozemok, removePozemok,
     addBudova, updateBudova, removeBudova,
