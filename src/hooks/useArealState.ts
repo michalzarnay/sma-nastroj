@@ -1,10 +1,11 @@
-import { useReducer, useEffect, useCallback } from 'react';
+import { useReducer, useEffect, useCallback, useRef, useState } from 'react';
 import {
   Areal, Pozemok, Budova, InaStavba, BGOpatrenie, MediaItem, ScoringWeights,
   createEmptyAreal, createEmptyPozemok, createEmptyBudova,
   createEmptyInaStavba, createEmptyBGOpatrenie,
 } from '../types/areal';
 import { FUEL_CONVERSIONS } from '../data/constants';
+import { dbSaveMedia, dbLoadMedia } from '../utils/mediaDb';
 
 type Action =
   | { type: 'SET_AREAL'; payload: Areal }
@@ -260,6 +261,10 @@ function arealReducer(state: Areal, action: Action): Areal {
 const STORAGE_KEY = 'sma-nastroj-areal';
 
 export function useArealState() {
+  // Guard: don't overwrite IndexedDB with empty dataUrls before the initial load completes
+  const mediaLoadedRef = useRef(false);
+  const [mediaReady, setMediaReady] = useState(false);
+
   const [areal, dispatch] = useReducer(arealReducer, null, () => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -270,12 +275,38 @@ export function useArealState() {
     return createEmptyAreal();
   });
 
-  // Save to localStorage on every change
+  // On first mount: reload media with dataUrls from IndexedDB and merge into state
   useEffect(() => {
+    dbLoadMedia()
+      .then(items => {
+        mediaLoadedRef.current = true;
+        if (items.length > 0) {
+          dispatch({ type: 'UPDATE_AREAL', payload: { media: items } });
+        }
+        setMediaReady(true);
+      })
+      .catch(() => {
+        mediaLoadedRef.current = true; // IndexedDB unavailable, allow saves anyway
+        setMediaReady(true);
+      });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Save to localStorage (without dataUrls) + IndexedDB (with dataUrls) on every change
+  useEffect(() => {
+    // localStorage: strip dataUrls to stay within quota
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(areal));
+      const toStore = {
+        ...areal,
+        media: areal.media.map(m => ({ ...m, dataUrl: '' })),
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
     } catch (error) {
       console.warn('Failed to save areal to localStorage:', error);
+    }
+    // IndexedDB: only after initial load to avoid overwriting with empty dataUrls
+    if (mediaLoadedRef.current) {
+      dbSaveMedia(areal.media).catch(() => { /* ignore */ });
     }
   }, [areal]);
 
@@ -334,6 +365,7 @@ export function useArealState() {
 
   return {
     areal,
+    mediaReady,
     updateAreal,
     addPozemok, updatePozemok, removePozemok,
     addBudova, updateBudova, removeBudova,

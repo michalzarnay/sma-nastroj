@@ -6,17 +6,57 @@ import { SelectCard } from '../../ui/SelectCard';
 import { PercentageGroup } from '../../ui/PercentageGroup';
 import { ConditionalSection } from '../../ui/ConditionalSection';
 import { Tooltip } from '../../ui/Tooltip';
+import { PDFUploadButton } from '../../ui/PDFUploadButton';
+import { ParsedDocument } from '../../../utils/pdfParser';
 
 interface BudovaFormProps {
   budova: Budova;
   onChange: (data: Partial<Budova>) => void;
 }
 
+function applyDocToBudova(doc: ParsedDocument, onChange: (data: Partial<Budova>) => void) {
+  const updates: Partial<Budova> = {};
+
+  if (doc.projekt) {
+    const p = doc.projekt;
+    if (p.uzitkovaPlocha) updates.uzitkovaPlochaNUS = p.uzitkovaPlocha;
+    if (p.zastavanahPlocha) updates.plochaPodorysu = p.zastavanahPlocha;
+    if (p.obvodoveStenyMaterial) updates.obvodoveStenyMaterial = p.obvodoveStenyMaterial;
+    if (p.typStrechy) {
+      const t = p.typStrechy.toLowerCase();
+      if (t.includes('ploch')) updates.strechaTyp = 1;
+      else if (t.includes('šikm') || t.includes('sikm')) updates.strechaTyp = 2;
+    }
+  }
+
+  if (doc.certifikat) {
+    const c = doc.certifikat;
+    if (c.celkovaPlochaMsq) updates.uzitkovaPlochaNUS = c.celkovaPlochaMsq;
+  }
+
+  if (doc.audit) {
+    const a = doc.audit;
+    if (a.spotrebaElektrina) updates.kurenieElektrinaSpotreba = a.spotrebaElektrina;
+    if (a.spotrebaPlyn) updates.kureniePlynSpotreba = a.spotrebaPlyn;
+  }
+
+  if (Object.keys(updates).length > 0) onChange(updates);
+}
+
 export function BudovaForm({ budova, onChange }: BudovaFormProps) {
   return (
     <div className="space-y-6">
       {/* Zakladne info */}
-      <Section title="Základné informácie">
+      <Section
+        title="Základné informácie"
+        action={
+          <PDFUploadButton
+            label="Nahrať dokumentáciu"
+            acceptTypes={['energetickyCertifikat', 'projektovaDokumentacia', 'auditSprava']}
+            onParsed={(doc) => applyDocToBudova(doc, onChange)}
+          />
+        }
+      >
         <TextInput
           label="Názov budovy"
           value={budova.nazov}
@@ -771,10 +811,13 @@ export function BudovaForm({ budova, onChange }: BudovaFormProps) {
 
 // Helper components
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="space-y-4 border border-gray-100 rounded-lg p-4">
-      <h3 className="text-sm font-semibold text-gray-800 border-b border-gray-100 pb-2">{title}</h3>
+      <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+        <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
+        {action}
+      </div>
       {children}
     </div>
   );
