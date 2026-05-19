@@ -5,10 +5,23 @@ import { SelectCard } from '../../ui/SelectCard';
 import { PercentageGroup } from '../../ui/PercentageGroup';
 import { ConditionalSection } from '../../ui/ConditionalSection';
 import { YES_NO } from '../../../data/constants';
+import { PDFUploadButton } from '../../ui/PDFUploadButton';
+import { ParsedDocument } from '../../../utils/pdfParser';
 
 interface PozemokFormProps {
   pozemok: Pozemok;
   onChange: (data: Partial<Pozemok>) => void;
+}
+
+function applyLVToPozemok(doc: ParsedDocument, onChange: (data: Partial<Pozemok>) => void) {
+  if (!doc.lv) return;
+  const { lv } = doc;
+  const updates: Partial<Pozemok> = {};
+  if (lv.cisloLV) updates.listVlastnictva = lv.cisloLV;
+  if (lv.parcely.length > 0) {
+    updates.parcela = lv.parcely.map(p => p.cislo).join(', ');
+  }
+  onChange(updates);
 }
 
 export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
@@ -16,7 +29,14 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
     <div className="space-y-6">
       {/* Identifikacia */}
       <div className="space-y-4">
-        <h3 className="text-sm font-semibold text-gray-800 border-b border-gray-100 pb-2">Identifikácia</h3>
+        <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+          <h3 className="text-sm font-semibold text-gray-800">Identifikácia</h3>
+          <PDFUploadButton
+            label="Nahrať list vlastníctva"
+            acceptTypes={['lv']}
+            onParsed={(doc) => applyLVToPozemok(doc, onChange)}
+          />
+        </div>
         <TextInput
           label="Aktuálne využitie"
           value={pozemok.aktualneVyuzitie}
