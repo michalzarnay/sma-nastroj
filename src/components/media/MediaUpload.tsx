@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
-import { Camera, Film, Trash2, Upload, AlertCircle } from 'lucide-react';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { Camera, Film, Trash2, Upload, AlertCircle, X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { MediaItem } from '../../types/areal';
 
 const MAX_FOTO_SIZE_MB = 20;
 const MAX_VIDEO_SIZE_MB = 50;
-const COMPRESS_MAX_PX = 1400;   // max width or height after resize
-const COMPRESS_QUALITY = 0.82;  // JPEG quality
+const COMPRESS_MAX_PX = 1400;
+const COMPRESS_QUALITY = 0.82;
 
 interface MediaUploadProps {
   media: MediaItem[];
@@ -20,6 +20,36 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
   const videoRef = useRef<HTMLInputElement>(null);
   const [chyba, setChyba] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // Only photos can be opened in lightbox
+  const fotoItems = media.filter(m => m.typ === 'foto' && m.dataUrl);
+
+  const openLightbox = useCallback((item: MediaItem) => {
+    const idx = fotoItems.findIndex(f => f.id === item.id);
+    if (idx !== -1) setLightboxIndex(idx);
+  }, [fotoItems]);
+
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+
+  const prevPhoto = useCallback(() => {
+    setLightboxIndex(i => (i !== null && i > 0 ? i - 1 : i));
+  }, []);
+
+  const nextPhoto = useCallback(() => {
+    setLightboxIndex(i => (i !== null && i < fotoItems.length - 1 ? i + 1 : i));
+  }, [fotoItems.length]);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') prevPhoto();
+      if (e.key === 'ArrowRight') nextPhoto();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [lightboxIndex, closeLightbox, prevPhoto, nextPhoto]);
 
   const spracujSubory = async (files: FileList | null) => {
     if (!files) return;
@@ -43,7 +73,6 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
 
       if (jeFoto) {
         const dataUrl = await compressImage(file);
-        // estimate compressed size from base64 length
         const compressedSize = Math.round((dataUrl.length - dataUrl.indexOf(',') - 1) * 0.75);
         onAdd({
           id: crypto.randomUUID(),
@@ -55,7 +84,6 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
           datumNahratia: new Date().toISOString(),
         });
       } else {
-        // Video: uložíme iba metadáta, nie binárne dáta (príliš veľké pre localStorage)
         onAdd({
           id: crypto.randomUUID(),
           nazov: file.name,
@@ -93,8 +121,7 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
           const canvas = document.createElement('canvas');
           canvas.width = width;
           canvas.height = height;
-          const ctx = canvas.getContext('2d')!;
-          ctx.drawImage(img, 0, 0, width, height);
+          canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
           resolve(canvas.toDataURL('image/jpeg', COMPRESS_QUALITY));
         };
         img.src = src;
@@ -112,6 +139,8 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
   };
+
+  const lightboxItem = lightboxIndex !== null ? fotoItems[lightboxIndex] : null;
 
   return (
     <div className="space-y-4">
@@ -144,22 +173,10 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
         <p className="text-xs text-gray-400 mt-2">
           Foto: max {MAX_FOTO_SIZE_MB} MB (automaticky skomprimované) · Video: max {MAX_VIDEO_SIZE_MB} MB (iba metadáta)
         </p>
-        <input
-          ref={fotoRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="hidden"
-          onChange={(e) => spracujSubory(e.target.files)}
-        />
-        <input
-          ref={videoRef}
-          type="file"
-          accept="video/*"
-          multiple
-          className="hidden"
-          onChange={(e) => spracujSubory(e.target.files)}
-        />
+        <input ref={fotoRef} type="file" accept="image/*" multiple className="hidden"
+          onChange={(e) => spracujSubory(e.target.files)} />
+        <input ref={videoRef} type="file" accept="video/*" multiple className="hidden"
+          onChange={(e) => spracujSubory(e.target.files)} />
       </div>
 
       {chyba && (
@@ -187,10 +204,70 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
                 mediaReady={mediaReady}
                 onPopis={(popis) => onUpdate(item.id, { popis })}
                 onRemove={() => onRemove(item.id)}
+                onExpand={() => openLightbox(item)}
                 formatVelkost={formatVelkost}
               />
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Lightbox */}
+      {lightboxItem && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          onClick={closeLightbox}
+        >
+          {/* Zatvoriť */}
+          <button
+            type="button"
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          {/* Počítadlo */}
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 text-white/70 text-sm">
+            {(lightboxIndex ?? 0) + 1} / {fotoItems.length}
+          </div>
+
+          {/* Predchádzajúca */}
+          {(lightboxIndex ?? 0) > 0 && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); prevPhoto(); }}
+              className="absolute left-4 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            >
+              <ChevronLeft className="w-7 h-7" />
+            </button>
+          )}
+
+          {/* Obrázok */}
+          <img
+            src={lightboxItem.dataUrl}
+            alt={lightboxItem.nazov}
+            className="max-h-[90vh] max-w-[90vw] object-contain rounded shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          {/* Nasledujúca */}
+          {(lightboxIndex ?? 0) < fotoItems.length - 1 && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); nextPhoto(); }}
+              className="absolute right-4 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            >
+              <ChevronRight className="w-7 h-7" />
+            </button>
+          )}
+
+          {/* Popis */}
+          {lightboxItem.popis && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/80 text-sm bg-black/50 px-4 py-2 rounded-full max-w-sm text-center">
+              {lightboxItem.popis}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -202,33 +279,45 @@ function MediaCard({
   mediaReady,
   onPopis,
   onRemove,
+  onExpand,
   formatVelkost,
 }: {
   item: MediaItem;
   mediaReady: boolean;
   onPopis: (p: string) => void;
   onRemove: () => void;
+  onExpand: () => void;
   formatVelkost: (b: number) => string;
 }) {
+  const canExpand = item.typ === 'foto' && !!item.dataUrl;
+
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden group">
       {/* Náhľad */}
-      <div className="relative bg-gray-100 h-28 flex items-center justify-center">
+      <div
+        className={`relative bg-gray-100 h-28 flex items-center justify-center ${canExpand ? 'cursor-zoom-in' : ''}`}
+        onClick={canExpand ? onExpand : undefined}
+      >
         {item.typ === 'foto' && item.dataUrl ? (
-          <img
-            src={item.dataUrl}
-            alt={item.nazov}
-            className="h-full w-full object-cover"
-          />
+          <>
+            <img
+              src={item.dataUrl}
+              alt={item.nazov}
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow" />
+            </div>
+          </>
         ) : item.typ === 'foto' && !mediaReady ? (
           <div className="flex flex-col items-center gap-1 text-gray-400">
-            <Camera className="w-8 h-8" />
+            <Camera className="w-8 h-8 animate-pulse" />
             <span className="text-xs">načítava sa…</span>
           </div>
         ) : item.typ === 'foto' ? (
           <div className="flex flex-col items-center gap-1 text-red-300">
             <Camera className="w-8 h-8" />
-            <span className="text-xs text-center px-1">foto sa stratilo<br/>nahraj znovu</span>
+            <span className="text-xs text-center px-1">foto sa stratilo<br />nahraj znovu</span>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-1 text-gray-400">
@@ -238,8 +327,8 @@ function MediaCard({
         )}
         <button
           type="button"
-          onClick={onRemove}
-          className="absolute top-1 right-1 p-1 rounded-full bg-white/90 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
+          onClick={(e) => { e.stopPropagation(); onRemove(); }}
+          className="absolute top-1 right-1 p-1 rounded-full bg-white/90 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 z-10"
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>
