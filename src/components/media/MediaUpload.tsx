@@ -216,6 +216,11 @@ function MediaCard({
             alt={item.nazov}
             className="h-full w-full object-cover"
           />
+        ) : item.typ === 'foto' ? (
+          <div className="flex flex-col items-center gap-1 text-gray-400">
+            <Camera className="w-8 h-8" />
+            <span className="text-xs">načítava sa…</span>
+          </div>
         ) : (
           <div className="flex flex-col items-center gap-1 text-gray-400">
             <Film className="w-8 h-8" />

@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useCallback } from 'react';
+import { useReducer, useEffect, useCallback, useRef } from 'react';
 import {
   Areal, Pozemok, Budova, InaStavba, BGOpatrenie, MediaItem, ScoringWeights,
   createEmptyAreal, createEmptyPozemok, createEmptyBudova,
@@ -261,6 +261,9 @@ function arealReducer(state: Areal, action: Action): Areal {
 const STORAGE_KEY = 'sma-nastroj-areal';
 
 export function useArealState() {
+  // Guard: don't overwrite IndexedDB with empty dataUrls before the initial load completes
+  const mediaLoadedRef = useRef(false);
+
   const [areal, dispatch] = useReducer(arealReducer, null, () => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -273,11 +276,16 @@ export function useArealState() {
 
   // On first mount: reload media with dataUrls from IndexedDB and merge into state
   useEffect(() => {
-    dbLoadMedia().then(items => {
-      if (items.length > 0) {
-        dispatch({ type: 'UPDATE_AREAL', payload: { media: items } });
-      }
-    }).catch(() => { /* IndexedDB unavailable, ignore */ });
+    dbLoadMedia()
+      .then(items => {
+        mediaLoadedRef.current = true;
+        if (items.length > 0) {
+          dispatch({ type: 'UPDATE_AREAL', payload: { media: items } });
+        }
+      })
+      .catch(() => {
+        mediaLoadedRef.current = true; // IndexedDB unavailable, allow saves anyway
+      });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -293,8 +301,10 @@ export function useArealState() {
     } catch (error) {
       console.warn('Failed to save areal to localStorage:', error);
     }
-    // IndexedDB: full media with dataUrls
-    dbSaveMedia(areal.media).catch(() => { /* ignore */ });
+    // IndexedDB: only after initial load to avoid overwriting with empty dataUrls
+    if (mediaLoadedRef.current) {
+      dbSaveMedia(areal.media).catch(() => { /* ignore */ });
+    }
   }, [areal]);
 
   const updateAreal = useCallback((data: Partial<Areal>) => {
