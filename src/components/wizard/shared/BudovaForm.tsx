@@ -51,6 +51,11 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
   const [svpMsg, setSvpMsg] = useState<string | null>(null);
 
   const fetchSvpRiziko = async () => {
+    // SVP proxy is a Vercel serverless function — not available on localhost
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      setSvpMsg('SVP lookup funguje len na nasadenej verzii (sma-nastroj.vercel.app), nie na localhost.');
+      return;
+    }
     if (!arealAdresa?.adresa && !arealAdresa?.obec) {
       setSvpMsg('Najprv vyplňte adresu areálu v kroku 1.');
       return;
