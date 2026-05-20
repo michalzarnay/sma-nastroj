@@ -4,29 +4,26 @@
  *
  * GET /api/svp-flood?lat=48.15&lon=17.6
  * Response: { riziko: 0-5, perioda: number|null, zona: string|null }
- *   riziko 0 = no data / outside flood zone
- *   riziko 1 = Q1000 zone (lowest hazard)
- *   riziko 2 = Q100 zone
- *   riziko 3 = Q50 zone
- *   riziko 4 = Q10 zone
- *   riziko 5 = Q5 zone (highest hazard)
  */
-
-export const config = { runtime: 'edge' };
 
 const SVP_BASE =
   'https://mpt.svp.sk/server/rest/services/inspire/INSPIRE_MPO/MapServer/identify';
 
-export default async function handler(request: Request): Promise<Response> {
-  const url = new URL(request.url);
-  const lat = parseFloat(url.searchParams.get('lat') ?? '');
-  const lon = parseFloat(url.searchParams.get('lon') ?? '');
+export default async function handler(
+  req: { query: Record<string, string> },
+  res: {
+    status: (c: number) => { json: (d: unknown) => void };
+    json: (d: unknown) => void;
+  },
+) {
+  const lat = parseFloat(req.query.lat ?? '');
+  const lon = parseFloat(req.query.lon ?? '');
 
   if (isNaN(lat) || isNaN(lon)) {
-    return Response.json({ error: 'Chýbajú parametre lat/lon.' }, { status: 400 });
+    return res.status(400).json({ error: 'Chýbajú parametre lat/lon.' });
   }
 
-  const delta = 0.005; // ~500m tolerance box
+  const delta = 0.005;
   const svpUrl =
     `${SVP_BASE}?` +
     `geometry=${encodeURIComponent(JSON.stringify({ x: lon, y: lat }))}&` +
@@ -40,19 +37,20 @@ export default async function handler(request: Request): Promise<Response> {
     `f=json`;
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+
     const resp = await fetch(svpUrl, {
       headers: { 'User-Agent': 'sma-nastroj/1.0' },
-      signal: AbortSignal.timeout(8000),
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
 
     if (!resp.ok) {
-      return Response.json(
-        { error: `SVP server vrátil ${resp.status}` },
-        { status: 502 },
-      );
+      return res.status(502).json({ error: `SVP server vrátil ${resp.status}` });
     }
 
-    const data = (await resp.json()) as {
+    const data = await resp.json() as {
       results?: Array<{ attributes?: { inundationReturnPeriod?: number } }>;
     };
 
@@ -62,7 +60,6 @@ export default async function handler(request: Request): Promise<Response> {
 
     const minPeriod = periods.length > 0 ? Math.min(...periods) : null;
 
-    // Map return period → 1-5 risk scale
     let riziko = 0;
     if (minPeriod !== null) {
       if (minPeriod <= 5) riziko = 5;
@@ -72,13 +69,9 @@ export default async function handler(request: Request): Promise<Response> {
       else riziko = 1;
     }
 
-    const zonaLabel = minPeriod !== null ? `Q${minPeriod}` : null;
-
-    return Response.json({ riziko, perioda: minPeriod, zona: zonaLabel });
-  } catch (err) {
-    return Response.json(
-      { error: 'Nepodarilo sa spojiť so SVP serverom.' },
-      { status: 502 },
-    );
+    return res.json({ riziko, perioda: minPeriod, zona: minPeriod ? `Q${minPeriod}` : null });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Neznáma chyba';
+    return res.status(502).json({ error: `Nepodarilo sa spojiť so SVP: ${msg}` });
   }
 }
