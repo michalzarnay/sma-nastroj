@@ -3,7 +3,9 @@ import { Building2, MapPin, Camera, ClipboardList, Globe, Loader2 } from 'lucide
 import { Areal, MediaItem } from '../../types/areal';
 import { TextInput } from '../ui/TextInput';
 import { NumberInput } from '../ui/NumberInput';
+import { ComboboxInput } from '../ui/ComboboxInput';
 import { MediaUpload } from '../media/MediaUpload';
+import { KRAJE, OKRESY_BY_KRAJ, OBCE_SR } from '../../data/slovakLocations';
 
 interface Step1Props {
   areal: Areal;
@@ -64,11 +66,16 @@ async function fetchKlimatickeUdaje(
   return { zrazky, solar };
 }
 
+const selectClasses =
+  'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none';
+
 export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMedia, mediaReady }: Step1Props) {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [fetchStatus, setFetchStatus] = useState('');
   const [fetchError, setFetchError] = useState('');
   const [fetchOk, setFetchOk] = useState(false);
+
+  const okresy = areal.kraj ? (OKRESY_BY_KRAJ[areal.kraj] ?? []) : [];
 
   const handleFetchKlima = async () => {
     setFetchLoading(true);
@@ -131,20 +138,47 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
           placeholder="napr. Hlavná 15"
         />
 
+        {/* Kraj + Okres */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <TextInput
-            label="Obec"
-            value={areal.obec}
-            onChange={(v) => updateAreal({ obec: v })}
-            placeholder="napr. Likavka"
-          />
-          <TextInput
-            label="Región"
-            value={areal.region}
-            onChange={(v) => updateAreal({ region: v })}
-            placeholder="napr. Liptov"
-          />
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">Kraj</label>
+            <select
+              value={areal.kraj}
+              onChange={(e) => updateAreal({ kraj: e.target.value, okres: '' })}
+              className={selectClasses}
+            >
+              <option value="">– vyberte kraj –</option>
+              {KRAJE.map((k) => (
+                <option key={k} value={k}>{k}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">Okres</label>
+            <select
+              value={areal.okres}
+              onChange={(e) => updateAreal({ okres: e.target.value })}
+              disabled={okresy.length === 0}
+              className={selectClasses}
+            >
+              <option value="">
+                {areal.kraj ? '– vyberte okres –' : '– najprv vyberte kraj –'}
+              </option>
+              {okresy.map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+          </div>
         </div>
+
+        {/* Obec combobox */}
+        <ComboboxInput
+          label="Obec"
+          value={areal.obec}
+          onChange={(v) => updateAreal({ obec: v })}
+          options={OBCE_SR}
+          placeholder="napr. Likavka"
+        />
 
         {/* Klimatické údaje s auto-fetch */}
         <div className="space-y-2">
