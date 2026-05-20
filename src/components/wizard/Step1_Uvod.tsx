@@ -16,17 +16,37 @@ interface Step1Props {
   mediaReady: boolean;
 }
 
+function matchKraj(raw: string): string {
+  if (!raw) return '';
+  const norm = raw.trim();
+  // Nominatim SK state names match our KRAJE directly, e.g. "Žilinský kraj"
+  const exact = KRAJE.find(k => k.toLowerCase() === norm.toLowerCase());
+  if (exact) return exact;
+  // Fallback: partial match
+  return KRAJE.find(k => norm.toLowerCase().includes(k.split(' ')[0].toLowerCase())) ?? '';
+}
+
+function matchOkres(raw: string, kraj: string): string {
+  if (!raw) return '';
+  // Nominatim returns "Okres Ružomberok" — strip prefix
+  const stripped = raw.replace(/^[Oo]kres\s+/, '').trim();
+  const pool = kraj ? (OKRESY_BY_KRAJ[kraj] ?? []) : Object.values(OKRESY_BY_KRAJ).flat();
+  return pool.find(o => o.toLowerCase() === stripped.toLowerCase())
+    ?? pool.find(o => stripped.toLowerCase().includes(o.toLowerCase()))
+    ?? '';
+}
+
 async function fetchKlimatickeUdaje(
   adresa: string,
   obec: string,
   onStatus: (msg: string) => void,
-): Promise<{ zrazky: number; solar: number } | null> {
+): Promise<{ zrazky: number; solar: number; kraj: string; okres: string } | null> {
   const query = [adresa, obec, 'Slovensko'].filter(Boolean).join(', ');
 
   // 1. Geocoding
   onStatus('Hľadám polohu adresy…');
   const geoRes = await fetch(
-    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`,
+    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&addressdetails=1`,
     { headers: { 'Accept-Language': 'sk', 'User-Agent': 'sma-nastroj/1.0 (zarnay@inovia.sk)' } }
   );
   if (!geoRes.ok) throw new Error(`Geocoding zlyhal (${geoRes.status})`);
@@ -34,6 +54,11 @@ async function fetchKlimatickeUdaje(
   if (!geoData.length) return null;
   const lat = parseFloat(geoData[0].lat);
   const lon = parseFloat(geoData[0].lon);
+
+  // Extract kraj + okres from address details
+  const addr = geoData[0].address ?? {};
+  const krajMatched = matchKraj(addr.state ?? '');
+  const okresMatched = matchOkres(addr.county ?? addr.state_district ?? '', krajMatched);
 
   // 2. Zrážky – Open-Meteo (priemer posledných 5 rokov)
   onStatus('Načítavam zrážkové dáta…');
@@ -63,7 +88,7 @@ async function fetchKlimatickeUdaje(
   const monthly: { H_h: number }[] = pvData.outputs?.monthly?.fixed ?? [];
   const solar = Math.round(monthly.reduce((a, m) => a + (m.H_h ?? 0), 0));
 
-  return { zrazky, solar };
+  return { zrazky, solar, kraj: krajMatched, okres: okresMatched };
 }
 
 const selectClasses =
@@ -85,7 +110,9 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
     try {
       const res = await fetchKlimatickeUdaje(areal.adresa, areal.obec, setFetchStatus);
       if (!res) { setFetchError('Adresu sa nepodarilo nájsť. Skúste zadať obec presnejšie.'); return; }
-      updateAreal({ mnozstvoZrazok: res.zrazky, potencialSlnecnehoSvitu: res.solar });
+      const update: Partial<Areal> = { mnozstvoZrazok: res.zrazky, potencialSlnecnehoSvitu: res.solar };
+      if (res.kraj) { update.kraj = res.kraj; update.okres = res.okres || ''; }
+      updateAreal(update);
       setFetchOk(true);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Neznáma chyba';
