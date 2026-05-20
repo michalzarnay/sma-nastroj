@@ -14,35 +14,50 @@ interface Step1Props {
   mediaReady: boolean;
 }
 
-async function fetchKlimatickeUdaje(adresa: string, obec: string): Promise<{ zrazky: number; solar: number } | null> {
+async function fetchKlimatickeUdaje(
+  adresa: string,
+  obec: string,
+  onStatus: (msg: string) => void,
+): Promise<{ zrazky: number; solar: number } | null> {
   const query = [adresa, obec, 'Slovensko'].filter(Boolean).join(', ');
+
   // 1. Geocoding
+  onStatus('Hľadám polohu adresy…');
   const geoRes = await fetch(
     `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`,
-    { headers: { 'Accept-Language': 'sk' } }
+    { headers: { 'Accept-Language': 'sk', 'User-Agent': 'sma-nastroj/1.0 (zarnay@inovia.sk)' } }
   );
+  if (!geoRes.ok) throw new Error(`Geocoding zlyhal (${geoRes.status})`);
   const geoData = await geoRes.json();
   if (!geoData.length) return null;
   const lat = parseFloat(geoData[0].lat);
   const lon = parseFloat(geoData[0].lon);
 
   // 2. Zrážky – Open-Meteo (priemer posledných 5 rokov)
+  onStatus('Načítavam zrážkové dáta…');
   const rok = new Date().getFullYear();
   const precipRes = await fetch(
     `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}` +
     `&start_date=${rok - 6}-01-01&end_date=${rok - 1}-12-31` +
     `&daily=precipitation_sum&timezone=Europe%2FBerlin`
   );
+  if (!precipRes.ok) throw new Error(`Open-Meteo zlyhal (${precipRes.status})`);
   const precipData = await precipRes.json();
+  if (precipData.error) throw new Error(`Open-Meteo: ${precipData.reason ?? 'neznáma chyba'}`);
   const sums: number[] = precipData.daily?.precipitation_sum ?? [];
-  const zrazky = Math.round(sums.reduce((a, b) => a + (b ?? 0), 0) / 5);
+  const zrazky = sums.length > 0
+    ? Math.round(sums.reduce((a, b) => a + (b ?? 0), 0) / 5)
+    : 0;
 
   // 3. Slnečný svit – PVGIS (kWh/m²/rok)
+  onStatus('Načítavam dáta slnečného svitu…');
   const pvRes = await fetch(
     `https://re.jrc.ec.europa.eu/api/v5_2/MRcalc?lat=${lat}&lon=${lon}` +
     `&outputformat=json&raddatabase=PVGIS-SARAH2&horirrad=1`
   );
+  if (!pvRes.ok) throw new Error(`PVGIS zlyhal (${pvRes.status})`);
   const pvData = await pvRes.json();
+  if (pvData.status === 'error') throw new Error(`PVGIS: ${pvData.message ?? 'neznáma chyba'}`);
   const monthly: { H_h: number }[] = pvData.outputs?.monthly?.fixed ?? [];
   const solar = Math.round(monthly.reduce((a, m) => a + (m.H_h ?? 0), 0));
 
@@ -51,6 +66,7 @@ async function fetchKlimatickeUdaje(adresa: string, obec: string): Promise<{ zra
 
 export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMedia, mediaReady }: Step1Props) {
   const [fetchLoading, setFetchLoading] = useState(false);
+  const [fetchStatus, setFetchStatus] = useState('');
   const [fetchError, setFetchError] = useState('');
   const [fetchOk, setFetchOk] = useState(false);
 
@@ -58,15 +74,18 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
     setFetchLoading(true);
     setFetchError('');
     setFetchOk(false);
+    setFetchStatus('');
     try {
-      const res = await fetchKlimatickeUdaje(areal.adresa, areal.obec);
+      const res = await fetchKlimatickeUdaje(areal.adresa, areal.obec, setFetchStatus);
       if (!res) { setFetchError('Adresu sa nepodarilo nájsť. Skúste zadať obec presnejšie.'); return; }
       updateAreal({ mnozstvoZrazok: res.zrazky, potencialSlnecnehoSvitu: res.solar });
       setFetchOk(true);
-    } catch {
-      setFetchError('Chyba pri načítaní dát. Skontrolujte internetové pripojenie.');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Neznáma chyba';
+      setFetchError(msg);
     } finally {
       setFetchLoading(false);
+      setFetchStatus('');
     }
   };
 
@@ -143,6 +162,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
                 : <><Globe className="w-3 h-3" /> Načítať z webu</>}
             </button>
           </div>
+          {fetchStatus && !fetchError && <p className="text-xs text-gray-500 italic">{fetchStatus}</p>}
           {fetchError && <p className="text-xs text-red-600">{fetchError}</p>}
           {fetchOk && <p className="text-xs text-green-700">✓ Údaje načítané – skontrolujte a upravte podľa potreby.</p>}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
