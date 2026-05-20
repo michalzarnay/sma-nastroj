@@ -207,16 +207,18 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
             tooltipText="Maximálna kapacita zariadenia – koľko ľudí sa doň zmestí naraz najviac (žiaci, pacienti, návštevníci…)."
           />
           <NumberInput
-            label="Aktuálna obsadenosť"
+            label="Aktuálna obsadenosť klientov/žiakov"
             value={areal.aktualnaObsadenost}
             onChange={(v) => updateAreal({ aktualnaObsadenost: v })}
             unit="%"
             max={100}
+            tooltipText="Obsadenosť klientmi, pacientmi alebo žiakmi v čase mapovania, vyjadrená ako % z kapacity zariadenia. Ak sa obsadenosť v čase mapovania mení, uveďte priemer za príslušné obdobie. Nezahŕňa zamestnancov."
           />
           <NumberInput
             label="Počet zamestnancov"
             value={areal.pocetZamestnancov}
             onChange={(v) => updateAreal({ pocetZamestnancov: v })}
+            tooltipText="Priemerný počet zamestnancov prítomných v areáli počas prevádzky. Slúži na výpočet KPI spotreby energií a vody – klienti/žiaci a zamestnanci majú spravidla rôznu spotrebu (napr. v sociálnych zariadeniach je spotreba klientov výrazne vyššia ako zamestnancov)."
           />
         </div>
       </div>
