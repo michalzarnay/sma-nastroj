@@ -45,6 +45,7 @@ export function WizardContainer() {
             addBudova={arealState.addBudova}
             updateBudova={arealState.updateBudova}
             removeBudova={arealState.removeBudova}
+            arealAdresa={{ adresa: arealState.areal.adresa, obec: arealState.areal.obec }}
           />
         );
       case 4:
