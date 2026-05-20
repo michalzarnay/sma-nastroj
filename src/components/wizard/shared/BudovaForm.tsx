@@ -72,9 +72,13 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
       const svpData = await svpRes.json();
       if (svpData.error) { setSvpMsg(`Chyba: ${svpData.error}`); setSvpLoading(false); return; }
 
-      onChange({ povodnovoRiziko: svpData.riziko });
-      if (svpData.riziko === 0) setSvpMsg('Lokalita nie je v evidovanej záplavovej zóne SVP.');
-      else setSvpMsg(`Záplavová zóna ${svpData.zona} → riziko ${svpData.riziko}/5`);
+      // "nie je v zóne" = riziko 0 z API → mapujeme na 1 (Žiadne riziko)
+      const riziko = svpData.riziko === 0 ? 1 : svpData.riziko;
+      onChange({ povodnovoRiziko: riziko });
+      if (svpData.riziko === 0)
+        setSvpMsg('Lokalita nie je v evidovanej záplavovej zóne SVP → nastavené: 1 – Žiadne riziko.');
+      else
+        setSvpMsg(`Záplavová zóna ${svpData.zona} → nastavené: ${riziko}/5`);
     } catch {
       setSvpMsg('Chyba pri načítaní zo SVP.');
     }
