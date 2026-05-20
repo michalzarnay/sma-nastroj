@@ -265,11 +265,11 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
               className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none"
             >
               <option value={0}>— nevyplnené —</option>
-              <option value={1}>1 – Žiadne riziko</option>
-              <option value={2}>2 – Nízke riziko</option>
-              <option value={3}>3 – Stredné riziko</option>
-              <option value={4}>4 – Vysoké riziko</option>
-              <option value={5}>5 – Veľmi vysoké riziko</option>
+              <option value={1}>1 – Žiadne riziko (mimo záplavovej zóny / Q1000)</option>
+              <option value={2}>2 – Nízke riziko (raz za 100 rokov / Q100)</option>
+              <option value={3}>3 – Stredné riziko (raz za 50 rokov / Q50)</option>
+              <option value={4}>4 – Vysoké riziko (raz za 10 rokov / Q10)</option>
+              <option value={5}>5 – Veľmi vysoké riziko (raz za 5 rokov / Q5)</option>
             </select>
             <button
               type="button"
