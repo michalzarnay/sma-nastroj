@@ -30,7 +30,7 @@ function sheetSuhrn(areal: Areal, score: ScoreResult): (string | number)[][] {
     ['Dátum obhliadky', areal.datumObhliadky],
     ['Prítomné osoby', areal.pritomnePOSOBY],
     ['Kapacita zariadenia', areal.kapacitaZariadenia],
-    ['Aktuálna obsadenosť (%)', areal.aktualnaObsadenost],
+    ['Aktuálna obsadenosť klientov/žiakov (%)', areal.aktualnaObsadenost],
     ['Počet zamestnancov', areal.pocetZamestnancov],
     [],
     ['Počet pozemkov', areal.pozemky.length],
