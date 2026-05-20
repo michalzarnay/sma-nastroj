@@ -21,7 +21,10 @@ export interface Areal {
   nazov: string;
   adresa: string;
   obec: string;
+  /** @deprecated use kraj + okres instead */
   region: string;
+  kraj: string;
+  okres: string;
   mnozstvoZrazok?: number;        // mm/m2
   potencialSlnecnehoSvitu?: number; // kWh/rok
 
@@ -522,6 +525,8 @@ export function createEmptyAreal(): Areal {
     adresa: '',
     obec: '',
     region: '',
+    kraj: '',
+    okres: '',
     organizaciaVZriadovatelskejPobnonosti: '',
     obhliadkuVykonal: '',
     datumObhliadky: '',
