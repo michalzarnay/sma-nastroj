@@ -4,6 +4,7 @@ import { Areal, MediaItem } from '../../types/areal';
 import { TextInput } from '../ui/TextInput';
 import { NumberInput } from '../ui/NumberInput';
 import { ComboboxInput } from '../ui/ComboboxInput';
+import { AddressAutocomplete } from '../ui/AddressAutocomplete';
 import { MediaUpload } from '../media/MediaUpload';
 import { KRAJE, OKRESY_BY_KRAJ, OBCE_SR } from '../../data/slovakLocations';
 
@@ -102,6 +103,30 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
 
   const okresy = areal.kraj ? (OKRESY_BY_KRAJ[areal.kraj] ?? []) : [];
 
+  // Derive countryCode for Photon API
+  const photonCountryCode =
+    areal.krajina === 'Slovensko' ? 'sk' :
+    areal.krajina === 'Česká republika' ? 'cz' :
+    '';
+
+  const isSlovak = areal.krajina === 'Slovensko';
+  const isCzech = areal.krajina === 'Česká republika';
+
+  const handleAddressSelect = (result: { ulica: string; obec: string; okres: string; kraj: string }) => {
+    const update: Partial<Areal> = { adresa: result.ulica };
+    if (result.obec) update.obec = result.obec;
+    if (isSlovak) {
+      if (result.kraj) { update.kraj = result.kraj; update.okres = result.okres || ''; }
+      else if (result.okres) update.okres = result.okres;
+    } else {
+      // For CZ just fill obec/okres/kraj as free text
+      if (result.obec) update.obec = result.obec;
+      if (result.okres) update.okres = result.okres;
+      if (result.kraj) update.kraj = result.kraj;
+    }
+    updateAreal(update);
+  };
+
   const handleFetchKlima = async () => {
     setFetchLoading(true);
     setFetchError('');
@@ -158,54 +183,100 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
           tooltipText="Zvoľte ľubovoľný názov, ktorý vám pomôže areál identifikovať."
         />
 
-        <TextInput
-          label="Adresa"
+        {/* Krajina */}
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-700">Krajina</label>
+          <select
+            value={areal.krajina ?? 'Slovensko'}
+            onChange={(e) => updateAreal({ krajina: e.target.value })}
+            className={selectClasses}
+          >
+            <option value="Slovensko">Slovensko</option>
+            <option value="Česká republika">Česká republika</option>
+            <option value="">Iná krajina</option>
+          </select>
+        </div>
+
+        {/* Ulica + číslo */}
+        <AddressAutocomplete
+          label="Ulica + číslo"
           value={areal.adresa}
           onChange={(v) => updateAreal({ adresa: v })}
+          onSelect={handleAddressSelect}
+          countryCode={photonCountryCode}
           placeholder="napr. Hlavná 15"
         />
+
+        {/* Obec */}
+        {isSlovak ? (
+          <ComboboxInput
+            label="Obec"
+            value={areal.obec}
+            onChange={(v) => updateAreal({ obec: v })}
+            options={OBCE_SR}
+            placeholder="napr. Likavka"
+          />
+        ) : (
+          <TextInput
+            label="Obec"
+            value={areal.obec}
+            onChange={(v) => updateAreal({ obec: v })}
+            placeholder="napr. Brno"
+          />
+        )}
 
         {/* Kraj + Okres */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-gray-700">Kraj</label>
-            <select
-              value={areal.kraj}
-              onChange={(e) => updateAreal({ kraj: e.target.value, okres: '' })}
-              className={selectClasses}
-            >
-              <option value="">– vyberte kraj –</option>
-              {KRAJE.map((k) => (
-                <option key={k} value={k}>{k}</option>
-              ))}
-            </select>
+            {isSlovak ? (
+              <select
+                value={areal.kraj}
+                onChange={(e) => updateAreal({ kraj: e.target.value, okres: '' })}
+                className={selectClasses}
+              >
+                <option value="">– vyberte kraj –</option>
+                {KRAJE.map((k) => (
+                  <option key={k} value={k}>{k}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                value={areal.kraj}
+                onChange={(e) => updateAreal({ kraj: e.target.value })}
+                placeholder={isCzech ? 'napr. Jihomoravský kraj' : 'napr. Kraj'}
+                className={selectClasses}
+              />
+            )}
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-gray-700">Okres</label>
-            <select
-              value={areal.okres}
-              onChange={(e) => updateAreal({ okres: e.target.value })}
-              disabled={okresy.length === 0}
-              className={selectClasses}
-            >
-              <option value="">
-                {areal.kraj ? '– vyberte okres –' : '– najprv vyberte kraj –'}
-              </option>
-              {okresy.map((o) => (
-                <option key={o} value={o}>{o}</option>
-              ))}
-            </select>
+            {isSlovak ? (
+              <select
+                value={areal.okres}
+                onChange={(e) => updateAreal({ okres: e.target.value })}
+                disabled={okresy.length === 0}
+                className={selectClasses}
+              >
+                <option value="">
+                  {areal.kraj ? '– vyberte okres –' : '– najprv vyberte kraj –'}
+                </option>
+                {okresy.map((o) => (
+                  <option key={o} value={o}>{o}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                value={areal.okres}
+                onChange={(e) => updateAreal({ okres: e.target.value })}
+                placeholder={isCzech ? 'napr. Brno-město' : 'napr. Okres'}
+                className={selectClasses}
+              />
+            )}
           </div>
         </div>
-
-        {/* Obec combobox */}
-        <ComboboxInput
-          label="Obec"
-          value={areal.obec}
-          onChange={(v) => updateAreal({ obec: v })}
-          options={OBCE_SR}
-          placeholder="napr. Likavka"
-        />
 
         {/* Klimatické údaje s auto-fetch */}
         <div className="space-y-2">
