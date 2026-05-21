@@ -20,6 +20,7 @@ export interface Areal {
   id: string;
   nazov: string;
   adresa: string;
+  krajina: string;
   obec: string;
   /** @deprecated use kraj + okres instead */
   region: string;
@@ -523,6 +524,7 @@ export function createEmptyAreal(): Areal {
     id: crypto.randomUUID(),
     nazov: '',
     adresa: '',
+    krajina: 'Slovensko',
     obec: '',
     region: '',
     kraj: '',

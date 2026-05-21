@@ -11,6 +11,7 @@ import { Step5_BGOpatrenia } from './Step5_BGOpatrenia';
 import { Step6_Vysledky } from './Step6_Vysledky';
 import { ChatPanel } from '../chat/ChatPanel';
 import { SessionManager } from '../sessions/SessionManager';
+import { FilePlus } from 'lucide-react';
 
 export function WizardContainer() {
   const wizard = useWizard();
@@ -87,11 +88,27 @@ export function WizardContainer() {
         visitedSteps={wizard.visitedSteps}
         onGoTo={wizard.goToStep}
         extraActions={
-          <SessionManager
-            areal={arealState.areal}
-            onLoad={arealState.setAreal}
-            onNew={arealState.resetAreal}
-          />
+          <>
+            <button
+              type="button"
+              title="Nový areál"
+              onClick={() => {
+                if (confirm('Začať nový areál? Neuložené zmeny budú stratené.')) {
+                  arealState.resetAreal();
+                  wizard.goToStep(1);
+                }
+              }}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <FilePlus className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Nový areál</span>
+            </button>
+            <SessionManager
+              areal={arealState.areal}
+              onLoad={arealState.setAreal}
+              onNew={arealState.resetAreal}
+            />
+          </>
         }
       />
 
