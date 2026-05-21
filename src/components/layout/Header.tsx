@@ -22,8 +22,8 @@ export function Header({ currentStep, totalSteps, visitedSteps, onGoTo, extraAct
               <Leaf className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-bold text-gray-800 leading-tight">SMA Nástroj</h1>
-              <p className="text-[10px] text-gray-500 hidden sm:block">Hodnotenie adaptačných opatrení</p>
+              <h1 className="text-sm font-bold text-gray-800 leading-tight">SMAVE <span className="font-normal text-gray-400">Test 9</span></h1>
+              <p className="text-[10px] text-gray-500 hidden sm:block">Sprievodca mapovaním areálov – voda a energia</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
