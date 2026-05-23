@@ -62,6 +62,7 @@ export function PercentageGroup({
                 max={100}
                 step={1}
                 placeholder="0"
+                style={{ paddingRight: '1.25rem' }}
                 className="w-full rounded border border-gray-300 px-2 py-1 text-xs text-right focus:border-[#2D7D46] focus:ring-1 focus:ring-[#2D7D46]/20 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 pointer-events-none">

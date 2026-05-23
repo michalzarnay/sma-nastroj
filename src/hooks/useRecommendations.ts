@@ -22,21 +22,17 @@ export function useRecommendations(areal: Areal): Odporucanie[] {
     // Analyze pozemky
     let totalPlocha = 0;
     let totalSpevnena = 0;
-    let totalPriepustna = 0;
     let hasRetencnaNadrz = false;
     let hasDazdovaZahrada = false;
     let avgNeriesenyOdvod = 0;
-    let totalZelenaStrechaPozemky = 0;
 
     for (const p of areal.pozemky) {
       const plocha = p.plochaBezBudov || p.celkovaVymera;
       totalPlocha += plocha;
       totalSpevnena += p.spevnenaPlochaCelkom;
-      totalPriepustna += p.priepustnaPlochaCelkom;
       if (p.nadzemneNadobyObjem > 0 || p.podzemneNadobyObjem > 0) hasRetencnaNadrz = true;
       if (p.dazdovaZahradaPlocha > 0) hasDazdovaZahrada = true;
       avgNeriesenyOdvod += p.odvodVodyNerieseny;
-      totalZelenaStrechaPozemky += p.zelenaStrechaPlocha;
     }
     if (areal.pozemky.length > 0) avgNeriesenyOdvod /= areal.pozemky.length;
 

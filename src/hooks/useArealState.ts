@@ -289,7 +289,6 @@ export function useArealState() {
         mediaLoadedRef.current = true; // IndexedDB unavailable, allow saves anyway
         setMediaReady(true);
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Save to localStorage (without dataUrls) + IndexedDB (with dataUrls) on every change

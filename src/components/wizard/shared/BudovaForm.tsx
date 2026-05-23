@@ -296,12 +296,12 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
             ['castPodTerenomBezOdcerpania', 'Budova má časť pod úrovňou terénu bez možnosti odčerpania'],
             ['technologickeZariadenieSuteren', 'V suteréne sú technologické zariadenia (kotolňa, rozvádzače…)'],
             ['kanalizacneVpusteNadSuterenom', 'Kanalizačné vpuste sú pod úrovňou podlahy suterénu'],
-            ['potrubiaNeSpljajuNormy', 'Potrubia nemajú spätné klapky podľa noriem'],
-            ['chybajuMriazkyNaVtokoch', 'Na vtokoch dažďovej kanalizácie chýbajú ochranné mriežky'],
-            ['dazdovaKanalizaciaBezZariadenia', 'Dažďová kanalizácia nemá spätné (protipovodňové) zariadenie'],
-            ['pripojkaBezSpatnejKlapky', 'Kanalizačná prípojka nemá spätnú klapku'],
-            ['elektrickeZariadeniaSuterenNizko', 'Elektrické zariadenia v suteréne sú umiestnené nízko (pod potenciálnou hladinou záplavy)'],
-            ['uzaverPlynuSuteren', 'V suteréne chýba uzáver plynu'],
+            ['potrubiaNeSpljajuNormy', 'Potrubia bez spätných klapiek podľa noriem (riziko späteného prietoku)'],
+            ['chybajuMriazkyNaVtokoch', 'Vtoky dažďovej kanalizácie bez ochranných mriežok'],
+            ['dazdovaKanalizaciaBezZariadenia', 'Dažďová kanalizácia bez spätného (protipovodňového) zariadenia'],
+            ['pripojkaBezSpatnejKlapky', 'Kanalizačná prípojka bez spätnej klapky'],
+            ['elektrickeZariadeniaSuterenNizko', 'Elektrické zariadenia v suteréne umiestené nízko (pod potenciálnou hladinou záplavy)'],
+            ['uzaverPlynuSuteren', 'Suterén bez uzáveru plynu'],
           ] as [keyof typeof budova, string][]).map(([key, label]) => (
             <SelectCard
               key={key}
@@ -336,12 +336,14 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
             { key: 'budovaOdvodVodyKanalizacia', label: 'Do kanalizácie' },
             { key: 'budovaOdvodVodyVodnyTok', label: 'Do vodného toku' },
             { key: 'budovaOdvodVodyNaPozemok', label: 'Cielene na pozemok' },
+            { key: 'budovaOdvodVodyRetencnaNadrz', label: 'Do retenčnej nádrže' },
             { key: 'budovaOdvodVodyNerieseny', label: 'Neriešený' },
           ]}
           values={{
             budovaOdvodVodyKanalizacia: budova.budovaOdvodVodyKanalizacia,
             budovaOdvodVodyVodnyTok: budova.budovaOdvodVodyVodnyTok,
             budovaOdvodVodyNaPozemok: budova.budovaOdvodVodyNaPozemok,
+            budovaOdvodVodyRetencnaNadrz: budova.budovaOdvodVodyRetencnaNadrz,
             budovaOdvodVodyNerieseny: budova.budovaOdvodVodyNerieseny,
           }}
           onChange={(key, value) => onChange({ [key]: value })}
