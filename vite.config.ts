@@ -77,8 +77,57 @@ function svpProxyPlugin(): Plugin {
   }
 }
 
+function pvgisProxyPlugin(): Plugin {
+  const PVGIS_BASE = 'https://re.jrc.ec.europa.eu/api/v5_2/MRcalc'
+
+  return {
+    name: 'pvgis-dev-proxy',
+    configureServer(server) {
+      server.middlewares.use(
+        '/api/pvgis',
+        async (req: IncomingMessage, res: ServerResponse) => {
+          const url = new URL(req.url ?? '', 'http://localhost')
+          const lat = parseFloat(url.searchParams.get('lat') ?? '')
+          const lon = parseFloat(url.searchParams.get('lon') ?? '')
+
+          const send = (status: number, body: unknown) => {
+            res.statusCode = status
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify(body))
+          }
+
+          if (isNaN(lat) || isNaN(lon))
+            return send(400, { error: 'Chýbajú parametre lat/lon.' })
+
+          try {
+            const controller = new AbortController()
+            const t = setTimeout(() => controller.abort(), 10000)
+            const resp = await fetch(
+              `${PVGIS_BASE}?lat=${lat}&lon=${lon}&outputformat=json&raddatabase=PVGIS-SARAH2&horirrad=1`,
+              { headers: { 'User-Agent': 'sma-nastroj-dev/1.0' }, signal: controller.signal },
+            )
+            clearTimeout(t)
+            if (!resp.ok) return send(502, { error: `PVGIS vrátil ${resp.status}` })
+            const data = await resp.json() as {
+              status?: string; message?: string;
+              outputs?: { monthly?: { fixed?: { H_h: number }[] } }
+            }
+            if (data.status === 'error') return send(502, { error: `PVGIS: ${data.message}` })
+            const monthly = data.outputs?.monthly?.fixed ?? []
+            const solar = Math.round(monthly.reduce((a: number, m: { H_h: number }) => a + (m.H_h ?? 0), 0))
+            send(200, { solar })
+          } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : 'Neznáma chyba'
+            send(502, { error: `PVGIS nedostupné: ${msg}` })
+          }
+        },
+      )
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), tailwindcss(), svpProxyPlugin()],
+  plugins: [react(), tailwindcss(), svpProxyPlugin(), pvgisProxyPlugin()],
   server: {
     watch: {
       ignored: ['**/api/**'],

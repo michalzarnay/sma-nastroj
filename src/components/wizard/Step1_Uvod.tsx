@@ -77,17 +77,13 @@ async function fetchKlimatickeUdaje(
     ? Math.round(sums.reduce((a, b) => a + (b ?? 0), 0) / 5)
     : 0;
 
-  // 3. Slnečný svit – PVGIS (kWh/m²/rok)
+  // 3. Slnečný svit – PVGIS cez server proxy (CORS)
   onStatus('Načítavam dáta slnečného svitu…');
-  const pvRes = await fetch(
-    `https://re.jrc.ec.europa.eu/api/v5_2/MRcalc?lat=${lat}&lon=${lon}` +
-    `&outputformat=json&raddatabase=PVGIS-SARAH2&horirrad=1`
-  );
+  const pvRes = await fetch(`/api/pvgis?lat=${lat}&lon=${lon}`);
   if (!pvRes.ok) throw new Error(`PVGIS zlyhal (${pvRes.status})`);
-  const pvData = await pvRes.json();
-  if (pvData.status === 'error') throw new Error(`PVGIS: ${pvData.message ?? 'neznáma chyba'}`);
-  const monthly: { H_h: number }[] = pvData.outputs?.monthly?.fixed ?? [];
-  const solar = Math.round(monthly.reduce((a, m) => a + (m.H_h ?? 0), 0));
+  const pvData = await pvRes.json() as { solar?: number; error?: string };
+  if (pvData.error) throw new Error(`PVGIS: ${pvData.error}`);
+  const solar = pvData.solar ?? 0;
 
   return { zrazky, solar, kraj: krajMatched, okres: okresMatched };
 }
