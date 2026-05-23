@@ -178,10 +178,11 @@ export interface Budova {
   // Voda a splašky
   splaskovod: 1 | 2;
   zvodyDazdovejVody: 1 | 2;
-  budovaOdvodVodyKanalizacia: number; // %
-  budovaOdvodVodyVodnyTok: number;    // %
-  budovaOdvodVodyNaPozemok: number;   // %
-  budovaOdvodVodyNerieseny: number;   // %
+  budovaOdvodVodyKanalizacia: number;     // %
+  budovaOdvodVodyVodnyTok: number;        // %
+  budovaOdvodVodyNaPozemok: number;       // %
+  budovaOdvodVodyRetencnaNadrz: number;   // %
+  budovaOdvodVodyNerieseny: number;       // %
   oddeleneRozvodyVody: 0 | 1;
   vyuzitieDazdovejVodyVObjekte: 0 | 1; // nové
 
@@ -416,6 +417,7 @@ export function createEmptyBudova(): Budova {
     budovaOdvodVodyKanalizacia: 0,
     budovaOdvodVodyVodnyTok: 0,
     budovaOdvodVodyNaPozemok: 0,
+    budovaOdvodVodyRetencnaNadrz: 0,
     budovaOdvodVodyNerieseny: 0,
     oddeleneRozvodyVody: 0,
     vyuzitieDazdovejVodyVObjekte: 0,

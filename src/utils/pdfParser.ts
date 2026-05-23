@@ -154,19 +154,19 @@ export function parseEnergetickyCertifikat(text: string): ParsedEnergetickyCerti
   if (triedaMatch) result.energetickaTrieda = triedaMatch[1];
 
   // Celková podlahová plocha
-  const plochaMatch = text.match(/[Cc]elková\s+(?:podlahová\s+)?plocha[:\s]+([\d\s,\.]+)\s*m/);
+  const plochaMatch = text.match(/[Cc]elková\s+(?:podlahová\s+)?plocha[:\s]+([\d\s,.]+)\s*m/);
   if (plochaMatch) result.celkovaPlochaMsq = parseFloat(plochaMatch[1].replace(/\s/g, '').replace(',', '.'));
 
   // Potreba tepla na vykurovanie
-  const kurMatch = text.match(/[Pp]otreba\s+(?:tepla\s+na\s+)?vykurovanie[:\s]+([\d\s,\.]+)\s*kWh/);
+  const kurMatch = text.match(/[Pp]otreba\s+(?:tepla\s+na\s+)?vykurovanie[:\s]+([\d\s,.]+)\s*kWh/);
   if (kurMatch) result.potrebaEnergieKurenie = parseFloat(kurMatch[1].replace(/\s/g, '').replace(',', '.'));
 
   // Potreba tepla na prípravu teplej vody
-  const tvMatch = text.match(/[Pp]otreba\s+(?:tepla\s+na\s+)?(?:prípravu\s+)?teplej\s+vody[:\s]+([\d\s,\.]+)\s*kWh/);
+  const tvMatch = text.match(/[Pp]otreba\s+(?:tepla\s+na\s+)?(?:prípravu\s+)?teplej\s+vody[:\s]+([\d\s,.]+)\s*kWh/);
   if (tvMatch) result.potrebaEnergieVoda = parseFloat(tvMatch[1].replace(/\s/g, '').replace(',', '.'));
 
   // Primárna energia
-  const primMatch = text.match(/[Pp]rimárna\s+energia[:\s]+([\d\s,\.]+)\s*kWh/);
+  const primMatch = text.match(/[Pp]rimárna\s+energia[:\s]+([\d\s,.]+)\s*kWh/);
   if (primMatch) result.primarnaEnergia = parseFloat(primMatch[1].replace(/\s/g, '').replace(',', '.'));
 
   // Typ vykurovania
@@ -187,10 +187,10 @@ export function parseProjektovaDokumentacia(text: string): ParsedProjektovaDokum
   const rokMatch = text.match(/[Rr]ok\s+(?:výstavby|kolaudácie|dokončenia)[:\s]+((?:19|20)\d{2})/);
   if (rokMatch) result.rokVystavby = parseInt(rokMatch[1], 10);
 
-  const upMatch = text.match(/[Uu]žitková\s+plocha[:\s]+([\d\s,\.]+)\s*m/);
+  const upMatch = text.match(/[Uu]žitková\s+plocha[:\s]+([\d\s,.]+)\s*m/);
   if (upMatch) result.uzitkovaPlocha = parseFloat(upMatch[1].replace(/\s/g, '').replace(',', '.'));
 
-  const zpMatch = text.match(/[Zz]astavané\s+(?:plocha|územie)[:\s]+([\d\s,\.]+)\s*m/);
+  const zpMatch = text.match(/[Zz]astavané\s+(?:plocha|územie)[:\s]+([\d\s,.]+)\s*m/);
   if (zpMatch) result.zastavanahPlocha = parseFloat(zpMatch[1].replace(/\s/g, '').replace(',', '.'));
 
   const npMatch = text.match(/(?:počet\s+)?nadzemn\w+\s+podlaž[íi][:\s]+(\d+)/i);
@@ -215,13 +215,13 @@ export function parseProjektovaDokumentacia(text: string): ParsedProjektovaDokum
 export function parseAuditSprava(text: string): ParsedAuditSprava {
   const result: ParsedAuditSprava = {};
 
-  const celkMatch = text.match(/[Cc]elková\s+spotreba\s+energie[:\s]+([\d\s,\.]+)\s*kWh/);
+  const celkMatch = text.match(/[Cc]elková\s+spotreba\s+energie[:\s]+([\d\s,.]+)\s*kWh/);
   if (celkMatch) result.celkovaSpotreba = parseFloat(celkMatch[1].replace(/\s/g, '').replace(',', '.'));
 
-  const elMatch = text.match(/[Ss]potreba\s+elektrin\w[:\s]+([\d\s,\.]+)\s*kWh/);
+  const elMatch = text.match(/[Ss]potreba\s+elektrin\w[:\s]+([\d\s,.]+)\s*kWh/);
   if (elMatch) result.spotrebaElektrina = parseFloat(elMatch[1].replace(/\s/g, '').replace(',', '.'));
 
-  const plynMatch = text.match(/[Ss]potreba\s+(?:zemného\s+)?plynu[:\s]+([\d\s,\.]+)\s*(?:kWh|m³|MWh)/);
+  const plynMatch = text.match(/[Ss]potreba\s+(?:zemného\s+)?plynu[:\s]+([\d\s,.]+)\s*(?:kWh|m³|MWh)/);
   if (plynMatch) result.spotrebaPlyn = parseFloat(plynMatch[1].replace(/\s/g, '').replace(',', '.'));
 
   return result;

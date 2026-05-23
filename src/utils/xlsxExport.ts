@@ -117,6 +117,7 @@ function sheetBudovy(areal: Areal): (string | number)[][] {
     // Strecha
     'Typ strechy', 'Zateplenie strechy', 'Orientácia na juh (m²)',
     // Voda
+    'Odvod do retenčnej nádrže (%)',
     'Využitie dažďovej vody v objekte',
     // Úspory
     'Materiál obvodových stien', 'Zateplenie fasády', 'Materiál zateplenia fasády',
@@ -151,6 +152,7 @@ function sheetBudovy(areal: Areal): (string | number)[][] {
     yn(b.dazdovaKanalizaciaBezZariadenia), yn(b.pripojkaBezSpatnejKlapky),
     yn(b.elektrickeZariadeniaSuterenNizko), yn(b.uzaverPlynuSuteren),
     typStrechy(b.strechaTyp), zateplenie(b.strechaZateplenie), b.strechaOrientovanaPlochaNaJuh,
+    b.budovaOdvodVodyRetencnaNadrz,
     yn(b.vyuzitieDazdovejVodyVObjekte),
     b.obvodoveStenyMaterial, zateplenie(b.zateplenieFasady), b.zateplenieFasadyMaterial,
     b.celkovaPlochaPresklenia, b.termoizolacneOkna, b.vekTermoizolacnychOkien || '',

@@ -165,6 +165,23 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
         </div>
       </div>
 
+      {/* Legenda skratiek */}
+      <details className="group border border-gray-200 rounded-lg overflow-hidden">
+        <summary className="cursor-pointer flex items-center gap-2 px-4 py-2.5 hover:bg-gray-50 transition-colors text-sm text-gray-600 list-none select-none">
+          <span className="group-open:rotate-90 transition-transform inline-block text-gray-400">▶</span>
+          Vysvetlenie skratiek
+        </summary>
+        <div className="px-4 pb-3 pt-2 border-t border-gray-100 grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 text-xs text-gray-600">
+          <div><abbr title="Modro-zelená infraštruktúra" className="no-underline font-semibold">MZI</abbr> – Modro-zelená infraštruktúra</div>
+          <div><abbr title="Obnoviteľné zdroje energie" className="no-underline font-semibold">OZE</abbr> – Obnoviteľné zdroje energie</div>
+          <div><abbr title="Tepelné čerpadlo" className="no-underline font-semibold">TČ</abbr> – Tepelné čerpadlo</div>
+          <div><abbr title="Netto úžitková plocha" className="no-underline font-semibold">NUS</abbr> – Netto úžitková plocha</div>
+          <div><abbr title="Fotovoltika" className="no-underline font-semibold">FV</abbr> – Fotovoltika (solárne panely)</div>
+          <div><abbr title="Centrálne zásobovanie teplom" className="no-underline font-semibold">CZT</abbr> – Centrálne zásobovanie teplom</div>
+          <div><abbr title="Light Emitting Diode – dióda emitujúca svetlo" className="no-underline font-semibold">LED</abbr> – Úsporné osvetlenie</div>
+        </div>
+      </details>
+
       {/* Score Gauges */}
       <div className="flex flex-wrap justify-center gap-8">
         <div className="text-center">
