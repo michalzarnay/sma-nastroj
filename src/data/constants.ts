@@ -22,15 +22,15 @@ export const ROOF_TYPES = [
 
 // Insulation levels
 export const INSULATION_LEVELS = [
-  { value: 0, label: 'Nie' },
-  { value: 1, label: 'Áno' },
+  { value: 0, label: 'nie' },
+  { value: 1, label: 'áno' },
   { value: 2, label: 'čiastočne', description: 'Iba časť plochy alebo na dnešné pomery už nepostačujúce zateplenie' },
 ] as const;
 
 // Yes/No
 export const YES_NO = [
-  { value: 1, label: 'Áno' },
-  { value: 0, label: 'Nie' },
+  { value: 1, label: 'áno' },
+  { value: 0, label: 'nie' },
 ] as const;
 
 // Sewage types
@@ -47,7 +47,7 @@ export const GUTTER_TYPES = [
 
 // Coal/wood types
 export const COAL_WOOD_TYPES = [
-  { value: 0, label: 'Nie' },
+  { value: 0, label: 'nie' },
   { value: 1, label: 'uhlie' },
   { value: 2, label: 'drevo' },
 ] as const;
