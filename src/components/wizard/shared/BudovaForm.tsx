@@ -220,8 +220,8 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
         <SelectCard
           label="Problémy s aktuálnym stavom strechy"
           options={[
-            { value: 0, label: 'Nie', description: 'Strecha je v poriadku' },
-            { value: 1, label: 'Áno', description: 'Zatekanie, plesne, iné problémy' },
+            { value: 0, label: 'nie', description: 'Strecha je v poriadku' },
+            { value: 1, label: 'áno', description: 'Zatekanie, plesne, iné problémy' },
           ]}
           value={budova.strechaProblemy}
           onChange={(v) => onChange({ strechaProblemy: v as 0 | 1 })}
