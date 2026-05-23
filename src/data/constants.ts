@@ -22,8 +22,13 @@ export const ROOF_TYPES = [
 
 // Insulation levels
 export const INSULATION_LEVELS = [
+<<<<<<< HEAD
   { value: 0, label: 'nie' },
   { value: 1, label: 'áno' },
+=======
+  { value: 0, label: 'Nie' },
+  { value: 1, label: 'Áno' },
+>>>>>>> origin/main
   { value: 2, label: 'čiastočne', description: 'Iba časť plochy alebo na dnešné pomery už nepostačujúce zateplenie' },
 ] as const;
 
@@ -47,7 +52,11 @@ export const GUTTER_TYPES = [
 
 // Coal/wood types
 export const COAL_WOOD_TYPES = [
+<<<<<<< HEAD
   { value: 0, label: 'nie' },
+=======
+  { value: 0, label: 'Nie' },
+>>>>>>> origin/main
   { value: 1, label: 'uhlie' },
   { value: 2, label: 'drevo' },
 ] as const;
