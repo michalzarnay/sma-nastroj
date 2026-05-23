@@ -15,16 +15,16 @@ export const BUILDING_CATEGORIES = {
 
 // Roof types
 export const ROOF_TYPES = [
-  { value: 1, label: 'Plochá strecha (do 10°)', description: 'Strecha so sklonom do 10 stupňov' },
-  { value: 2, label: 'Šikmá strecha (10° – 45°)', description: 'Strecha so sklonom medzi 10 a 45 stupňami' },
-  { value: 3, label: 'Strmá strecha (nad 45°)', description: 'Strecha so sklonom nad 45 stupňov' },
+  { value: 1, label: 'plochá strecha (do 10°)', description: 'Strecha so sklonom do 10 stupňov' },
+  { value: 2, label: 'šikmá strecha (10° – 45°)', description: 'Strecha so sklonom medzi 10 a 45 stupňami' },
+  { value: 3, label: 'strmá strecha (nad 45°)', description: 'Strecha so sklonom nad 45 stupňov' },
 ] as const;
 
 // Insulation levels
 export const INSULATION_LEVELS = [
   { value: 0, label: 'Nie' },
   { value: 1, label: 'Áno' },
-  { value: 2, label: 'Čiastočne', description: 'Iba časť plochy alebo na dnešné pomery už nepostačujúce zateplenie' },
+  { value: 2, label: 'čiastočne', description: 'Iba časť plochy alebo na dnešné pomery už nepostačujúce zateplenie' },
 ] as const;
 
 // Yes/No
@@ -35,38 +35,38 @@ export const YES_NO = [
 
 // Sewage types
 export const SEWAGE_TYPES = [
-  { value: 1, label: 'Spoločne', description: 'Splašky a dažďová voda odvádzané spoločným potrubím' },
-  { value: 2, label: 'Oddelene', description: 'Splašky a dažďová voda majú samostatné potrubia' },
+  { value: 1, label: 'spoločne', description: 'Splašky a dažďová voda odvádzané spoločným potrubím' },
+  { value: 2, label: 'oddelene', description: 'Splašky a dažďová voda majú samostatné potrubia' },
 ] as const;
 
 // Rain gutter types
 export const GUTTER_TYPES = [
-  { value: 1, label: 'Vonkajšie', description: 'Zvody vedené po vonkajšej fasáde budovy' },
-  { value: 2, label: 'Vnútorné', description: 'Zvody vedené vnútrom budovy' },
+  { value: 1, label: 'vonkajšie', description: 'Zvody vedené po vonkajšej fasáde budovy' },
+  { value: 2, label: 'vnútorné', description: 'Zvody vedené vnútrom budovy' },
 ] as const;
 
 // Coal/wood types
 export const COAL_WOOD_TYPES = [
   { value: 0, label: 'Nie' },
-  { value: 1, label: 'Uhlie' },
-  { value: 2, label: 'Drevo' },
+  { value: 1, label: 'uhlie' },
+  { value: 2, label: 'drevo' },
 ] as const;
 
 // Project documentation levels
 export const PD_LEVELS = [
   { value: 0, label: '–' },
-  { value: 1, label: 'Zámer' },
-  { value: 2, label: 'Štúdia uskutočniteľnosti' },
+  { value: 1, label: 'zámer' },
+  { value: 2, label: 'štúdia uskutočniteľnosti' },
   { value: 3, label: 'PD pre územné rozhodnutie' },
   { value: 4, label: 'PD pre stavebné povolenie' },
-  { value: 5, label: 'Realizačná dokumentácia' },
-  { value: 6, label: 'Skutočné vyhotovenie' },
+  { value: 5, label: 'realizačná dokumentácia' },
+  { value: 6, label: 'skutočné vyhotovenie' },
 ] as const;
 
 // PD form
 export const PD_FORMS = [
-  { value: 1, label: 'Tlačená' },
-  { value: 2, label: 'Elektronická' },
+  { value: 1, label: 'tlačená' },
+  { value: 2, label: 'elektronická' },
 ] as const;
 
 // Slovak regions

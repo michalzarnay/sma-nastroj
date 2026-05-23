@@ -189,7 +189,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
           >
             <option value="Slovensko">Slovensko</option>
             <option value="Česká republika">Česká republika</option>
-            <option value="">Iná krajina</option>
+            <option value="">iná krajina</option>
           </select>
         </div>
 
