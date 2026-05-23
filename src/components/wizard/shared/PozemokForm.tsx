@@ -92,13 +92,13 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         title="Odvod vody z pozemku"
         tooltipText="Kam odteká voda (zrejme najmä dažďová) z vášho pozemku? Rozdeľte 100% plochy medzi jednotlivé spôsoby odvodu."
         fields={[
-          { key: 'odvodVodyJednotnaKanalizacia', label: 'Jednotná stokova sieť', tooltipText: 'Kanalizácia spoločná pre splaškovú aj dažďovú vodu.' },
-          { key: 'odvodVodySplaskovaKanalizacia', label: 'Delená splašková kanalizácia', tooltipText: 'Samostatná kanalizácia pre splašky (bez dažďovej vody).' },
-          { key: 'odvodVodyZrazkovaKanalizacia', label: 'Delená zrážková kanalizácia', tooltipText: 'Samostatná kanalizácia len pre dažďovú vodu.' },
-          { key: 'odvodVodyVodnyTok', label: 'Do vodného toku', tooltipText: 'Priamo do potoka, rieky alebo vodnej plochy.' },
-          { key: 'odvodVodyVsakovanie', label: 'Cielené vsakovanie', tooltipText: 'Cielene vsakovaním – napr. do priehlbne, dažďovej záhrady.' },
-          { key: 'odvodVodyRetencnaNadrzou', label: 'Do retenčnej nádrže', tooltipText: 'Voda sa zachytáva v retenčnej nádrži.' },
-          { key: 'odvodVodyNerieseny', label: 'Neriešený', tooltipText: 'Odvod vody nie je riešený – voda voľne steká po povrchu.' },
+          { key: 'odvodVodyJednotnaKanalizacia', label: 'jednotná stokova sieť', tooltipText: 'Kanalizácia spoločná pre splaškovú aj dažďovú vodu.' },
+          { key: 'odvodVodySplaskovaKanalizacia', label: 'delená splašková kanalizácia', tooltipText: 'Samostatná kanalizácia pre splašky (bez dažďovej vody).' },
+          { key: 'odvodVodyZrazkovaKanalizacia', label: 'delená zrážková kanalizácia', tooltipText: 'Samostatná kanalizácia len pre dažďovú vodu.' },
+          { key: 'odvodVodyVodnyTok', label: 'do vodného toku', tooltipText: 'Priamo do potoka, rieky alebo vodnej plochy.' },
+          { key: 'odvodVodyVsakovanie', label: 'cielené vsakovanie', tooltipText: 'Cielene vsakovaním – napr. do priehlbne, dažďovej záhrady.' },
+          { key: 'odvodVodyRetencnaNadrzou', label: 'do retenčnej nádrže', tooltipText: 'Voda sa zachytáva v retenčnej nádrži.' },
+          { key: 'odvodVodyNerieseny', label: 'neriešený', tooltipText: 'Odvod vody nie je riešený – voda voľne steká po povrchu.' },
         ]}
         values={{
           odvodVodyJednotnaKanalizacia: pozemok.odvodVodyJednotnaKanalizacia,
@@ -126,10 +126,10 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
             title="Podiel typov vegetácie na priepustnej ploche"
             tooltipText="Rozdeľte priepustnú plochu podľa typu vegetácie. Súčet musí byť 100%."
             fields={[
-              { key: 'priepustnaPlochaHolaPoda', label: 'Holá pôda' },
-              { key: 'priepustnaPlochaByliny', label: 'Byliny (trávnik, lúka)' },
-              { key: 'priepustnaPlochaKry', label: 'Kry' },
-              { key: 'priepustnaPlochaStromy', label: 'Stromy' },
+              { key: 'priepustnaPlochaHolaPoda', label: 'holá pôda' },
+              { key: 'priepustnaPlochaByliny', label: 'byliny (trávnik, lúka)' },
+              { key: 'priepustnaPlochaKry', label: 'kry' },
+              { key: 'priepustnaPlochaStromy', label: 'stromy' },
             ]}
             values={{
               priepustnaPlochaHolaPoda: pozemok.priepustnaPlochaHolaPoda,
@@ -163,15 +163,15 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
             title="Typy polopriepustného povrchu"
             tooltipText="Rozdeľte polopriepustnú plochu podľa typu materiálu. Súčet musí byť 100%."
             fields={[
-              { key: 'polopriepustnaPriepustnyAsfalt', label: 'Priepustný asfalt' },
-              { key: 'polopriepustnaPriepustnyBeton', label: 'Priepustný betón' },
-              { key: 'polopriepustnaPlnevegetacneTvarnice', label: 'Plnevegetačné zatrávňovacie tvárnice' },
-              { key: 'polopriepustnaPolovegetacneTvarnice', label: 'Polovegetačné tvárnice (betónové)' },
-              { key: 'polopriepustnaVodopriepustnaDlazba', label: 'Vodopriepustná dlažba', tooltipKey: 'priepustnaDlazbaDef' },
-              { key: 'polopriepustnaZivicaKremicityStrk', label: 'Živica a kremičitý štrk' },
-              { key: 'polopriepustnaMlatovyPovrch', label: 'Mlatový povrch' },
-              { key: 'polopriepustnaStered', label: 'Materiál STERED ID 250/05' },
-              { key: 'polopriepustnaInyPovrch', label: 'Iný povrch' },
+              { key: 'polopriepustnaPriepustnyAsfalt', label: 'priepustný asfalt' },
+              { key: 'polopriepustnaPriepustnyBeton', label: 'priepustný betón' },
+              { key: 'polopriepustnaPlnevegetacneTvarnice', label: 'plnevegetačné zatrávňovacie tvárnice' },
+              { key: 'polopriepustnaPolovegetacneTvarnice', label: 'polovegetačné tvárnice (betónové)' },
+              { key: 'polopriepustnaVodopriepustnaDlazba', label: 'vodopriepustná dlažba', tooltipKey: 'priepustnaDlazbaDef' },
+              { key: 'polopriepustnaZivicaKremicityStrk', label: 'živica a kremičitý štrk' },
+              { key: 'polopriepustnaMlatovyPovrch', label: 'mlatový povrch' },
+              { key: 'polopriepustnaStered', label: 'materiál STERED ID 250/05' },
+              { key: 'polopriepustnaInyPovrch', label: 'iný povrch' },
             ]}
             values={{
               polopriepustnaPriepustnyAsfalt: pozemok.polopriepustnaPriepustnyAsfalt,

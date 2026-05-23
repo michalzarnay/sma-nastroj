@@ -265,11 +265,11 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
               className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none"
             >
               <option value={0}>— nevyplnené —</option>
-              <option value={1}>1 – Žiadne riziko (mimo záplavovej zóny / Q1000)</option>
-              <option value={2}>2 – Nízke riziko (raz za 100 rokov / Q100)</option>
-              <option value={3}>3 – Stredné riziko (raz za 50 rokov / Q50)</option>
-              <option value={4}>4 – Vysoké riziko (raz za 10 rokov / Q10)</option>
-              <option value={5}>5 – Veľmi vysoké riziko (raz za 5 rokov / Q5)</option>
+              <option value={1}>1 – žiadne riziko (mimo záplavovej zóny / Q1000)</option>
+              <option value={2}>2 – nízke riziko (raz za 100 rokov / Q100)</option>
+              <option value={3}>3 – stredné riziko (raz za 50 rokov / Q50)</option>
+              <option value={4}>4 – vysoké riziko (raz za 10 rokov / Q10)</option>
+              <option value={5}>5 – veľmi vysoké riziko (raz za 5 rokov / Q5)</option>
             </select>
             <button
               type="button"
@@ -279,7 +279,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-blue-700 border border-blue-300 rounded-lg hover:bg-blue-50 disabled:opacity-50 transition-colors whitespace-nowrap"
             >
               {svpLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <MapPin className="w-3.5 h-3.5" />}
-              {svpLoading ? 'Načítava…' : 'Zistiť zo SVP'}
+              {svpLoading ? 'načítava…' : 'zistiť zo SVP'}
             </button>
           </div>
           {svpMsg && (
@@ -333,11 +333,11 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
           title="Odvod vody z budovy"
           tooltipText="Kam odteká dažďová voda zo strechy a okolia budovy? Rozdeľte 100%."
           fields={[
-            { key: 'budovaOdvodVodyKanalizacia', label: 'Do kanalizácie' },
-            { key: 'budovaOdvodVodyVodnyTok', label: 'Do vodného toku' },
-            { key: 'budovaOdvodVodyNaPozemok', label: 'Cielene na pozemok' },
-            { key: 'budovaOdvodVodyRetencnaNadrz', label: 'Do retenčnej nádrže' },
-            { key: 'budovaOdvodVodyNerieseny', label: 'Neriešený' },
+            { key: 'budovaOdvodVodyKanalizacia', label: 'do kanalizácie' },
+            { key: 'budovaOdvodVodyVodnyTok', label: 'do vodného toku' },
+            { key: 'budovaOdvodVodyNaPozemok', label: 'cielene na pozemok' },
+            { key: 'budovaOdvodVodyRetencnaNadrz', label: 'do retenčnej nádrže' },
+            { key: 'budovaOdvodVodyNerieseny', label: 'neriešený' },
           ]}
           values={{
             budovaOdvodVodyKanalizacia: budova.budovaOdvodVodyKanalizacia,
