@@ -21,6 +21,7 @@ const KONTEXTOVE_OTAZKY: Record<number, string[]> = {
     'Kde nájdem množstvo zrážok pre moju obec?',
     'Čo je potenciál slnečného svitu a kde ho zistím?',
     'Ako definovať hranice areálu?',
+    'Čo je VESMA?',
   ],
   2: [
     'Ako rozlíšiť priepustné a polopriepustné plochy?',
@@ -49,46 +50,74 @@ const KONTEXTOVE_OTAZKY: Record<number, string[]> = {
     'Čo znamenajú váhy pri porovnávaní areálov?',
     'Ako exportovať výsledky do XLSX?',
     'Ktoré opatrenia sú najdôležitejšie?',
+    'Aké sú orientačné ceny opatrení?',
   ],
 };
 
 // Databáza odpovedí
 const ODPOVEDE: Record<string, string> = {
+  // VESMA všeobecne
+  'čo je vesma': '**VESMA** (Voda a energia – sprievodca mapovaním areálov) je metodický nástroj vyvinutý v spolupráci INOVIA, Žilinský samosprávny kraj a UNIZA. Pomáha organizáciám verejného sektora zmapovať stav svojich areálov z hľadiska:\n• **MZI** – modro-zelená infraštruktúra (hospodárenie s vodou)\n• **OZE** – obnoviteľné zdroje energie\n• **Energetika** – efektívnosť budov\n\nNa základe zberu dát nástroj odporúča konkrétne opatrenia vrátane orientačných cien.',
+
+  'mzi opatrenia': '**MZI – modro-zelená infraštruktúra** pomáha zadržiavať vodu v krajine a znižovať povodňové riziká. Orientačné ceny opatrení:\n• **Dažďová záhrada**: 500–3 000 €\n• **Vsakovací rigol**: 1 500–5 000 €\n• **Priepustná dlažba**: 25–60 €/m²\n• **Výsadba stromov**: 50–500 €/strom\n• **Retenčná nádrž**: 2 000–8 000 €\n• **Zelená strecha extenzívna**: 40–80 €/m²',
+
+  'oze opatrenia': '**OZE – obnoviteľné zdroje energie** znižujú závislosť od fosílnych palív. Orientačné ceny:\n• **Fotovoltická elektráreň (FVE)**: 800–1 200 €/kWp\n• **Tepelné čerpadlo (TČ)**: 8 000–18 000 €\n• **Batériové úložisko**: 4 000–10 000 €\n\nFVE je vhodná pre ploché a šikmé strechy s južnou orientáciou. TČ nahrádza plynové kotly pri dobrom pomere COP.',
+
+  'energetické opatrenia': '**Energetické opatrenia** zvyšujú tepelný komfort a znižujú spotrebu energie. Orientačné ceny:\n• **Zateplenie fasády ETICS**: 50–100 €/m²\n• **Výmena okien**: 250–600 €/m²\n• **LED osvetlenie**: 3–30 €/svietidlo\n• **Rekuperácia**: 5 000–15 000 €\n\nNajväčší efekt má zateplenie budov postavených pred rokom 2000 bez dodatočného zateplenia.',
+
+  'ceny opatrení': 'Orientačné ceny opatrení (VESMA metodika V1.0, 2026):\n\n**MZI:**\n• Dažďová záhrada: 500–3 000 €\n• Vsakovací rigol: 1 500–5 000 €\n• Priepustná dlažba: 25–60 €/m²\n• Retenčná nádrž: 2 000–8 000 €\n• Zelená strecha: 40–80 €/m²\n• Výsadba stromov: 50–500 €/strom\n\n**OZE:**\n• FVE: 800–1 200 €/kWp\n• Tepelné čerpadlo: 8 000–18 000 €\n• Batériové úložisko: 4 000–10 000 €\n\n**Energia:**\n• Zateplenie fasády: 50–100 €/m²\n• Výmena okien: 250–600 €/m²\n• LED: 3–30 €/svietidlo\n• Rekuperácia: 5 000–15 000 €',
+
   // Step 1
-  'kde nájdem množstvo zrážok': 'Množstvo zrážok pre vašu obec nájdete na stránke **SHMÚ (shmu.sk)** v sekcii Klimatológia → Zrážky. Pre rýchly odhad: väčšina Slovenska má 600–800 mm/rok, hornaté oblasti 800–1200 mm/rok.',
+  'kde nájdem množstvo zrážok': 'Množstvo zrážok pre vašu obec nájdete na stránke **SHMÚ (shmu.sk)** v sekcii Klimatológia → Zrážky. Pre rýchly odhad: väčšina Slovenska má 600–800 mm/rok, hornaté oblasti 800–1 200 mm/rok. Nástroj VESMA dokáže zrážky načítať automaticky podľa adresy cez tlačidlo "Načítať klimatické údaje".',
 
-  'potenciál slnečného svitu': 'Potenciál slnečného svitu (kWh/m²/rok) nájdete v európskej databáze **PVGIS** (re.jrc.ec.europa.eu/pvgis). Pre väčšinu Slovenska je to 1 000–1 200 kWh/m²/rok. Zadáte súradnice a systém vám vráti hodnotu pre konkrétnu lokalitu.',
+  'potenciál slnečného svitu': 'Potenciál slnečného svitu (kWh/m²/rok) pochádza z európskej databázy **PVGIS** (re.jrc.ec.europa.eu/pvgis). Pre väčšinu Slovenska je to 1 000–1 200 kWh/m²/rok. Nástroj VESMA dokáže túto hodnotu načítať automaticky podľa adresy – kliknite na "Načítať klimatické údaje".',
 
-  'hranice areálu': 'Areál definujte ako **súvislé územie** (pozemky + budovy), ktoré patria k jednej organizácii alebo projektu. Ideálne využite katastrálnu mapu (katasterportal.sk) na identifikáciu parciel. Jeden areál = jedna položka v tomto nástroji.',
+  'hranice areálu': 'Areál definujte ako **súvislé územie** (pozemky + budovy), ktoré patria k jednej organizácii alebo projektu. Ideálne využite katastrálnu mapu (katasterportal.sk) na identifikáciu parciel. Jeden areál = jedna položka v tomto nástroji. Ak má organizácia viacero oddelených areálov, každý zadajte zvlášť.',
 
   // Step 2
-  'priepustné a polopriepustné': 'Priepustné plochy **prepúšťajú vodu priamo do pôdy**: tráva, záhony, lesná pôda, štrk. Polopriepustné plochy prepúšťajú vodu **čiastočne**: priepustný asfalt, vegetačné tvarovky, mlat. Spevnené plochy (beton, klasický asfalt) vodu **neprepúšťajú vôbec**.',
+  'priepustné a polopriepustné': 'Priepustné plochy **prepúšťajú vodu priamo do pôdy**: tráva, záhony, lesná pôda, štrk bez podkladu. Polopriepustné plochy prepúšťajú vodu **čiastočne**: priepustný asfalt, vegetačné tvarovky, mlat, štrk na pevnom podklade. Spevnené plochy (betón, klasický asfalt) vodu **neprepúšťajú vôbec**.',
 
   'spevnená plocha': 'Do spevnenej plochy patria: klasický asfalt, betónové plochy, dlažba bez spár, terasy. Sú to plochy, kde dažďová voda **nevsákne** – odtečie po povrchu do odtoku alebo kanalizácie.',
 
-  'odvod dažďovej vody': 'Percentá odvodu odhadnite takto:\n• Kanalizácia: ak väčšina odtokov vedie do splaškovej/daž. kanalizácie\n• Vodný tok: ak areál susedí s potok/riekou a voda odtečie priamo\n• Vsakovanie: ak máte zelené plochy kde voda vsákne\n• Neriešený: ak neviete kam voda odtečie (problém!)\nSúčet musí dať 100 %.',
+  'odvod dažďovej vody': 'Percentá odvodu odhadnite takto:\n• Kanalizácia: ak väčšina odtokov vedie do splaškovej/daž. kanalizácie\n• Vodný tok: ak areál susedí s potokom/riekou a voda odtečie priamo\n• Vsakovanie: ak máte zelené plochy, kde voda vsákne\n• Retenčná nádrž: ak je na pozemku záchytná nádrž\n• Neriešený: ak neviete kam voda odtečie (problém!)\nSúčet musí dať 100 %.',
 
-  'dažďová záhrada': 'Dažďová záhrada je **zahlbená záhon** (10–30 cm pod úrovňou okolia), do ktorej sa zvádza dažďová voda zo striech alebo spevnených plôch. Rastliny v nej sú odolné voči krátkodobému zaplaveniu aj suchu. Pomáha vsáknutiu vody do pôdy a znižuje záťaž kanalizácie.',
+  'dažďová záhrada': 'Dažďová záhrada je **zahlbená záhon** (10–30 cm pod úrovňou okolia), do ktorej sa zvádza dažďová voda zo striech alebo spevnených plôch. Rastliny v nej sú odolné voči krátkodobému zaplaveniu aj suchu. Pomáha vsáknutiu vody do pôdy a znižuje záťaž kanalizácie. Orientačná cena: **500–3 000 €** (VESMA V1.0).',
+
+  'vsakovací rigol': 'Vsakovací rigol je **podzemná vsakovacia štruktúra** – priekopa vyplnená štrkom alebo špeciálnym modulom, do ktorej sa odvádza dažďová voda a postupne vsáka do pôdy. Vhodný pre parkoviská a dvorce. Cena: **1 500–5 000 €** (VESMA V1.0).',
+
+  'retenčná nádrž': 'Retenčná nádrž je **záchytná nádoba** na dažďovú vodu (nadzemná alebo podzemná). Voda sa využíva na závlahu, úžitkovú potrebu alebo sa regulovane vypúšťa. Znižuje nápor na kanalizáciu počas prívalových dažďov. Cena: **2 000–8 000 €** (VESMA V1.0).',
+
+  'zelená strecha': 'Zelená strecha je strecha pokrytá vegetáciou. Typy:\n• **Extenzívna** (nízke rastliny, 6–20 cm substrátu): 40–80 €/m² – nenáročná na údržbu\n• **Intenzívna** (záhrada na streche, 20–100+ cm): vyššia cena, vyžaduje statiku\n\nZnižuje odtok dažďovej vody, izoluje budovu a ochladzuje okolie.',
+
+  'priepustná dlažba': '**Priepustná dlažba** umožňuje vsakovanie dažďovej vody cez spáry alebo priepustný materiál. Vhodná pre parkoviská, chodníky, dvorce. Cena: **25–60 €/m²**. Pri renovácii parkoviska ide o jednoduchú náhradu klasického asfaltu.',
 
   // Step 3
-  'typ strechy': 'Typy striech:\n• **Plochá** (sklon < 5°): ideálna pre zelenú strechu alebo fotovoltiku\n• **Šikmá** (sklon 5°–45°): vhodná pre FV panely\n• **Strmá** (sklon > 45°): menej vhodná pre FV, väčšie tienenie',
+  'typ strechy': 'Typy striech:\n• **Plochá** (sklon do 10°): ideálna pre zelenú strechu alebo fotovoltiku\n• **Šikmá** (10°–45°): vhodná pre FV panely, možná zelená strecha extenzívna\n• **Strmá** (nad 45°): menej vhodná pre FV, väčšie tienenie\n\nTyp strechy zásadne ovplyvňuje odporúčania nástroja VESMA.',
 
-  'orientácia strechy na juh': 'Zadajte **plochu strešnej roviny** (v m²) otočenej na juh (± 45° od juhu). Táto plocha je kľúčová pre výpočet solárneho potenciálu. Ak má strecha viac rovín, sčítajte plochy tých, ktoré sú orientované na juh, juhozápad alebo juhovýchod.',
+  'orientácia strechy na juh': 'Zadajte **plochu strešnej roviny** (v m²) otočenej na juh (± 45° od juhu). Táto plocha je kľúčová pre výpočet solárneho potenciálu FVE. Ak má strecha viac rovín, sčítajte plochy orientované na juh, juhozápad alebo juhovýchod.',
 
-  'spotreba plynu elektriny': 'Spotrebu nájdete na **ročnom vyúčtovaní** od dodávateľa energie:\n• Plyn: v m³ alebo kWh (prepočet: 1 m³ ≈ 10,5 kWh)\n• Elektrina: v kWh\nAk nemáte vyúčtovanie, odhadnite podľa výkonu kotla × hodiny prevádzky za rok.',
+  'spotreba plynu elektriny': 'Spotrebu nájdete na **ročnom vyúčtovaní** od dodávateľa energie:\n• Plyn: v m³ alebo kWh (prepočet: 1 m³ ≈ 10,5 kWh)\n• Elektrina: v kWh\nAk nemáte vyúčtovanie, odhadnite podľa výkonu kotla × hodiny prevádzky za rok. Správna hodnota spotreby zlepšuje kvalitu odporúčaní nástroja.',
 
-  'rekuperácia': 'Rekuperácia (spätné získavanie tepla) je systém vetrania, ktorý **ohrieva čerstvý vzduch** tepelnou energiou odpadového vzduchu. Znižuje straty tepla pri vetraní o 60–85 %. Ak má budova takýto systém, zadajte "áno".',
+  'rekuperácia': 'Rekuperácia (spätné získavanie tepla) je systém vetrania, ktorý **ohrieva čerstvý vzduch** tepelnou energiou odpadového vzduchu. Znižuje straty tepla pri vetraní o 60–90 %. Ak má budova takýto systém, zadajte "áno". Inštalácia novej rekuperácie: **5 000–15 000 €** (VESMA V1.0).',
 
-  'termoizolačné okná': 'Zadajte **percentuálny podiel** okien s tepelnoizolačným zasklením (dvojsklo/trojsklo) z celkových okien budovy. Ak si nie ste istí, odhadnite: okná staršie ako 20 rokov sú väčšinou bez termoizolácie.',
+  'termoizolačné okná': 'Zadajte **percentuálny podiel** okien s tepelnoizolačným zasklením (dvojsklo/trojsklo) z celkových okien budovy. Ak si nie ste istí, odhadnite: okná staršie ako 25 rokov sú väčšinou bez termoizolácie. Výmena okien: **250–600 €/m²** (VESMA V1.0).',
+
+  'fotovoltika fve': '**Fotovoltická elektráreň (FVE)** premieňa slnečnú energiu na elektrinu. Odporúčaná pre:\n• Ploché a šikmé strechy s južnou orientáciou\n• Spotreba elektriny v budove (vlastná spotreba znižuje návratnosť)\n\nNáklady: **800–1 200 €/kWp**. Na Slovensku dostupné dotácie z Environmentálneho fondu a eurofondov. Typická návratnosť: 7–12 rokov.',
+
+  'tepelné čerpadlo': '**Tepelné čerpadlo (TČ)** využíva teplo zo vzduchu, zeme alebo vody na vykurovanie. Ideálne ako náhrada plynového kotla:\n• COP (efektívnosť) 3–5: na 1 kWh elektriny → 3–5 kWh tepla\n• Vhodné pre budovy s nižšou teplotou vykurovacej sústavy\n\nCena: **8 000–18 000 €** + prípadná úprava vykurovacej sústavy (VESMA V1.0).',
+
+  'zateplenie fasády': '**Zateplenie fasády systémom ETICS** (kontaktné zatepľovacie systémy) znižuje tepelné straty o 30–60 %. Cena: **50–100 €/m²** podľa hrúbky izolácie a materiálu. Najefektívnejšie pri budovách bez zateplenia postavených pred rokom 2000. Dotácie: dostupné cez OPKZP, OP Slovensko.',
 
   // Step 6
-  'interpretovať celkové skóre': 'Skóre vyjadruje **pripravenosť areálu** na klimatické opatrenia:\n• 0–30: nízka (veľký potenciál zlepšenia)\n• 31–50: podpriemerná\n• 51–70: priemerná\n• 71–85: dobrá\n• 86–100: výborná\n\nNižšie skóre = väčší priestor pre zlepšenie a možné dotácie.',
+  'interpretovať celkové skóre': 'Skóre VESMA vyjadruje **pripravenosť areálu** na klimatické opatrenia (0 = nič nie je urobené, 100 = všetko optimálne):\n• 0–30: nízka – veľký potenciál zlepšenia, priorita investícií\n• 31–50: podpriemerná – niekoľko kľúčových oblastí bez riešenia\n• 51–70: priemerná – základné opatrenia sú, rezervy existujú\n• 71–85: dobrá – areál je dobre vybavený\n• 86–100: výborná – príkladový areál\n\nNižšie skóre = väčší priestor pre dotácie.',
 
-  'váhy pri porovnávaní': 'Váhy umožňujú **zvýrazniť dôležitosť** konkrétnej oblasti pre daný typ areálu alebo zámer:\n• Ak chcete prioritizovať vodu: nastavte MZI váhu vyššie (napr. 2)\n• Ak riešite energiu: zvýšte váhu Energia\n• Výsledné vážené skóre sa zobrazí v XLSX v záložke "Váhy a skóre"',
+  'váhy pri porovnávaní': 'Váhy umožňujú **zvýrazniť dôležitosť** konkrétnej oblasti pre daný typ areálu:\n• Ak prioritizujete vodu: nastavte MZI váhu vyššie (napr. 2)\n• Ak riešite energiu: zvýšte váhu Energia\n• Vážené skóre sa zobrazí v XLSX v záložke "Váhy a skóre"\n\nVáhy neovplyvňujú odporúčania, iba celkové skóre pre porovnanie viacerých areálov.',
 
-  'exportovať výsledky do xlsx': 'Kliknite na tlačidlo **"Exportovať XLSX"** v sekcii Výsledky (krok 6). Súbor obsahuje 5 záložiek: Súhrn, Pozemky, Budovy, Odporúčania, Váhy a skóre. Záložku "Váhy a skóre" môžete upraviť priamo v Exceli pre porovnanie viacerých areálov.',
+  'exportovať výsledky do xlsx': 'Kliknite na tlačidlo **"Exportovať XLSX"** v sekcii Výsledky (krok 6). Súbor obsahuje 5 záložiek:\n• **Súhrn**: identifikácia, skóre, závery\n• **Pozemky**: dáta o každom pozemku\n• **Budovy**: dáta o každej budove\n• **Odporúčania**: opatrenia zoradené podľa priority\n• **Váhy a skóre**: pre porovnanie viacerých areálov\n\nSúbor môžete odovzdať ako podklad pre projektantov alebo žiadosť o dotáciu.',
 
-  'najdôležitejšie opatrenia': 'Opatrenia sú zoradené podľa **priority** (vysoká → stredná → nízka). Priorita je určená na základe:\n• Ako veľmi zlepší skóre\n• Dostupnosť dotácií\n• Realizovateľnosť\n\nOdporúčame začať s opatreniami s **vysokou prioritou** a dobrou dostupnosťou dotácií.',
+  'najdôležitejšie opatrenia': 'Opatrenia VESMA sú zoradené podľa **priority** (vysoká → stredná → nízka). Priorita zohľadňuje:\n• Ako veľmi zlepší skóre v danej oblasti\n• Dostupnosť dotácií\n• Realizovateľnosť bez stavebného povolenia\n\nOdporúčame začať s opatreniami s **vysokou prioritou** – zvyčajne sú to zateplenie, LED osvetlenie a dažďová záhrada alebo priepustná dlažba.',
+
+  'dotácie': 'Pre opatrenia VESMA sú dostupné viaceré dotačné schémy:\n• **MZI (voda)**: Environmentálny fond SR, OP Slovensko (výzvy pre samosprávy)\n• **OZE (energia)**: Plán obnovy SR, Zelená domácnostiam (pre menšie zariadenia)\n• **Energetika**: OP Slovensko, Fond na podporu zatepľovania\n\nPre verejné inštitúcie (školy, kultúrne centrá) sú dostupné preferencie. Konkrétne výzvy overte na enviroportal.sk a slovensko.sk.',
 };
 
 function najdiOdpoved(otazka: string): string {
@@ -102,17 +131,20 @@ function najdiOdpoved(otazka: string): string {
   }
 
   // Fallback podľa kľúčových slov
+  if (q.includes('vesma') || q.includes('čo je tento')) {
+    return ODPOVEDE['čo je vesma'];
+  }
   if (q.includes('zrážok') || q.includes('srážok') || q.includes('prší')) {
     return ODPOVEDE['kde nájdem množstvo zrážok'];
   }
-  if (q.includes('slnk') || q.includes('pvgis') || q.includes('solar')) {
+  if (q.includes('slnk') || q.includes('pvgis') || q.includes('solar') || q.includes('slnečn')) {
     return ODPOVEDE['potenciál slnečného svitu'];
   }
   if (q.includes('priepust')) {
     return ODPOVEDE['priepustné a polopriepustné'];
   }
-  if (q.includes('strech') && (q.includes('typ') || q.includes('druh'))) {
-    return ODPOVEDE['typ strechy'];
+  if (q.includes('strech') && (q.includes('typ') || q.includes('druh') || q.includes('zel'))) {
+    return q.includes('zel') ? ODPOVEDE['zelená strecha'] : ODPOVEDE['typ strechy'];
   }
   if (q.includes('rekuperáci') || q.includes('rekuperac')) {
     return ODPOVEDE['rekuperácia'];
@@ -123,8 +155,44 @@ function najdiOdpoved(otazka: string): string {
   if (q.includes('xlsx') || q.includes('export') || q.includes('excel')) {
     return ODPOVEDE['exportovať výsledky do xlsx'];
   }
+  if (q.includes('fotovolt') || q.includes('fve') || q.includes('panel')) {
+    return ODPOVEDE['fotovoltika fve'];
+  }
+  if (q.includes('tepeln') && q.includes('čerpadl')) {
+    return ODPOVEDE['tepelné čerpadlo'];
+  }
+  if (q.includes('zateplen') || q.includes('etics') || q.includes('fasád')) {
+    return ODPOVEDE['zateplenie fasády'];
+  }
+  if (q.includes('dažďová záhrad') || q.includes('dazdova zahrad')) {
+    return ODPOVEDE['dažďová záhrada'];
+  }
+  if (q.includes('rigol') || q.includes('vsakov')) {
+    return ODPOVEDE['vsakovací rigol'];
+  }
+  if (q.includes('retenčn') || q.includes('nádrž') || q.includes('nadrz')) {
+    return ODPOVEDE['retenčná nádrž'];
+  }
+  if (q.includes('dlažb') || q.includes('priepustn') && q.includes('dlažb')) {
+    return ODPOVEDE['priepustná dlažba'];
+  }
+  if (q.includes('dotáci') || q.includes('grant') || q.includes('podpora')) {
+    return ODPOVEDE['dotácie'];
+  }
+  if (q.includes('cen') || q.includes('koľko stoj') || q.includes('náklad')) {
+    return ODPOVEDE['ceny opatrení'];
+  }
+  if (q.includes('mzi') || q.includes('modro') || q.includes('zelená infra')) {
+    return ODPOVEDE['mzi opatrenia'];
+  }
+  if (q.includes('oze') || q.includes('obnoviteľn')) {
+    return ODPOVEDE['oze opatrenia'];
+  }
+  if (q.includes('energia') || q.includes('energetick')) {
+    return ODPOVEDE['energetické opatrenia'];
+  }
 
-  return 'Prepáčte, na túto otázku nemám presnú odpoveď. Skúste otázku preformulovať alebo sa pozrite do nápovedy pri konkrétnom poli (ikona ?).\n\nMôžete sa tiež opýtať na: zrážky, slnečný svit, typy plôch, odvod vody, typ strechy, spotrebu energie, rekuperáciu, alebo interpretáciu skóre.';
+  return 'Prepáčte, na túto otázku nemám presnú odpoveď. Skúste otázku preformulovať alebo sa pozrite do nápovedy pri konkrétnom poli (ikona ?).\n\nMôžete sa pýtať na: VESMA metodiku, zrážky, slnečný svit, typy plôch, odvod vody, dažďovú záhradu, retenčnú nádrž, zelenú strechu, fotovoltiku, tepelné čerpadlo, zateplenie, rekuperáciu, dotácie, ceny opatrení alebo interpretáciu skóre.';
 }
 
 function formatText(text: string): React.ReactNode {
@@ -153,7 +221,7 @@ export function ChatPanel({ currentStep }: ChatPanelProps) {
     {
       id: '0',
       odosielatel: 'bot',
-      text: 'Dobrý deň! Som váš asistent pre mapovanie areálu. Môžem vám pomôcť objasniť, ako vyplniť jednotlivé polia, alebo odpovedať na otázky o parametroch a opatreniach.',
+      text: 'Dobrý deň! Som asistent VESMA – nástroja pre mapovanie areálov z hľadiska vody a energie. Môžem vám vysvetliť, ako vyplniť polia, a odpovedať na otázky o MZI, OZE, energetických opatreniach, ich cenách a dotáciách.',
       cas: new Date().toLocaleTimeString('sk', { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
