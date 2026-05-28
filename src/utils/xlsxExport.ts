@@ -14,7 +14,7 @@ function weightedScore(score: ScoreResult, vahy: Areal['vahy']): number {
 function sheetSuhrn(areal: Areal, score: ScoreResult): (string | number)[][] {
   const ws = (vahy: Areal['vahy']) => weightedScore(score, vahy);
   return [
-    ['SMA Nástroj – Hodnotenie areálu'],
+    ['VESMA – Hodnotenie areálu'],
     [],
     ['Dátum hodnotenia', new Date().toLocaleDateString('sk')],
     ['Názov areálu', areal.nazov],
