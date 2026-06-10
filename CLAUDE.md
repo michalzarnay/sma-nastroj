@@ -2,7 +2,7 @@
 
 ## Kontext
 VESMA je online dotazníkový nástroj pre samosprávy (voda, energia, adaptácia).
-Stack: React + TypeScript + Tailwind, nasadenie na Vercel. (Over a uprav podľa reality.)
+Stack: React + Vite + TypeScript + Tailwind, nasadenie na Vercel. (Over a uprav podľa reality.)
 
 ## Zakázané oblasti — NIKDY neupravuj bez človeka
 Ak sa oprava dotýka týchto oblastí, NEopravuj. Napíš do issue/PR komentár
