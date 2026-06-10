@@ -14,7 +14,7 @@ export function EntityTabBar({
   items, activeIndex, onSelect, onAdd, onRemove, addLabel, minItems = 1,
 }: EntityTabBarProps) {
   return (
-    <div className="flex items-center gap-1 border-b border-gray-200 overflow-x-auto pb-0 mb-4">
+    <div className="relative z-10 flex items-center gap-1 border-b border-gray-200 overflow-x-auto pb-0 mb-4">
       {items.map((item, index) => (
         <div key={item.id} className="flex items-center flex-shrink-0">
           <button
