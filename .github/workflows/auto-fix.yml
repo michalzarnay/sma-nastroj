@@ -1,0 +1,27 @@
+name: VESMA auto-fix
+on:
+  issues:
+    types: [labeled]
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+jobs:
+  fix:
+    if: github.event.label.name == 'auto-fix'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Oprav chybu opísanú v tomto issue podľa pravidiel v CLAUDE.md.
+            Pracuj na novej vetve, NIKDY nepushuj do main.
+            Spusti testy, otvor PR a v popise uveď "Closes #${{ github.event.issue.number }}".
+            Ak je problém nejednoznačný alebo zasahuje zakázanú oblasť, neopravuj —
+            iba napíš do issue komentár a počkaj na človeka.
+          claude_args: |
+            --max-turns 15
+            --model claude-opus-4-8
+            --allowedTools "Read,Edit,Write,Bash(npm:*),Bash(git:*)"
