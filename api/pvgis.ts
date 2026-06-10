@@ -43,15 +43,34 @@ export default async function handler(
     const data = await resp.json() as {
       status?: string;
       message?: string;
-      outputs?: { monthly?: { fixed?: { H_h: number }[] } };
+      outputs?: {
+        monthly?: { fixed?: Record<string, number>[] } | Record<string, number>[];
+        totals?: { fixed?: Record<string, number> };
+      };
     };
 
     if (data.status === 'error') {
       return res.status(502).json({ error: `PVGIS: ${data.message ?? 'neznáma chyba'}` });
     }
 
-    const monthly = data.outputs?.monthly?.fixed ?? [];
-    const solar = Math.round(monthly.reduce((a, m) => a + (m.H_h ?? 0), 0));
+    // PVGIS monthly může byť pole priamo alebo cez .fixed
+    const rawMonthly = data.outputs?.monthly;
+    const monthly: Record<string, number>[] = Array.isArray(rawMonthly)
+      ? rawMonthly
+      : (rawMonthly as { fixed?: Record<string, number>[] } | undefined)?.fixed ?? [];
+
+    // Pole H_h sa v rôznych verziách API volá rôzne: H_h, H(h)_m, Gh
+    const solar = Math.round(
+      monthly.reduce((a, m) => {
+        const val = m['H_h'] ?? m['H(h)_m'] ?? m['Gh'] ?? m['G(h)'] ?? 0;
+        return a + val;
+      }, 0)
+    );
+
+    // Debug: vráť aj surové dáta ak solar = 0
+    if (solar === 0 && monthly.length > 0) {
+      return res.json({ solar, _debug: { keys: Object.keys(monthly[0]), sample: monthly[0] } });
+    }
 
     return res.json({ solar });
   } catch (err: unknown) {
