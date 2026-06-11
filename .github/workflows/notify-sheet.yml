@@ -1,0 +1,36 @@
+name: VESMA notify-sheet
+# Po MERGE PR pošle POST na Apps Script web-app, ktorý prepíše „stav riešenia"
+# na „overené" a zapíše odkaz na PR. Merge robí človek → udalosť spustí tento
+# workflow (na rozdiel od PR vytvoreného botom cez GITHUB_TOKEN).
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  notify:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Zisti číslo issue z popisu PR ("Closes #N")
+        id: issue
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          NUM=$(printf '%s' "$PR_BODY" | grep -oiE 'closes? #[0-9]+' | grep -oE '[0-9]+' | head -n1)
+          echo "number=$NUM" >> "$GITHUB_OUTPUT"
+
+      - name: Oznám Google Sheetu (overené)
+        if: steps.issue.outputs.number != ''
+        env:
+          WEBAPP_URL: ${{ secrets.SHEET_WEBAPP_URL }}
+          WEBHOOK_SECRET: ${{ secrets.SHEET_WEBHOOK_SECRET }}
+          ISSUE: ${{ steps.issue.outputs.number }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          PAYLOAD=$(printf '{"secret":"%s","issue":"%s","pr_url":"%s","pr_number":"%s"}' \
+            "$WEBHOOK_SECRET" "$ISSUE" "$PR_URL" "$PR_NUMBER")
+          curl -sS -L -X POST "$WEBAPP_URL" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD"
