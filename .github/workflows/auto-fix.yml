@@ -16,6 +16,7 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          show_full_output: true
           prompt: |
             Oprav chybu opísanú v tomto issue podľa pravidiel v CLAUDE.md.
             Pracuj na novej vetve, NIKDY nepushuj do main.
@@ -25,4 +26,4 @@ jobs:
           claude_args: |
             --max-turns 30
             --model claude-opus-4-8
-            --allowedTools "Read,Edit,Write,Bash(npm:*),Bash(git:*)"
+            --allowedTools "Read,Edit,Write,Bash(npm:*),Bash(git:*),Bash(gh:*)"
