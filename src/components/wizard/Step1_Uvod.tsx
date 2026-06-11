@@ -48,7 +48,7 @@ async function fetchKlimatickeUdaje(
   onStatus('Hľadám polohu adresy…');
   const geoRes = await fetch(
     `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&addressdetails=1`,
-    { headers: { 'Accept-Language': 'sk', 'User-Agent': 'sma-nastroj/1.0 (zarnay@inovia.sk)' } }
+    { headers: { 'Accept-Language': 'sk' } }
   );
   if (!geoRes.ok) throw new Error(`Geocoding zlyhal (${geoRes.status})`);
   const geoData = await geoRes.json();
