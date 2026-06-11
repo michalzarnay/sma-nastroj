@@ -23,7 +23,7 @@ export function Header({ currentStep, totalSteps, visitedSteps, onGoTo, extraAct
             </div>
             <div>
               <h1 className="text-sm font-bold text-gray-800 leading-tight">VESMA <span className="font-normal text-gray-400">Test 23</span></h1>
-              <p className="text-[10px] text-gray-500 hidden sm:block">Sprievodca mapovaním areálov – voda a energia</p>
+              <p className="text-[10px] text-gray-500 hidden sm:block">Voda a energia – sprievodca mapovaním areálov</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
