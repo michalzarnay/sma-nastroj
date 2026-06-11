@@ -16,7 +16,6 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          show_full_output: true
           prompt: |
             Oprav chybu opísanú v tomto issue podľa pravidiel v CLAUDE.md.
             Pracuj na novej vetve, NIKDY nepushuj do main.
