@@ -148,7 +148,7 @@ export const glossary: Record<string, GlossaryEntry> = {
   },
   parcelaDef: {
     term: 'Parcela',
-    definition: 'Konkrétny kus pozemku evidovaný v katastri nehnuteľností pod vlastným číslom.',
+    definition: 'Konkrétny kus pozemku evidovaný v katastri nehnuteľností pod vlastným číslom. Parcela, na ktorej je iba budova, patrí len medzi Budovy – nezadávajte ju medzi Pozemky. Ak je na jednej parcele budova aj nezastavaný pozemok, zaraďte ju podľa toho, čo na nej prevažuje (dominantné využitie) – buď medzi Budovy, alebo medzi Pozemky.',
     whereToFind: 'Číslo parcely nájdete na liste vlastníctva alebo na katasterportál.sk.',
   },
   projektovaDokumentaciaDef: {

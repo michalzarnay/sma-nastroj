@@ -75,8 +75,10 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
             tooltipText="Plocha parcely bez zastavanej časti – teda plocha pozemku, na ktorej nestojí žiadna budova. Táto plocha sa hodnotí v tomto formulári."
           />
         </div>
-        <div className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-xs text-blue-700">
-          Pozor: pozemok (parcela) <strong>nezahŕňa</strong> zastavanú plochu budov. Údaje o budovách zadajte v kroku Budovy.
+        {/* Nápoveda k rozhodnutiu, kam zaradiť parcelu (pozri issue #37). */}
+        <div className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-xs text-blue-700 space-y-1">
+          <p>Pozor: pozemok (parcela) <strong>nezahŕňa</strong> zastavanú plochu budov. Údaje o budovách zadajte v kroku Budovy.</p>
+          <p>Parcela len so stavbou sem <strong>nepatrí</strong> — zadajte ju len medzi Budovy. Ak je na parcele budova aj nezastavaný pozemok, zaraďte ju tam, kde prevažuje dominantné využitie.</p>
         </div>
         <TextInput
           label="Členitosť terénu"
