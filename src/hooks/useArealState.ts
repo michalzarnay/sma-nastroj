@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useCallback, useRef, useState } from 'react';
+import { useReducer, useEffect, useCallback, useRef, useState, useMemo } from 'react';
 import {
   Areal, Pozemok, Budova, InaStavba, BGOpatrenie, MediaItem, ScoringWeights,
   createEmptyAreal, createEmptyPozemok, createEmptyBudova,
@@ -260,6 +260,16 @@ function arealReducer(state: Areal, action: Action): Areal {
 
 const STORAGE_KEY = 'sma-nastroj-areal';
 
+// Serializovaný „odtlačok" areálu na porovnanie neuložených zmien.
+// dataUrl médií ignorujeme (rovnako ako pri ukladaní do localStorage), aby
+// asynchrónne donačítanie médií z IndexedDB nevyvolalo falošný príznak zmeny.
+function serializeForCompare(areal: Areal): string {
+  return JSON.stringify({
+    ...areal,
+    media: areal.media.map((m) => ({ ...m, dataUrl: '' })),
+  });
+}
+
 export function useArealState() {
   // Guard: don't overwrite IndexedDB with empty dataUrls before the initial load completes
   const mediaLoadedRef = useRef(false);
@@ -274,6 +284,14 @@ export function useArealState() {
     } catch { /* ignore */ }
     return createEmptyAreal();
   });
+
+  // Odtlačok posledného „uloženého" (resp. načítaného / prázdneho) stavu.
+  // Slúži na rozlíšenie, či má aktuálny areál reálne neuložené zmeny.
+  const [baseline, setBaseline] = useState<string>(() => serializeForCompare(areal));
+  const isDirty = useMemo(
+    () => serializeForCompare(areal) !== baseline,
+    [areal, baseline]
+  );
 
   // On first mount: reload media with dataUrls from IndexedDB and merge into state
   useEffect(() => {
@@ -359,12 +377,31 @@ export function useArealState() {
     dispatch({ type: 'UPDATE_VAHY', payload: data });
   }, []);
 
-  const resetAreal = useCallback(() => dispatch({ type: 'RESET' }), []);
-  const setAreal = useCallback((a: Areal) => dispatch({ type: 'SET_AREAL', payload: a }), []);
+  // Nový prázdny areál — baseline nastavíme na presne ten objekt, ktorý
+  // vkladáme do stavu (createEmptyAreal generuje náhodné id, preto ho nesmieme
+  // generovať druhýkrát pre porovnanie). Po resete je stav „čistý".
+  const resetAreal = useCallback(() => {
+    const empty = createEmptyAreal();
+    dispatch({ type: 'SET_AREAL', payload: empty });
+    setBaseline(serializeForCompare(empty));
+  }, []);
+
+  // Načítanie / import relácie — nový stav je hneď považovaný za „čistý".
+  const setAreal = useCallback((a: Areal) => {
+    dispatch({ type: 'SET_AREAL', payload: a });
+    setBaseline(serializeForCompare(a));
+  }, []);
+
+  // Označí aktuálny stav za uložený (volá sa po uložení relácie).
+  const markSaved = useCallback(() => {
+    setBaseline(serializeForCompare(areal));
+  }, [areal]);
 
   return {
     areal,
     mediaReady,
+    isDirty,
+    markSaved,
     updateAreal,
     addPozemok, updatePozemok, removePozemok,
     addBudova, updateBudova, removeBudova,

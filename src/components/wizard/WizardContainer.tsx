@@ -93,7 +93,8 @@ export function WizardContainer() {
               type="button"
               title="Nový areál"
               onClick={() => {
-                if (confirm('Začať nový areál? Neuložené zmeny budú stratené.')) {
+                // Varujeme len ak sú v aktuálnom areáli reálne neuložené zmeny.
+                if (!arealState.isDirty || confirm('Začať nový areál? Neuložené zmeny budú stratené.')) {
                   arealState.resetAreal();
                   wizard.goToStep(1);
                 }
@@ -107,6 +108,8 @@ export function WizardContainer() {
               areal={arealState.areal}
               onLoad={arealState.setAreal}
               onNew={arealState.resetAreal}
+              isDirty={arealState.isDirty}
+              onSaved={arealState.markSaved}
             />
           </>
         }
