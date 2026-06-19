@@ -7,9 +7,13 @@ interface SessionManagerProps {
   areal: Areal;
   onLoad: (areal: Areal) => void;
   onNew: () => void;
+  /** Či má aktuálny areál reálne neuložené zmeny (riadi zobrazenie varovaní). */
+  isDirty: boolean;
+  /** Zavolá sa po úspešnom uložení relácie — stav sa označí za uložený. */
+  onSaved: () => void;
 }
 
-export function SessionManager({ areal, onLoad, onNew }: SessionManagerProps) {
+export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: SessionManagerProps) {
   const { sessions, saveSession, deleteSession, exportSession, importSession } = useSessionManager();
   const [otvoreny, setOtvoreny] = useState(false);
   const [rezim, setRezim] = useState<'ulozit' | 'nacitat'>('ulozit');
@@ -24,13 +28,15 @@ export function SessionManager({ areal, onLoad, onNew }: SessionManagerProps) {
       return;
     }
     saveSession(nazov.trim(), areal);
+    onSaved();
     setChyba(null);
     setPotvrdenie(`Relácia „${nazov}" bola uložená.`);
     setTimeout(() => setPotvrdenie(null), 3000);
   };
 
   const nacitat = (session: Session) => {
-    if (!confirm(`Načítať reláciu „${session.nazov}"? Neuložené zmeny budú stratené.`)) return;
+    // Varujeme len ak by sa stratili reálne neuložené zmeny.
+    if (isDirty && !confirm(`Načítať reláciu „${session.nazov}"? Neuložené zmeny budú stratené.`)) return;
     onLoad(session.areal);
     setOtvoreny(false);
   };
@@ -43,7 +49,7 @@ export function SessionManager({ areal, onLoad, onNew }: SessionManagerProps) {
   const importovat = async (file: File) => {
     try {
       const nacitany = await importSession(file);
-      if (!confirm(`Importovať areál „${nacitany.nazov || 'bez názvu'}"? Neuložené zmeny budú stratené.`)) return;
+      if (isDirty && !confirm(`Importovať areál „${nacitany.nazov || 'bez názvu'}"? Neuložené zmeny budú stratené.`)) return;
       onLoad(nacitany);
       setOtvoreny(false);
     } catch {
@@ -164,7 +170,7 @@ export function SessionManager({ areal, onLoad, onNew }: SessionManagerProps) {
                   <div className="border-t border-gray-100 pt-3">
                     <button
                       type="button"
-                      onClick={() => { if (confirm('Začať nový areál? Neuložené zmeny budú stratené.')) { onNew(); setOtvoreny(false); } }}
+                      onClick={() => { if (!isDirty || confirm('Začať nový areál? Neuložené zmeny budú stratené.')) { onNew(); setOtvoreny(false); } }}
                       className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
                     >
                       + Nový prázdny areál
