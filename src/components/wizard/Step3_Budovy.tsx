@@ -41,6 +41,12 @@ export function Step3_Budovy({ budovy, addBudova, updateBudova, removeBudova, ar
         </div>
       </div>
 
+      {/* Nápoveda k rozhodnutiu, kam zaradiť parcelu (pozri issue #37). */}
+      <div className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-xs text-blue-700 space-y-1">
+        <p>Parcela, na ktorej je iba budova, patrí <strong>len sem (medzi Budovy)</strong> — nezadávajte ju medzi Pozemky.</p>
+        <p>Ak je na parcele budova aj nezastavaný pozemok, zaraďte ju podľa toho, čo na nej prevažuje (dominantné využitie) — buď medzi Budovy, alebo medzi Pozemky.</p>
+      </div>
+
       <EntityTabBar
         items={budovy.map((b, i) => ({
           id: b.id,
