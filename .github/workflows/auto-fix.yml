@@ -23,6 +23,6 @@ jobs:
             Ak je problém nejednoznačný alebo zasahuje zakázanú oblasť, neopravuj —
             iba napíš do issue komentár a počkaj na človeka.
           claude_args: |
-            --max-turns 30
+            --max-turns 60
             --model claude-opus-4-8
             --allowedTools "Read,Edit,Write,Bash(npm:*),Bash(git:*),Bash(gh:*)"
