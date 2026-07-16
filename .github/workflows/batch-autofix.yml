@@ -1,0 +1,94 @@
+name: VESMA batch auto-fix
+
+# Spustí auto-fix na viacerých GitHub issues naraz.
+# Pridá label "auto-fix" ku každému zadanému issue číslu → spustí auto-fix.yml pre každé z nich.
+# Predpokladá, že GitHub issues sú už vytvorené (VESMA most ich vytvoril z GSheet).
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_numbers:
+        description: 'Čísla GitHub issues oddelené čiarkou (napr. 44,45,46)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run – iba vypíše čo by urobil, nepridá labely'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+
+permissions:
+  issues: write
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pridaj label auto-fix na každé issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          # Parsuj čísla issues
+          IFS=',' read -ra ISSUES <<< "${{ github.event.inputs.issue_numbers }}"
+
+          OK=0
+          SKIP=0
+          FAIL=0
+
+          for RAW in "${ISSUES[@]}"; do
+            NUM=$(echo "$RAW" | tr -d ' ')
+            [ -z "$NUM" ] && continue
+
+            echo "--- Issue #$NUM ---"
+
+            # Over, či issue existuje
+            STATUS=$(gh api "repos/$REPO/issues/$NUM" --jq '.state' 2>/dev/null || echo "not_found")
+
+            if [ "$STATUS" = "not_found" ]; then
+              echo "  ⚠️  Issue #$NUM neexistuje – preskakujem."
+              SKIP=$((SKIP+1))
+              continue
+            fi
+
+            if [ "$STATUS" = "closed" ]; then
+              echo "  ⚠️  Issue #$NUM je zatvorené – preskakujem."
+              SKIP=$((SKIP+1))
+              continue
+            fi
+
+            # Over, či label auto-fix ešte nie je priradený
+            HAS_LABEL=$(gh api "repos/$REPO/issues/$NUM/labels" --jq '[.[].name] | contains(["auto-fix"])' 2>/dev/null || echo "false")
+
+            if [ "$HAS_LABEL" = "true" ]; then
+              echo "  ℹ️  Issue #$NUM má label auto-fix – preskakujem (auto-fix pravdepodobne beží)."
+              SKIP=$((SKIP+1))
+              continue
+            fi
+
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "  🔍 DRY RUN: gh issue edit #$NUM --add-label auto-fix"
+              OK=$((OK+1))
+              continue
+            fi
+
+            # Pridaj label
+            if gh issue edit "$NUM" --add-label "auto-fix" --repo "$REPO"; then
+              echo "  ✅ Label auto-fix pridaný → auto-fix.yml spustený."
+              OK=$((OK+1))
+            else
+              echo "  ❌ Nepodarilo sa pridať label na issue #$NUM."
+              FAIL=$((FAIL+1))
+            fi
+
+            # Krátka pauza medzi issues (rate limit)
+            sleep 2
+          done
+
+          echo ""
+          echo "=== Výsledok ==="
+          echo "Spustené: $OK | Preskočené: $SKIP | Chyby: $FAIL"
+
+          [ "$FAIL" -gt 0 ] && exit 1 || exit 0
