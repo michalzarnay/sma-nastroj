@@ -10,6 +10,7 @@ import { Step4_IneStavby } from './Step4_IneStavby';
 import { Step5_BGOpatrenia } from './Step5_BGOpatrenia';
 import { Step6_Vysledky } from './Step6_Vysledky';
 import { ChatPanel } from '../chat/ChatPanel';
+import { step1CanProceed } from '../../utils/stepValidation';
 import { SessionManager } from '../sessions/SessionManager';
 import { FilePlus } from 'lucide-react';
 
@@ -125,6 +126,7 @@ export function WizardContainer() {
             onPrev={wizard.prevStep}
             onGoTo={wizard.goToStep}
             visitedSteps={wizard.visitedSteps}
+            canProceed={wizard.currentStep !== 1 || step1CanProceed(arealState.areal)}
           />
         </div>
       </main>
