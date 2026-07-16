@@ -4,34 +4,42 @@ import { openClean, goToResults } from './helpers/stubs';
 /**
  * VÝSLEDKY + EXPORT.
  *
- * Overuje, že krok Výsledky sa korektne vykreslí a že export XLSX reálne spustí
- * stiahnutie súboru (xlsx sa generuje na klientovi, takže funguje aj offline).
+ * Overuje, že krok Výsledky sa korektne vykreslí a že export XLSX/CSV reálne
+ * spustí stiahnutie súboru (generuje sa na klientovi, funguje aj offline).
  * Export je v `CLAUDE.md` označený ako kontrakt – tento test ho NEMENÍ,
- * len stráži, že tlačidlo stále produkuje súbor (regresná poistka).
+ * len stráži, že tlačidlo stále produkuje súbor so správnym názvom.
  */
+
+const NAZOV_AREALU = 'Testovací areál'; // rovnaká hodnota ako v openClean
+
 test.describe('Výsledky a export', () => {
   test.beforeEach(async ({ page }) => {
     await openClean(page);
   });
 
-  test('export XLSX spustí stiahnutie súboru', async ({ page }) => {
+  test('export XLSX – názov súboru obsahuje názov areálu a dnešný dátum', async ({ page }) => {
     await goToResults(page);
 
     const downloadPromise = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Exportovať XLSX' }).click();
     const download = await downloadPromise;
 
-    // Názov súboru by mal mať príponu .xlsx.
-    expect(download.suggestedFilename()).toMatch(/\.xlsx$/i);
+    const filename = download.suggestedFilename();
+    expect(filename).toMatch(/\.xlsx$/i);
+    expect(filename).toContain(NAZOV_AREALU);
+    // Dátum vo formáte YYYY-MM-DD je implicitný kontrakt exportu.
+    expect(filename).toMatch(/\d{4}-\d{2}-\d{2}/);
   });
 
-  test('export CSV spustí stiahnutie súboru', async ({ page }) => {
+  test('export CSV – názov súboru obsahuje názov areálu', async ({ page }) => {
     await goToResults(page);
 
     const downloadPromise = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Exportovať CSV' }).click();
     const download = await downloadPromise;
 
-    expect(download.suggestedFilename()).toMatch(/\.csv$/i);
+    const filename = download.suggestedFilename();
+    expect(filename).toMatch(/\.csv$/i);
+    expect(filename).toContain(NAZOV_AREALU);
   });
 });
