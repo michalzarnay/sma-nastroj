@@ -7,7 +7,7 @@ interface NumberInputProps {
   unit?: string;
   min?: number;
   max?: number;
-  step?: number;
+  step?: number | 'any';
   placeholder?: string;
   tooltipKey?: string;
   tooltipText?: string;
