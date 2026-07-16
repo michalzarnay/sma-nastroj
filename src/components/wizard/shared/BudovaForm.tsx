@@ -503,7 +503,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
           spotreba={budova.kureniePeletySpotreba_kg}
           onSpotreba={(v) => onChange({ kureniePeletySpotreba_kg: v })}
           spotrebaUnit="kg"
-          spotrebaLabel="Spotreba peliet za rok 2022"
+          spotrebaLabel="Spotreba peliet za minulý rok"
           tooltipKey="peletyDef"
         >
           {budova.kureniePeletami === 1 && budova.kureniePeletySpotreba_kg > 0 && (
@@ -527,7 +527,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
           spotreba={budova.kurenieStiepkaSpotreba_kg}
           onSpotreba={(v) => onChange({ kurenieStiepkaSpotreba_kg: v })}
           spotrebaUnit="kg"
-          spotrebaLabel="Spotreba štiepky za rok 2022"
+          spotrebaLabel="Spotreba štiepky za minulý rok"
           tooltipKey="stiepkaDef"
         >
           {budova.kurenieStiepkou === 1 && budova.kurenieStiepkaSpotreba_kg > 0 && (
@@ -561,7 +561,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
                 unit="kW"
               />
               <NumberInput
-                label="Spotreba za rok 2022"
+                label="Spotreba za minulý rok"
                 value={budova.kurenieUhlimDrevomSpotreba_kg}
                 onChange={(v) => onChange({ kurenieUhlimDrevomSpotreba_kg: v })}
                 unit="kg"
@@ -698,13 +698,13 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
       <Section title="Elektrická energia">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <NumberInput
-            label="Spotreba elektriny za rok 2022"
+            label="Spotreba elektriny za minulý rok"
             value={budova.spotrebaElektriny}
             onChange={(v) => onChange({ spotrebaElektriny: v })}
             unit="kWh"
           />
           <NumberInput
-            label="Výroba elektriny za rok 2022"
+            label="Výroba elektriny za minulý rok"
             value={budova.vyrobaElektriny}
             onChange={(v) => onChange({ vyrobaElektriny: v })}
             unit="kWh"
@@ -941,7 +941,7 @@ function HeatingSource({
             unit="kW"
           />
           <NumberInput
-            label={spotrebaLabel || `Spotreba za rok 2022`}
+            label={spotrebaLabel || `Spotreba za minulý rok`}
             value={spotreba}
             onChange={onSpotreba}
             unit={spotrebaUnit}
