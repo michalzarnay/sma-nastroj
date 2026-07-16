@@ -1,5 +1,6 @@
 import * as XLSX from 'xlsx';
 import { Areal } from '../types/areal';
+import { xlsxFilename } from './exportFilenames';
 import { ScoreResult } from '../types/scoring';
 import { Odporucanie } from '../types/catalog';
 
@@ -229,6 +230,6 @@ export function exportToXlsx(
   addSheet('Odporúčania', sheetOdporucania(recommendations));
   addSheet('Váhy a skóre', sheetVahy(areal, score));
 
-  const fileName = `${areal.nazov || 'areal'}-hodnotenie-${new Date().toISOString().slice(0, 10)}.xlsx`;
+  const fileName = xlsxFilename(areal.nazov, new Date().toISOString().slice(0, 10));
   XLSX.writeFile(wb, fileName);
 }

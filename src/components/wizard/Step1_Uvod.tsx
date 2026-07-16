@@ -7,6 +7,7 @@ import { ComboboxInput } from '../ui/ComboboxInput';
 import { AddressAutocomplete } from '../ui/AddressAutocomplete';
 import { MediaUpload } from '../media/MediaUpload';
 import { KRAJE, OKRESY_BY_KRAJ, OBCE_SR } from '../../data/slovakLocations';
+import { matchKraj, matchOkres } from '../../utils/locationMatchers';
 
 interface Step1Props {
   areal: Areal;
@@ -17,25 +18,6 @@ interface Step1Props {
   mediaReady: boolean;
 }
 
-function matchKraj(raw: string): string {
-  if (!raw) return '';
-  const norm = raw.trim();
-  // Nominatim SK state names match our KRAJE directly, e.g. "Žilinský kraj"
-  const exact = KRAJE.find(k => k.toLowerCase() === norm.toLowerCase());
-  if (exact) return exact;
-  // Fallback: partial match
-  return KRAJE.find(k => norm.toLowerCase().includes(k.split(' ')[0].toLowerCase())) ?? '';
-}
-
-function matchOkres(raw: string, kraj: string): string {
-  if (!raw) return '';
-  // Nominatim returns "Okres Ružomberok" — strip prefix
-  const stripped = raw.replace(/^[Oo]kres\s+/, '').trim();
-  const pool = kraj ? (OKRESY_BY_KRAJ[kraj] ?? []) : Object.values(OKRESY_BY_KRAJ).flat();
-  return pool.find(o => o.toLowerCase() === stripped.toLowerCase())
-    ?? pool.find(o => stripped.toLowerCase().includes(o.toLowerCase()))
-    ?? '';
-}
 
 async function fetchKlimatickeUdaje(
   adresa: string,

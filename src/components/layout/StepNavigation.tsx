@@ -8,9 +8,10 @@ interface StepNavigationProps {
   onPrev: () => void;
   onGoTo: (step: number) => void;
   visitedSteps: number[];
+  canProceed?: boolean;
 }
 
-export function StepNavigation({ currentStep, totalSteps, onNext, onPrev, onGoTo, visitedSteps }: StepNavigationProps) {
+export function StepNavigation({ currentStep, totalSteps, onNext, onPrev, onGoTo, visitedSteps, canProceed = true }: StepNavigationProps) {
   const prevStep = currentStep - 1;
   const nextStep = currentStep + 1;
   const prevName = WIZARD_STEPS.find(s => s.id === prevStep)?.nazov;
@@ -74,7 +75,8 @@ export function StepNavigation({ currentStep, totalSteps, onNext, onPrev, onGoTo
         <button
           type="button"
           onClick={onNext}
-          className="flex items-center gap-1.5 px-6 py-2 text-sm font-medium text-white bg-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/90 transition-colors"
+          disabled={!canProceed}
+          className="flex items-center gap-1.5 px-6 py-2 text-sm font-medium text-white bg-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {isLast ? 'Zobraziť výsledky' : <>Ďalej{nextName ? <span className="hidden sm:inline"> – {nextName}</span> : null}</>}
           {!isLast && <ChevronRight className="w-4 h-4" />}

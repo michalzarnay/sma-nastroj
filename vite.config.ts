@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import type { Plugin } from 'vite'
@@ -128,6 +128,10 @@ function pvgisProxyPlugin(): Plugin {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), svpProxyPlugin(), pvgisProxyPlugin()],
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.ts'],
+  },
   server: {
     watch: {
       ignored: ['**/api/**'],

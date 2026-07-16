@@ -7,6 +7,7 @@ import { ScoreGauge } from '../ui/ScoreGauge';
 import { getScoreLevel } from '../../types/scoring';
 import { Odporucanie } from '../../types/catalog';
 import { exportToXlsx } from '../../utils/xlsxExport';
+import { csvFilename } from '../../utils/exportFilenames';
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
   ResponsiveContainer,
@@ -60,7 +61,7 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${areal.nazov || 'areal'}-hodnotenie.csv`;
+    a.download = csvFilename(areal.nazov);
     a.click();
     URL.revokeObjectURL(url);
   };
