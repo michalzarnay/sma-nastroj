@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Building2, MapPin, Camera, ClipboardList, Globe, Loader2 } from 'lucide-react';
+import { Building2, MapPin, Camera, ClipboardList, Globe, Loader2, Gauge } from 'lucide-react';
 import { Areal, MediaItem } from '../../types/areal';
 import { TextInput } from '../ui/TextInput';
 import { NumberInput } from '../ui/NumberInput';
@@ -138,6 +138,20 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
           Zadajte základné údaje o areáli, ktorý chcete vyhodnotiť.
           Areál je súvislé územie s pozemkami a budovami, ktoré patria k sebe.
         </p>
+      </div>
+
+      {/* Presné hodnoty vs. odhady */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3">
+        <Gauge className="w-5 h-5 text-[#2196F3] flex-shrink-0 mt-0.5" />
+        <div className="text-xs text-blue-800 space-y-1">
+          <p className="font-semibold">Presné hodnoty vs. odhady</p>
+          <p>
+            Tam, kde viete zohnať presné dáta a fakty, vypĺňajte presné hodnoty.
+            Kde ich nemáte k dispozícii, stačí odborný odhad. Čím presnejšie údaje
+            zadáte, tým priliehavejší bude výsledok – zmysel má však aj vyplnenie
+            iba odhadov. Je na vás, do akej presnosti chcete ísť.
+          </p>
+        </div>
       </div>
 
       {/* Workflow info */}
