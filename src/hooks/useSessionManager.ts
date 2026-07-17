@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Areal, createEmptyAreal } from '../types/areal';
+import { buildShareMailto, sessionJsonFilename } from '../utils/shareSession';
 
 export interface Session {
   id: string;
@@ -82,10 +83,18 @@ export function useSessionManager() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${session.nazov || 'areal'}-${session.id.slice(0, 8)}.json`;
+    a.download = sessionJsonFilename(session.nazov, session.id);
     a.click();
     URL.revokeObjectURL(url);
   }, []);
+
+  // Zdieľanie relácie (variant A): stiahne JSON v nezmenenom formáte a otvorí
+  // e-mailového klienta s predvyplneným predmetom a telom. Prílohu pridá používateľ ručne.
+  const shareSession = useCallback((session: Session) => {
+    exportSession(session);
+    const filename = sessionJsonFilename(session.nazov, session.id);
+    window.location.href = buildShareMailto(session.nazov, filename);
+  }, [exportSession]);
 
   const importSession = useCallback((file: File): Promise<Areal> => {
     return new Promise((resolve, reject) => {
@@ -111,5 +120,5 @@ export function useSessionManager() {
     });
   }, []);
 
-  return { sessions, saveSession, updateSession, deleteSession, exportSession, importSession };
+  return { sessions, saveSession, updateSession, deleteSession, exportSession, shareSession, importSession };
 }
