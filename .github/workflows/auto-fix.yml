@@ -1,28 +1,76 @@
 name: VESMA auto-fix
+
+# Dva spúšťače:
+#  1) pridanie labelu `auto-fix` na issue  — prvé spustenie (robí Apps Script most)
+#  2) komentár obsahujúci `@auto-fix`      — opätovné spustenie po spresnení zadania
+#
+# Pri (2) sa NEMUSÍ label odstraňovať a znova pridávať. Stačí do komentára,
+# kde spresníš zadanie, napísať `@auto-fix` (kľudne na koniec) a odoslať.
+# Funguje aj z e-mailovej odpovede na notifikáciu z GitHubu.
+
 on:
   issues:
     types: [labeled]
+  issue_comment:
+    types: [created]
+
 permissions:
   contents: write
   pull-requests: write
   issues: write
-  id-token: write  
+  id-token: write
+
 jobs:
   fix:
-    if: github.event.label.name == 'auto-fix'
+    # (1) pridaný label auto-fix
+    # ALEBO
+    # (2) komentár od vlastníka repa, obsahuje @auto-fix, ide o issue (nie PR)
+    #     a issue už je v auto-fix dráhe (má label auto-fix)
+    if: >
+      (github.event_name == 'issues' &&
+       github.event.label.name == 'auto-fix')
+      ||
+      (github.event_name == 'issue_comment' &&
+       !github.event.issue.pull_request &&
+       contains(github.event.comment.body, '@auto-fix') &&
+       contains(github.event.issue.labels.*.name, 'auto-fix') &&
+       (github.event.comment.author_association == 'OWNER' ||
+        github.event.comment.author_association == 'COLLABORATOR'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Reakcia na komentár (nech je vidieť, že beh štartuje)
+        if: github.event_name == 'issue_comment'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api -X POST \
+            "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" \
+            -f content='eyes' || true
+
       - uses: anthropics/claude-code-action@v1
         with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # POUŽI ROVNAKÝ AUTH RIADOK AKO FUNGUJÚCI claude.yml:
+          #   anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          #   alebo
+          #   claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             Oprav chybu opísanú v tomto issue podľa pravidiel v CLAUDE.md.
+
+            DÔLEŽITÉ: Prečítaj si CELÚ diskusiu pod issue, nielen pôvodný popis.
+            Ak sú v komentároch spresnenia alebo rozhodnutia od človeka, majú
+            PREDNOSŤ pred pôvodným popisom. Najnovší komentár je najaktuálnejší.
+
             Pracuj na novej vetve, NIKDY nepushuj do main.
             Spusti testy, otvor PR a v popise uveď "Closes #${{ github.event.issue.number }}".
-            Ak je problém nejednoznačný alebo zasahuje zakázanú oblasť, neopravuj —
-            iba napíš do issue komentár a počkaj na človeka.
+            Ak už pre toto issue existuje otvorený PR, pokračuj v ňom namiesto
+            otvárania nového.
+
+            Ak je problém aj po spresnení nejednoznačný alebo zasahuje zakázanú
+            oblasť, neopravuj — iba napíš do issue komentár a počkaj na človeka.
           claude_args: |
-            --max-turns 60
+            --max-turns 30
             --model claude-opus-4-8
-            --allowedTools "Read,Edit,Write,Bash(npm:*),Bash(git:*),Bash(gh:*)"
+            --allowedTools "Read,Edit,Write,Bash(npm:*),Bash(git:*)"
