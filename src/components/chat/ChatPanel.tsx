@@ -292,7 +292,7 @@ export function ChatPanel({ currentStep }: ChatPanelProps) {
               <Bot className="w-4 h-4" />
             </div>
             <div className="flex-1">
-              <p className="font-semibold text-sm">Asistent mapera</p>
+              <p className="font-semibold text-sm">Asistent VESMA</p>
               <p className="text-xs text-white/70">
                 Krok {currentStep}: {['', 'Identifikácia', 'Pozemky', 'Budovy', 'Iné stavby', 'B&G opatrenia', 'Výsledky'][currentStep]}
               </p>

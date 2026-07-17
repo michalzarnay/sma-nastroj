@@ -106,7 +106,7 @@ function BGOpatrenieForm({ opatrenie, onChange }: { opatrenie: BGOpatrenie; onCh
         value={opatrenie.ochrannePasma}
         onChange={(v) => onChange({ ochrannePasma: v })}
         multiline
-        tooltipText="Pozemné, nadzemné ochranné pásma, technická infraštruktúra v okolí zamýšľaného opatrenia – existencia, vzdialenosť, prekryvy."
+        tooltipText="Uveďte, či sú v blízkosti plynovod, vodovod, elektrické vedenie alebo kanalizácia — môžu obmedziť výkopové práce pri realizácii opatrenia."
       />
       <TextInput
         label="Potenciál znečistenia"

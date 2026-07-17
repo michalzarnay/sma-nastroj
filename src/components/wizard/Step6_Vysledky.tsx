@@ -215,7 +215,7 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
             <div className="px-4 pb-4 border-t border-gray-100 pt-3 space-y-3">
               <p className="text-xs text-gray-500 flex items-start gap-1.5">
                 <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-blue-400" />
-                Zmeňte váhy pre zvýraznenie dôležitosti konkrétnej oblasti. Vážené skóre použijete pri porovnávaní viacerých areálov v XLSX.
+                Predvolená váha je 1 pre každú oblasť. Zvýšte váhu, ak chcete pri porovnávaní viacerých areálov v XLSX klásť väčší dôraz na danú oblasť (napr. MZI = 2 zdvojnásobí jej vplyv na vážené skóre).
               </p>
               <div className="grid grid-cols-3 gap-3">
                 {(['mzi', 'oze', 'energia'] as const).map((oblast) => (
@@ -278,7 +278,7 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
           items={[
             { label: 'Vhodnosť strechy', score: score.oze.vhodnostStrechyPreSolar, max: 30 },
             { label: 'Existujúce OZE', score: score.oze.existujuceOZE, max: 20 },
-            { label: 'Potenciál TČ', score: score.oze.potencialTepelnehoCerpadla, max: 25 },
+            { label: 'Potenciál tepelného čerpadla (TČ)', score: score.oze.potencialTepelnehoCerpadla, max: 25 },
             { label: 'Potenciál ďalších OZE', score: score.oze.potencialDalsichOZE, max: 25 },
           ]}
         />
@@ -374,7 +374,7 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
             </button>
           </div>
           <p className="text-[11px] text-gray-400">
-            Po dodaní API/formátovej špecifikácie bude export implementovaný.
+            Export do externých systémov bude dostupný v budúcej verzii. Kontaktujte správcu VESMA.
           </p>
         </div>
       </div>

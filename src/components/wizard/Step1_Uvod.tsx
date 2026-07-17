@@ -217,7 +217,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
             label="Obec"
             value={areal.obec}
             onChange={(v) => updateAreal({ obec: v })}
-            placeholder="napr. Brno"
+            placeholder="napr. Ružomberok"
           />
         )}
 
@@ -241,7 +241,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
                 type="text"
                 value={areal.kraj}
                 onChange={(e) => updateAreal({ kraj: e.target.value })}
-                placeholder={isCzech ? 'napr. Jihomoravský kraj' : 'napr. Kraj'}
+                placeholder={isCzech ? 'napr. Jihomoravský kraj' : 'napr. Banskobystrický kraj'}
                 className={selectClasses}
               />
             )}
@@ -267,7 +267,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
                 type="text"
                 value={areal.okres}
                 onChange={(e) => updateAreal({ okres: e.target.value })}
-                placeholder={isCzech ? 'napr. Brno-město' : 'napr. Okres'}
+                placeholder={isCzech ? 'napr. Brno-město' : 'napr. Ružomberok'}
                 className={selectClasses}
               />
             )}
