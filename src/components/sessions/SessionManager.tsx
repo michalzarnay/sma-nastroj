@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Save, FolderOpen, Trash2, Download, Upload, X, Clock, ChevronDown } from 'lucide-react';
+import { Save, FolderOpen, Trash2, Download, Upload, X, Clock, ChevronDown, Share2 } from 'lucide-react';
 import { Areal } from '../../types/areal';
 import { Session, useSessionManager } from '../../hooks/useSessionManager';
 
@@ -14,7 +14,7 @@ interface SessionManagerProps {
 }
 
 export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: SessionManagerProps) {
-  const { sessions, saveSession, deleteSession, exportSession, importSession } = useSessionManager();
+  const { sessions, saveSession, deleteSession, exportSession, shareSession, importSession } = useSessionManager();
   const [otvoreny, setOtvoreny] = useState(false);
   const [rezim, setRezim] = useState<'ulozit' | 'nacitat'>('ulozit');
   const [nazov, setNazov] = useState(areal.nazov || '');
@@ -192,6 +192,7 @@ export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: Sessi
                         session={session}
                         onNacitat={() => nacitat(session)}
                         onExportovat={() => exportSession(session)}
+                        onZdielat={() => shareSession(session)}
                         onZmazat={() => zmazat(session)}
                         formatDatum={formatDatum}
                       />
@@ -211,12 +212,14 @@ function SessionKarta({
   session,
   onNacitat,
   onExportovat,
+  onZdielat,
   onZmazat,
   formatDatum,
 }: {
   session: Session;
   onNacitat: () => void;
   onExportovat: () => void;
+  onZdielat: () => void;
   onZmazat: () => void;
   formatDatum: (iso: string) => string;
 }) {
@@ -267,6 +270,14 @@ function SessionKarta({
           >
             <Download className="w-3 h-3" />
             Exportovať JSON
+          </button>
+          <button
+            type="button"
+            onClick={onZdielat}
+            className="flex items-center gap-1 text-xs text-blue-600 hover:underline"
+          >
+            <Share2 className="w-3 h-3" />
+            Zdieľať
           </button>
           <button
             type="button"
