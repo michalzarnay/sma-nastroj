@@ -301,6 +301,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <NumberInput label="Nadzemné nádrže – objem" value={pozemok.nadzemneNadobyObjem}
               onChange={(v) => onChange({ nadzemneNadobyObjem: v })} unit="m³"
+              step="any" placeholder="0,0"
               tooltipText="Celkový objem všetkých nádob na dažďovú vodu v m³. Príklad: 2 sudy po 200 l = 0,4 m³." />
             <NumberInput label="Podzemné nádrže – objem" value={pozemok.podzemneNadobyObjem}
               onChange={(v) => onChange({ podzemneNadobyObjem: v })} unit="m³"
