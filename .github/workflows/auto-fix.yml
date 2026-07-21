@@ -23,7 +23,6 @@ jobs:
             Ak je problém nejednoznačný alebo zasahuje zakázanú oblasť, neopravuj —
             iba napíš do issue komentár a počkaj na človeka.
           max_turns: "30"
-          allowed_tools: "Read,Edit,Write,Bash(npm:*),Bash(git:*),Bash(gh:*)"
       - name: Upload Claude output
         if: always()
         uses: actions/upload-artifact@v4
