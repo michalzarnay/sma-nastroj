@@ -51,11 +51,7 @@ jobs:
 
       - uses: anthropics/claude-code-action@v1
         with:
-          # POUŽI ROVNAKÝ AUTH RIADOK AKO FUNGUJÚCI claude.yml:
-          #   anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          #   alebo
-          #   claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
             Oprav chybu opísanú v tomto issue podľa pravidiel v CLAUDE.md.
 
