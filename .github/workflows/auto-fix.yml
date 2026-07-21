@@ -70,4 +70,4 @@ jobs:
 
             Ak je problém aj po spresnení nejednoznačný alebo zasahuje zakázanú
             oblasť, neopravuj — iba napíš do issue komentár a počkaj na človeka.
-          max_turns: "30"
+          claude_args: "--max-turns 50"
