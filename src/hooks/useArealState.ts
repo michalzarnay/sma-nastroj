@@ -94,7 +94,7 @@ function migrateBudova(raw: unknown): Budova {
   };
 }
 
-function migrateAreal(raw: unknown): Areal {
+export function migrateAreal(raw: unknown): Areal {
   const empty = createEmptyAreal();
   const data = raw as Areal;
   return {
