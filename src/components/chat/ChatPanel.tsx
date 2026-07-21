@@ -108,6 +108,18 @@ const ODPOVEDE: Record<string, string> = {
 
   'zateplenie fasády': '**Zateplenie fasády systémom ETICS** (kontaktné zatepľovacie systémy) znižuje tepelné straty o 30–60 %. Cena: **50–100 €/m²** podľa hrúbky izolácie a materiálu. Najefektívnejšie pri budovách bez zateplenia postavených pred rokom 2000. Dotácie: dostupné cez OPKZP, OP Slovensko.',
 
+  // Step 4
+  'iné stavby': 'Do kroku **Iné stavby** patria všetky objekty v areáli, ktoré nie sú budovami ani pozemkami:\n• Oplotenie, brány, múry\n• Chodníky, terasy, spevnené plochy\n• Parkoviská a príjazdové cesty\n• Altánky, prístrešky, pergoly\n• Technické objekty (trafostanice, studne, žumpy)\n\nAk takéto stavby nemáte, krok preskočte – nie je povinný.',
+
+  'oplotenie parkovisko': 'Oplotenie, chodníky a parkoviská zadajte ako samostatné položky v kroku **Iné stavby**:\n1. Kliknite na "Pridať inú stavbu"\n2. Zadajte názov (napr. "Oplotenie areálu")\n3. Vyplňte typ stavby a zastavanou plochu\n\nPre parkovisko je dôležitý **typ povrchu** – klasický asfalt je nepriepustný, priepustná dlažba alebo štrk zlepšujú skóre MZI.',
+
+  // Step 5
+  'ochranné pásma': 'Ochranné pásma sú zóny, kde je obmedzená stavebná činnosť kvôli technickej infraštruktúre. Uveďte, či sú v blízkosti zamýšľaného opatrenia:\n• **Plynovod** – ochranné pásmo 1–4 m (výkopové práce zakázané)\n• **Vodovod a kanalizácia** – pásmo 1,5–3 m\n• **Elektrické vedenie** – podľa napätia 1–30 m\n• **Teplovod** – pásmo 2,5 m\n\nPreskúmajte katastrálnu mapu a kontaktujte správcov sietí pred plánovaním opatrení.',
+
+  'potenciál znečistenia': 'Uveďte, či existuje riziko znečistenia pôdy alebo vody v areáli:\n• **Povrchový odtok** z parkovísk alebo skladovacích plôch (ropné látky)\n• **Staré environmentálne záťaže** – skládky, kontaminovaná pôda z minulosti\n• **Chemické látky** – sklady hnojív, posypové soli, technické kvapaliny\n• **Odpadové vody** – nelegálne zaústenie do pôdy\n\nRiziko znečistenia môže obmedziť realizáciu vsakovacích opatrení (dažďová záhrada, rigol).',
+
+  'hladina podzemnej vody': 'Hladina podzemnej vody ovplyvňuje, či je vsakovanie vody do pôdy bezpečné a efektívne:\n• **Hlboko (viac ako 2 m)**: vsakovanie je vhodné – dažďová záhrada, rigol\n• **Blízko povrchu (menej ako 1 m)**: vsakovanie môže zaplavovať základy budov\n• **Sezónne kolísanie**: overte v jarných mesiacoch\n\nOdhadnúť ju môžete podľa geologickej mapy Slovenska (geology.sk) alebo sa opýtajte správcu obecného vodovodu.',
+
   // Step 6
   'interpretovať celkové skóre': 'Skóre VESMA vyjadruje **pripravenosť areálu** na klimatické opatrenia (0 = nič nie je urobené, 100 = všetko optimálne):\n• 0–30: nízka – veľký potenciál zlepšenia, priorita investícií\n• 31–50: podpriemerná – niekoľko kľúčových oblastí bez riešenia\n• 51–70: priemerná – základné opatrenia sú, rezervy existujú\n• 71–85: dobrá – areál je dobre vybavený\n• 86–100: výborná – príkladový areál\n\nNižšie skóre = väčší priestor pre dotácie.',
 
@@ -140,11 +152,20 @@ function najdiOdpoved(otazka: string): string {
   if (q.includes('slnk') || q.includes('pvgis') || q.includes('solar') || q.includes('slnečn')) {
     return ODPOVEDE['potenciál slnečného svitu'];
   }
+  if (q.includes('spevnen')) {
+    return ODPOVEDE['spevnená plocha'];
+  }
   if (q.includes('priepust')) {
     return ODPOVEDE['priepustné a polopriepustné'];
   }
   if (q.includes('strech') && (q.includes('typ') || q.includes('druh') || q.includes('zel'))) {
     return q.includes('zel') ? ODPOVEDE['zelená strecha'] : ODPOVEDE['typ strechy'];
+  }
+  if (q.includes('spotreb') && (q.includes('plyn') || q.includes('elektrin') || q.includes('energ'))) {
+    return ODPOVEDE['spotreba plynu elektriny'];
+  }
+  if (q.includes('termoizol')) {
+    return ODPOVEDE['termoizolačné okná'];
   }
   if (q.includes('rekuperáci') || q.includes('rekuperac')) {
     return ODPOVEDE['rekuperácia'];
@@ -175,6 +196,21 @@ function najdiOdpoved(otazka: string): string {
   }
   if (q.includes('dlažb') || q.includes('priepustn') && q.includes('dlažb')) {
     return ODPOVEDE['priepustná dlažba'];
+  }
+  if (q.includes('iné stavb') || q.includes('ine stavb') || (q.includes('čo patrí') && q.includes('stavb'))) {
+    return ODPOVEDE['iné stavby'];
+  }
+  if (q.includes('oploteni') || q.includes('parkovisk') || q.includes('altánok') || q.includes('chodník')) {
+    return ODPOVEDE['oplotenie parkovisko'];
+  }
+  if (q.includes('ochranné pásm') || q.includes('ochranné pasm') || q.includes('ochranné pásk') || (q.includes('pásm') && q.includes('ochran'))) {
+    return ODPOVEDE['ochranné pásma'];
+  }
+  if (q.includes('znečisten') || q.includes('kontaminác') || q.includes('záťaž')) {
+    return ODPOVEDE['potenciál znečistenia'];
+  }
+  if (q.includes('podzemn') && q.includes('vod')) {
+    return ODPOVEDE['hladina podzemnej vody'];
   }
   if (q.includes('dotáci') || q.includes('grant') || q.includes('podpora')) {
     return ODPOVEDE['dotácie'];
@@ -292,7 +328,7 @@ export function ChatPanel({ currentStep }: ChatPanelProps) {
               <Bot className="w-4 h-4" />
             </div>
             <div className="flex-1">
-              <p className="font-semibold text-sm">Asistent mapera</p>
+              <p className="font-semibold text-sm">Asistent VESMA</p>
               <p className="text-xs text-white/70">
                 Krok {currentStep}: {['', 'Identifikácia', 'Pozemky', 'Budovy', 'Iné stavby', 'B&G opatrenia', 'Výsledky'][currentStep]}
               </p>

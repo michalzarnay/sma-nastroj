@@ -118,6 +118,7 @@ function InaStavbaForm({ stavba, onChange }: { stavba: InaStavba; onChange: (dat
         label="Aktuálne využitie"
         value={stavba.aktualneVyuzitie}
         onChange={(v) => onChange({ aktualneVyuzitie: v })}
+        placeholder="napr. oplotenie, chodník, parkovisko, altánok"
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <NumberInput
@@ -125,12 +126,14 @@ function InaStavbaForm({ stavba, onChange }: { stavba: InaStavba; onChange: (dat
           value={stavba.celkovaVymeraParciel}
           onChange={(v) => onChange({ celkovaVymeraParciel: v })}
           unit="m²"
+          tooltipText="Súčet výmier všetkých parciel podľa listu vlastníctva (LV)."
         />
         <NumberInput
           label="Zastavaná plocha"
           value={stavba.zastavanaPlocha}
           onChange={(v) => onChange({ zastavanaPlocha: v })}
           unit="m²"
+          tooltipText="Plocha, ktorú stavba zaberá na zemi (pôdorys). Nájdete ju na stavebnom povolení alebo v katastri."
         />
       </div>
     </div>

@@ -85,7 +85,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
           value={pozemok.clenitosTerenu}
           onChange={(v) => onChange({ clenitosTerenu: v })}
           placeholder="napr. rovinatý, mierny svah, kopcovitý"
-          tooltipText="Opíšte tvar a sklon terénu."
+          tooltipText="Rovinatý (do 3 %), mierny svah (3–15 %), strmý svah (nad 15 %). Terén ovplyvňuje, kam odteká dažďová voda."
         />
       </div>
 
@@ -95,11 +95,11 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         tooltipText="Kam odteká voda (zrejme najmä dažďová) z vášho pozemku? Rozdeľte 100% plochy medzi jednotlivé spôsoby odvodu."
         fields={[
           { key: 'odvodVodyJednotnaKanalizacia', label: 'jednotná stokova sieť', tooltipText: 'Kanalizácia spoločná pre splaškovú aj dažďovú vodu.' },
-          { key: 'odvodVodySplaskovaKanalizacia', label: 'delená splašková kanalizácia', tooltipText: 'Samostatná kanalizácia pre splašky (bez dažďovej vody).' },
+          { key: 'odvodVodySplaskovaKanalizacia', label: 'delená splašková kanalizácia (omylom zvedené zrážky)', tooltipText: 'Samostatná splašková kanalizácia určená len pre splašky – sem uveďte podiel plochy, z ktorej sú zrážky omylom zvedené do splaškovej kanalizácie (hoci tam nepatria).' },
           { key: 'odvodVodyZrazkovaKanalizacia', label: 'delená zrážková kanalizácia', tooltipText: 'Samostatná kanalizácia len pre dažďovú vodu.' },
           { key: 'odvodVodyVodnyTok', label: 'do vodného toku', tooltipText: 'Priamo do potoka, rieky alebo vodnej plochy.' },
           { key: 'odvodVodyVsakovanie', label: 'cielené vsakovanie', tooltipText: 'Cielene vsakovaním – napr. do priehlbne, dažďovej záhrady.' },
-          { key: 'odvodVodyRetencnaNadrzou', label: 'do retenčnej nádrže', tooltipText: 'Voda sa zachytáva v retenčnej nádrži.' },
+          { key: 'odvodVodyRetencnaNadrzou', label: 'do retenčnej nádrže', tooltipText: 'Voda zo striech alebo plôch sa zachytáva v zásobníku (napr. podzemná betónová nádrž, plastový kontajner) a neskôr využíva na závlahu alebo úžitkovú vodu.' },
           { key: 'odvodVodyNerieseny', label: 'neriešený', tooltipText: 'Odvod vody nie je riešený – voda voľne steká po povrchu.' },
         ]}
         values={{
@@ -301,9 +301,12 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <NumberInput label="Nadzemné nádrže – objem" value={pozemok.nadzemneNadobyObjem}
               onChange={(v) => onChange({ nadzemneNadobyObjem: v })} unit="m³"
-              tooltipText="Sudy, IBC kontajnery a pod." />
+              step="any" placeholder="0,0"
+              tooltipText="Celkový objem všetkých nádob na dažďovú vodu v m³. Príklad: 2 sudy po 200 l = 0,4 m³." />
             <NumberInput label="Podzemné nádrže – objem" value={pozemok.podzemneNadobyObjem}
-              onChange={(v) => onChange({ podzemneNadobyObjem: v })} unit="m³" />
+              onChange={(v) => onChange({ podzemneNadobyObjem: v })} unit="m³"
+              step="any" placeholder="0,0"
+              tooltipText="Objem uveďte v m³, možno aj desatinné číslo (napr. 0.4)." />
           </div>
           <TextInput label="Spôsob využitia vody z nádob" value={pozemok.sposobVyuzitiaVody}
             onChange={(v) => onChange({ sposobVyuzitiaVody: v })}
