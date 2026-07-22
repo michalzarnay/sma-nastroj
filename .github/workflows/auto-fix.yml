@@ -66,5 +66,6 @@ jobs:
 
             Ak je problém aj po spresnení nejednoznačný alebo zasahuje zakázanú
             oblasť, neopravuj — iba napíš do issue komentár a počkaj na človeka.
+          allowed_tools: "Bash(gh:*),Bash(git:*)"
           claude_args: "--max-turns 50"
           show_full_output: "true"
