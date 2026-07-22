@@ -66,5 +66,4 @@ jobs:
 
             Ak je problém aj po spresnení nejednoznačný alebo zasahuje zakázanú
             oblasť, neopravuj — iba napíš do issue komentár a počkaj na človeka.
-          claude_args: "--max-turns 50"
-          show_full_output: "true"
+          claude_args: "--max-turns 50 --allowedTools Read,Edit,Write,Bash(gh:*),Bash(git:*),Bash(npm:*)"
