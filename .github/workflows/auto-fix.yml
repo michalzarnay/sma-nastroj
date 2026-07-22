@@ -68,4 +68,8 @@ jobs:
             oblasť, neopravuj — iba napíš do issue komentár a počkaj na človeka.
           allowed_tools: "Bash(gh:*),Bash(git:*)"
           claude_args: "--max-turns 50"
+          claude_args: >
+            --max-turns 50
+            --allowedTools "Bash(gh:*),Bash(git:*),Edit,Write,Read"
+            --permission-mode acceptEdits
           show_full_output: "true"
