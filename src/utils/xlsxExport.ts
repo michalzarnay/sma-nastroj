@@ -136,7 +136,7 @@ function sheetBudovy(areal: Areal): (string | number)[][] {
     // Zelená infra
     'Zelená strecha celkom (m²)', 'ZS extenzívna plochá (m²)', 'ZS extenzívna šikmá (m²)',
     'ZS intenzívna (m²)', 'ZS modrozelená (m²)', 'ZS štrková (m²)',
-    'Zelená stena budovy (m²)', 'Solárne panely (m²)',
+    'Zelená stena budovy (m²)', 'Solárne kolektory (m²)',
     // Stav
     'Celkový stav budovy',
   ];

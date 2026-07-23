@@ -827,7 +827,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
             tooltipKey="zelenaStrechaDef"
           />
           <NumberInput
-            label="Solárne panely – plocha"
+            label="Solárne kolektory – plocha"
             value={budova.solarnePanelyPlocha}
             onChange={(v) => onChange({ solarnePanelyPlocha: v })}
             unit="m²"

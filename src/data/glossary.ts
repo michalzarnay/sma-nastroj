@@ -39,7 +39,7 @@ export const glossary: Record<string, GlossaryEntry> = {
     example: 'Panely na streche, ktoré vyrábajú elektrinu pre domácnosť alebo budovu.',
   },
   solarnePanelyDef: {
-    term: 'Solárne (termálne) panely',
+    term: 'Solárne kolektory',
     definition: 'Panely, ktoré zachytávajú teplo slnečného žiarenia a používajú ho na ohrev vody. Na rozdiel od fotovoltiky nevyrábajú elektrinu, ale teplo.',
     example: 'Tmavé panely na streche napojené na bojler – slnko ohrieva vodu na kúpanie alebo vykurovanie.',
   },
