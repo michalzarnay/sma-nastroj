@@ -114,19 +114,19 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         onChange={(key, value) => onChange({ [key]: value })}
       />
 
-      {/* Priepustna plocha */}
+      {/* Prirodny (vsakovaci) povrch */}
       <div className="space-y-4">
         <NumberInput
-          label="Priepustná plocha celkom"
+          label="Prírodný (vsakovací) povrch celkom"
           value={pozemok.priepustnaPlochaCelkom}
           onChange={(v) => onChange({ priepustnaPlochaCelkom: v })}
           unit="m²"
           tooltipKey="priepustnaPlochaDef"
         />
-        <ConditionalSection title="Rozdelenie priepustnej plochy" show={pozemok.priepustnaPlochaCelkom > 0}>
+        <ConditionalSection title="Rozdelenie prírodného (vsakovacieho) povrchu" show={pozemok.priepustnaPlochaCelkom > 0}>
           <PercentageGroup
-            title="Podiel typov vegetácie na priepustnej ploche"
-            tooltipText="Rozdeľte priepustnú plochu podľa typu vegetácie. Súčet musí byť 100%."
+            title="Podiel typov vegetácie na prírodnom (vsakovacom) povrchu"
+            tooltipText="Rozdeľte prírodný (vsakovací) povrch podľa typu vegetácie. Súčet musí byť 100%."
             fields={[
               { key: 'priepustnaPlochaHolaPoda', label: 'holá pôda' },
               { key: 'priepustnaPlochaByliny', label: 'byliny (trávnik, lúka)' },
@@ -146,24 +146,24 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
             value={pozemok.priepustnaPlochaZatienena}
             onChange={(v) => onChange({ priepustnaPlochaZatienena: v })}
             unit="%" max={100}
-            tooltipText="Koľko percent priepustnej plochy je zatienených korunami stromov."
+            tooltipText="Koľko percent prírodného (vsakovacieho) povrchu je zatienených korunami stromov."
           />
         </ConditionalSection>
       </div>
 
-      {/* Polopriepustna plocha */}
+      {/* Spevneny (polopriepustny) povrch */}
       <div className="space-y-4">
         <NumberInput
-          label="Polopriepustná plocha celkom"
+          label="Spevnený (polopriepustný) povrch celkom"
           value={pozemok.polopriepustnaPlochaCelkom}
           onChange={(v) => onChange({ polopriepustnaPlochaCelkom: v })}
           unit="m²"
           tooltipKey="polopriepustnaPlochaDef"
         />
-        <ConditionalSection title="Rozdelenie polopriepustnej plochy" show={pozemok.polopriepustnaPlochaCelkom > 0}>
+        <ConditionalSection title="Rozdelenie spevneného (polopriepustného) povrchu" show={pozemok.polopriepustnaPlochaCelkom > 0}>
           <PercentageGroup
-            title="Typy polopriepustného povrchu"
-            tooltipText="Rozdeľte polopriepustnú plochu podľa typu materiálu. Súčet musí byť 100%."
+            title="Typy spevneného (polopriepustného) povrchu"
+            tooltipText="Rozdeľte spevnený (polopriepustný) povrch podľa typu materiálu. Súčet musí byť 100%."
             fields={[
               { key: 'polopriepustnaPriepustnyAsfalt', label: 'priepustný asfalt' },
               { key: 'polopriepustnaPriepustnyBeton', label: 'priepustný betón' },
@@ -189,7 +189,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
             onChange={(key, value) => onChange({ [key]: value })}
           />
           <NumberInput
-            label="Časť polopriepustnej plochy vyspádovaná"
+            label="Časť spevneného (polopriepustného) povrchu vyspádovaná"
             value={pozemok.polopriepustnaVyspadovana}
             onChange={(v) => onChange({ polopriepustnaVyspadovana: v })}
             unit="%" max={100}
@@ -198,18 +198,18 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </ConditionalSection>
       </div>
 
-      {/* Spevnena plocha */}
+      {/* Nepriepustny povrch */}
       <div className="space-y-4">
         <NumberInput
-          label="Spevnená plocha celkom"
+          label="Nepriepustný povrch celkom"
           value={pozemok.spevnenaPlochaCelkom}
           onChange={(v) => onChange({ spevnenaPlochaCelkom: v })}
           unit="m²"
           tooltipKey="spevnenaPlochaDef"
         />
-        <ConditionalSection title="Detail spevnenej plochy" show={pozemok.spevnenaPlochaCelkom > 0}>
+        <ConditionalSection title="Detail nepriepustného povrchu" show={pozemok.spevnenaPlochaCelkom > 0}>
           <NumberInput
-            label="Časť spevnenej plochy vyspádovaná"
+            label="Časť nepriepustného povrchu vyspádovaná"
             value={pozemok.spevnenaPlochaVyspadovana}
             onChange={(v) => onChange({ spevnenaPlochaVyspadovana: v })}
             unit="%" max={100}

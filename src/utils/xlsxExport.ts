@@ -77,7 +77,7 @@ function sheetPozemky(areal: Areal): (string | number)[][] {
     'Pozemok', 'Parcela', 'Využitie', 'Celková výmera (m²)', 'Plocha bez budov (m²)',
     'Odvod – jednotná kanal. (%)', 'Odvod – splašková kanal. (%)', 'Odvod – zrážková kanal. (%)',
     'Odvod – vodný tok (%)', 'Odvod – vsakovanie (%)', 'Odvod – retenčná nádrž (%)', 'Odvod – neriešený (%)',
-    'Priepustná plocha (m²)', 'Polopriepustná plocha (m²)', 'Spevnená plocha (m²)',
+    'Prírodný (vsakovací) povrch (m²)', 'Spevnený (polopriepustný) povrch (m²)', 'Nepriepustný povrch (m²)',
     'Stromy – podiel mladých (%)', 'Stromy – podiel nezdravých (%)',
     'Dažďová záhrada – plocha (m²)', 'Dažďová záhrada – hĺbka (cm)',
     'Dažďová záhrada – plocha strechy (m²)', 'Dažďová záhrada – plocha terénu (m²)',
