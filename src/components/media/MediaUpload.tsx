@@ -148,7 +148,7 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
       <div
         onDrop={onDrop}
         onDragOver={(e) => e.preventDefault()}
-        className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-[#2D7D46] transition-colors"
+        className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-[#52A8DE] transition-colors"
       >
         <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
         <p className="text-sm text-gray-600 font-medium">Pretiahnite súbory sem alebo</p>
@@ -156,7 +156,7 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
           <button
             type="button"
             onClick={() => fotoRef.current?.click()}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#2D7D46] border border-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/5"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#52A8DE] border border-[#52A8DE] rounded-xl hover:bg-[#52A8DE]/5"
           >
             <Camera className="w-3.5 h-3.5" />
             Pridať foto
@@ -164,7 +164,7 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
           <button
             type="button"
             onClick={() => videoRef.current?.click()}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-400 rounded-lg hover:bg-blue-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-400 rounded-xl hover:bg-blue-50"
           >
             <Film className="w-3.5 h-3.5" />
             Pridať video
@@ -180,7 +180,7 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
       </div>
 
       {chyba && (
-        <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">
+        <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 rounded-xl px-3 py-2">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {chyba}
         </div>
@@ -292,7 +292,7 @@ function MediaCard({
   const canExpand = item.typ === 'foto' && !!item.dataUrl;
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden group">
+    <div className="border border-gray-200 rounded-xl overflow-hidden group">
       {/* Náhľad */}
       <div
         className={`relative bg-gray-100 h-28 flex items-center justify-center ${canExpand ? 'cursor-zoom-in' : ''}`}
@@ -345,7 +345,7 @@ function MediaCard({
           value={item.popis}
           onChange={(e) => onPopis(e.target.value)}
           placeholder="Popis…"
-          className="w-full text-xs border border-gray-200 rounded px-1.5 py-1 focus:outline-none focus:border-[#2D7D46]"
+          className="w-full text-xs border border-gray-200 rounded px-1.5 py-1 focus:outline-none focus:border-[#52A8DE]"
         />
       </div>
     </div>

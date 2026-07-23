@@ -155,8 +155,8 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3 pb-3 border-b border-gray-100">
-        <div className="w-10 h-10 bg-[#2D7D46]/10 rounded-lg flex items-center justify-center">
-          <BarChart3 className="w-5 h-5 text-[#2D7D46]" />
+        <div className="w-10 h-10 bg-[#52A8DE]/10 rounded-xl flex items-center justify-center">
+          <BarChart3 className="w-5 h-5 text-[#52A8DE]" />
         </div>
         <div>
           <h2 className="text-lg font-bold text-gray-800">Výsledky hodnotenia</h2>
@@ -167,7 +167,7 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
       </div>
 
       {/* Legenda skratiek */}
-      <details className="group border border-gray-200 rounded-lg overflow-hidden">
+      <details className="group border border-gray-200 rounded-xl overflow-hidden">
         <summary className="cursor-pointer flex items-center gap-2 px-4 py-2.5 hover:bg-gray-50 transition-colors text-sm text-gray-600 list-none select-none">
           <span className="group-open:rotate-90 transition-transform inline-block text-gray-400">▶</span>
           Vysvetlenie skratiek
@@ -231,7 +231,7 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
                       step={0.5}
                       value={areal.vahy[oblast]}
                       onChange={(e) => updateVahy({ [oblast]: parseFloat(e.target.value) || 0 })}
-                      className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-center focus:outline-none focus:border-[#2D7D46]"
+                      className="w-full border border-gray-200 rounded-xl px-3 py-1.5 text-sm text-center focus:outline-none focus:border-[#52A8DE]"
                     />
                     <p className="text-xs text-gray-400 text-center mt-1">
                       {Math.round(score[oblast].celkove * areal.vahy[oblast])} / {Math.round(100 * areal.vahy[oblast])}
@@ -245,7 +245,7 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
       )}
 
       {/* Radar Chart */}
-      <div className="bg-gray-50 rounded-lg p-4">
+      <div className="bg-gray-50 rounded-xl p-4">
         <h3 className="text-sm font-semibold text-gray-700 mb-3 text-center">Porovnanie oblastí</h3>
         <div className="w-full h-64">
           <ResponsiveContainer width="100%" height="100%">
@@ -254,8 +254,8 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
               <PolarAngleAxis dataKey="subject" />
               <Radar
                 dataKey="value"
-                stroke="#2D7D46"
-                fill="#2D7D46"
+                stroke="#52A8DE"
+                fill="#52A8DE"
                 fillOpacity={0.3}
               />
             </RadarChart>
@@ -334,21 +334,21 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
         <div className="flex flex-wrap gap-3">
           <button
             onClick={handleExportXLSX}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#2D7D46] rounded-lg hover:bg-[#256939] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#52A8DE] rounded-xl hover:bg-[#52A8DE]/90 transition-colors"
           >
             <TableProperties className="w-4 h-4" />
             Exportovať XLSX
           </button>
           <button
             onClick={handleExportPDF}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#2D7D46] border border-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/5 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#52A8DE] border border-[#52A8DE] rounded-xl hover:bg-[#52A8DE]/5 transition-colors"
           >
             <FileText className="w-4 h-4" />
             Stiahnuť PDF
           </button>
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
           >
             <Download className="w-4 h-4" />
             Exportovať CSV
@@ -363,13 +363,13 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={handleExportXmatik}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-700 border border-blue-300 rounded-lg hover:bg-blue-50 transition-colors opacity-70"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-700 border border-blue-300 rounded-xl hover:bg-blue-50 transition-colors opacity-70"
             >
               Xmatik (ŽSK) →
             </button>
             <button
               onClick={handleExportURBIS}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 transition-colors opacity-70"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-purple-700 border border-purple-300 rounded-xl hover:bg-purple-50 transition-colors opacity-70"
             >
               URBIS – model majetku →
             </button>
@@ -389,7 +389,7 @@ export function Step6_Vysledky({ areal, updateVahy }: Step6Props) {
 
 function ScoreDetail({ title, items }: { title: string; items: { label: string; score: number; max: number }[] }) {
   return (
-    <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+    <div className="bg-gray-50 rounded-xl p-4 space-y-2">
       <h4 className="text-sm font-semibold text-gray-700">{title}</h4>
       {items.map((item) => (
         <div key={item.label} className="space-y-1">
@@ -428,7 +428,7 @@ function RecommendationCard({ rec, index }: { rec: Odporucanie; index: number })
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="border border-gray-200 rounded-xl overflow-hidden">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -453,7 +453,7 @@ function RecommendationCard({ rec, index }: { rec: Odporucanie; index: number })
         <div className="px-4 pb-4 space-y-3 border-t border-gray-100 pt-3">
           <p className="text-sm text-gray-700">{rec.opatrenie.popis}</p>
           {rec.potencial && (
-            <p className="text-sm text-[#2D7D46] font-medium">{rec.potencial}</p>
+            <p className="text-sm text-[#52A8DE] font-medium">{rec.potencial}</p>
           )}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
             <div>
@@ -479,7 +479,7 @@ function RecommendationCard({ rec, index }: { rec: Odporucanie; index: number })
               <ul className="mt-1 space-y-0.5">
                 {rec.opatrenie.benefity.map((b, i) => (
                   <li key={i} className="text-xs text-gray-600 flex items-start gap-1">
-                    <span className="text-[#2D7D46] mt-0.5">•</span>
+                    <span className="text-[#52A8DE] mt-0.5">•</span>
                     {b}
                   </li>
                 ))}

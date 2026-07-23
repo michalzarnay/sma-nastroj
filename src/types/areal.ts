@@ -16,6 +16,49 @@ export interface ScoringWeights {
   energia: number;
 }
 
+export type KategoriaObjektu = 'verejny_sektor' | 'firma' | 'sukromne';
+
+export const KATEGORIE_OBJEKTU: Array<{ value: KategoriaObjektu; label: string }> = [
+  { value: 'verejny_sektor', label: 'Samospráva a verejný sektor' },
+  { value: 'firma', label: 'Firma a organizácia' },
+  { value: 'sukromne', label: 'Súkromný obytný objekt' },
+];
+
+export const TYP_OBJEKTU_OPTIONS: Record<KategoriaObjektu, Array<{ value: string; label: string }>> = {
+  verejny_sektor: [
+    { value: 'ms', label: 'Materská škola' },
+    { value: 'zs', label: 'Základná škola' },
+    { value: 'ss', label: 'Stredná škola' },
+    { value: 'vs', label: 'Vysoká škola' },
+    { value: 'zdravotnicke_stredisko', label: 'Zdravotnícke stredisko' },
+    { value: 'nemocnica', label: 'Nemocnica' },
+    { value: 'dss', label: 'Dom sociálnych služieb' },
+    { value: 'kultura', label: 'Dom kultúry / knižnica' },
+    { value: 'urad', label: 'Obecný / mestský úrad' },
+    { value: 'hasicska_zbrojnica', label: 'Hasičská zbrojnica' },
+    { value: 'iny_verejny', label: 'Iný verejný objekt' },
+  ],
+  firma: [
+    { value: 'vyrobna_hala', label: 'Výrobná hala' },
+    { value: 'sklad', label: 'Sklad / logistika' },
+    { value: 'kancelaria', label: 'Kancelárska budova' },
+    { value: 'obchod', label: 'Obchod / predajňa' },
+    { value: 'gastro', label: 'Reštaurácia / kaviareň' },
+    { value: 'hotel', label: 'Hotel / penzión' },
+    { value: 'polnohospodarsky', label: 'Poľnohospodársky areál' },
+    { value: 'ina_firma', label: 'Iná firma' },
+  ],
+  sukromne: [
+    { value: 'rd', label: 'Rodinný dom' },
+    { value: 'bd', label: 'Bytový dom' },
+    { value: 'chalupa', label: 'Chalupa / rekreačný objekt' },
+    { value: 'zahradna_chata', label: 'Záhradná chata' },
+    { value: 'ine_sukromne', label: 'Iný súkromný objekt' },
+  ],
+};
+
+export const FIRMA_TYPY_S_KAPACITOU = ['gastro', 'hotel', 'obchod'] as const;
+
 export interface Areal {
   id: string;
   nazov: string;
@@ -28,6 +71,9 @@ export interface Areal {
   okres: string;
   mnozstvoZrazok?: number;        // mm/m2
   potencialSlnecnehoSvitu?: number; // kWh/rok
+
+  kategoriaObjektu?: KategoriaObjektu;
+  typObjektu?: string;
 
   // Záznam z obhliadky
   organizaciaVZriadovatelskejPobnonosti: string;

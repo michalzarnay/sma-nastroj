@@ -76,7 +76,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
           />
         </div>
         {/* Nápoveda k rozhodnutiu, kam zaradiť parcelu (pozri issue #37). */}
-        <div className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-xs text-blue-700 space-y-1">
+        <div className="bg-blue-50 border border-blue-100 rounded-xl px-3 py-2 text-xs text-blue-700 space-y-1">
           <p>Pozor: pozemok (parcela) <strong>nezahŕňa</strong> zastavanú plochu budov. Údaje o budovách zadajte v kroku Budovy.</p>
           <p>Parcela len so stavbou sem <strong>nepatrí</strong> — zadajte ju len medzi Budovy. Ak je na parcele budova aj nezastavaný pozemok, zaraďte ju tam, kde prevažuje dominantné využitie.</p>
         </div>
@@ -114,19 +114,19 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         onChange={(key, value) => onChange({ [key]: value })}
       />
 
-      {/* Priepustna plocha */}
+      {/* Prirodny (vsakovaci) povrch */}
       <div className="space-y-4">
         <NumberInput
-          label="Priepustná plocha celkom"
+          label="Prírodný (vsakovací) povrch celkom"
           value={pozemok.priepustnaPlochaCelkom}
           onChange={(v) => onChange({ priepustnaPlochaCelkom: v })}
           unit="m²"
           tooltipKey="priepustnaPlochaDef"
         />
-        <ConditionalSection title="Rozdelenie priepustnej plochy" show={pozemok.priepustnaPlochaCelkom > 0}>
+        <ConditionalSection title="Rozdelenie prírodného (vsakovacieho) povrchu" show={pozemok.priepustnaPlochaCelkom > 0}>
           <PercentageGroup
-            title="Podiel typov vegetácie na priepustnej ploche"
-            tooltipText="Rozdeľte priepustnú plochu podľa typu vegetácie. Súčet musí byť 100%."
+            title="Podiel typov vegetácie na prírodnom (vsakovacom) povrchu"
+            tooltipText="Rozdeľte prírodný (vsakovací) povrch podľa typu vegetácie. Súčet musí byť 100%."
             fields={[
               { key: 'priepustnaPlochaHolaPoda', label: 'holá pôda' },
               { key: 'priepustnaPlochaByliny', label: 'byliny (trávnik, lúka)' },
@@ -146,24 +146,24 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
             value={pozemok.priepustnaPlochaZatienena}
             onChange={(v) => onChange({ priepustnaPlochaZatienena: v })}
             unit="%" max={100}
-            tooltipText="Koľko percent priepustnej plochy je zatienených korunami stromov."
+            tooltipText="Koľko percent prírodného (vsakovacieho) povrchu je zatienených korunami stromov."
           />
         </ConditionalSection>
       </div>
 
-      {/* Polopriepustna plocha */}
+      {/* Spevneny (polopriepustny) povrch */}
       <div className="space-y-4">
         <NumberInput
-          label="Polopriepustná plocha celkom"
+          label="Spevnený (polopriepustný) povrch celkom"
           value={pozemok.polopriepustnaPlochaCelkom}
           onChange={(v) => onChange({ polopriepustnaPlochaCelkom: v })}
           unit="m²"
           tooltipKey="polopriepustnaPlochaDef"
         />
-        <ConditionalSection title="Rozdelenie polopriepustnej plochy" show={pozemok.polopriepustnaPlochaCelkom > 0}>
+        <ConditionalSection title="Rozdelenie spevneného (polopriepustného) povrchu" show={pozemok.polopriepustnaPlochaCelkom > 0}>
           <PercentageGroup
-            title="Typy polopriepustného povrchu"
-            tooltipText="Rozdeľte polopriepustnú plochu podľa typu materiálu. Súčet musí byť 100%."
+            title="Typy spevneného (polopriepustného) povrchu"
+            tooltipText="Rozdeľte spevnený (polopriepustný) povrch podľa typu materiálu. Súčet musí byť 100%."
             fields={[
               { key: 'polopriepustnaPriepustnyAsfalt', label: 'priepustný asfalt' },
               { key: 'polopriepustnaPriepustnyBeton', label: 'priepustný betón' },
@@ -189,7 +189,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
             onChange={(key, value) => onChange({ [key]: value })}
           />
           <NumberInput
-            label="Časť polopriepustnej plochy vyspádovaná"
+            label="Časť spevneného (polopriepustného) povrchu vyspádovaná"
             value={pozemok.polopriepustnaVyspadovana}
             onChange={(v) => onChange({ polopriepustnaVyspadovana: v })}
             unit="%" max={100}
@@ -198,18 +198,18 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </ConditionalSection>
       </div>
 
-      {/* Spevnena plocha */}
+      {/* Nepriepustny povrch */}
       <div className="space-y-4">
         <NumberInput
-          label="Spevnená plocha celkom"
+          label="Nepriepustný povrch celkom"
           value={pozemok.spevnenaPlochaCelkom}
           onChange={(v) => onChange({ spevnenaPlochaCelkom: v })}
           unit="m²"
           tooltipKey="spevnenaPlochaDef"
         />
-        <ConditionalSection title="Detail spevnenej plochy" show={pozemok.spevnenaPlochaCelkom > 0}>
+        <ConditionalSection title="Detail nepriepustného povrchu" show={pozemok.spevnenaPlochaCelkom > 0}>
           <NumberInput
-            label="Časť spevnenej plochy vyspádovaná"
+            label="Časť nepriepustného povrchu vyspádovaná"
             value={pozemok.spevnenaPlochaVyspadovana}
             onChange={(v) => onChange({ spevnenaPlochaVyspadovana: v })}
             unit="%" max={100}
@@ -236,7 +236,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
               tooltipText="Koľko percent všetkých stromov sú mladé (menej ako 10–15 rokov)."
             />
             <NumberInput
-              label="Podiel nezdravých stromov"
+              label="Podiel poškodených stromov"
               value={pozemok.stromyPodielNezdravych}
               onChange={(v) => onChange({ stromyPodielNezdravych: v })}
               unit="%" max={100}
@@ -258,7 +258,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </h3>
 
         {/* Dažďová záhrada */}
-        <div className="space-y-3 border border-gray-100 rounded-lg p-3">
+        <div className="space-y-3 border border-gray-100 rounded-xl p-3">
           <h4 className="text-xs font-semibold text-gray-700">Dažďová záhrada</h4>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <NumberInput label="Plocha" value={pozemok.dazdovaZahradaPlocha}
@@ -275,7 +275,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </div>
 
         {/* Jazierko */}
-        <div className="space-y-3 border border-gray-100 rounded-lg p-3">
+        <div className="space-y-3 border border-gray-100 rounded-xl p-3">
           <h4 className="text-xs font-semibold text-gray-700">Jazierko</h4>
           <div className="grid grid-cols-2 gap-3">
             <NumberInput label="Plocha" value={pozemok.jazierkoPlocha}
@@ -296,7 +296,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </div>
 
         {/* Nádrže */}
-        <div className="space-y-3 border border-gray-100 rounded-lg p-3">
+        <div className="space-y-3 border border-gray-100 rounded-xl p-3">
           <h4 className="text-xs font-semibold text-gray-700">Nádrže na dažďovú vodu</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <NumberInput label="Nadzemné nádrže – objem" value={pozemok.nadzemneNadobyObjem}
@@ -317,8 +317,8 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </div>
 
         {/* Zelená strecha na pozemkoch */}
-        <div className="space-y-3 border border-gray-100 rounded-lg p-3">
-          <h4 className="text-xs font-semibold text-gray-700">Zelená strecha na pozemkoch (napr. prístrešok)</h4>
+        <div className="space-y-3 border border-gray-100 rounded-xl p-3">
+          <h4 className="text-xs font-semibold text-gray-700">Vegetačná strecha na doplnkových stavbách na pozemku (napr. prístrešok, altánok a pod.)</h4>
           <NumberInput label="Celková plocha" value={pozemok.zelenaStrechaPlocha}
             onChange={(v) => onChange({ zelenaStrechaPlocha: v })} unit="m²" tooltipKey="zelenaStrechaDef" />
           <ConditionalSection title="Rozdelenie podľa typu" show={pozemok.zelenaStrechaPlocha > 0}>
@@ -340,7 +340,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </div>
 
         {/* Vsakovacie priehlbne */}
-        <div className="space-y-3 border border-gray-100 rounded-lg p-3">
+        <div className="space-y-3 border border-gray-100 rounded-xl p-3">
           <h4 className="text-xs font-semibold text-gray-700">Vsakovacie priehlbne</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <NumberInput label="S bezpečnostným prepadom" value={pozemok.vsakovaciaPrehlbenaBezpecnostnyPrepad}

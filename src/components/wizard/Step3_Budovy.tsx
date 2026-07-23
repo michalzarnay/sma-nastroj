@@ -30,7 +30,7 @@ export function Step3_Budovy({ budovy, addBudova, updateBudova, removeBudova, ar
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 pb-3 border-b border-gray-100">
-        <div className="w-10 h-10 bg-[#2196F3]/10 rounded-lg flex items-center justify-center">
+        <div className="w-10 h-10 bg-[#2196F3]/10 rounded-xl flex items-center justify-center">
           <Home className="w-5 h-5 text-[#2196F3]" />
         </div>
         <div>
@@ -42,7 +42,7 @@ export function Step3_Budovy({ budovy, addBudova, updateBudova, removeBudova, ar
       </div>
 
       {/* Nápoveda k rozhodnutiu, kam zaradiť parcelu (pozri issue #37). */}
-      <div className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-xs text-blue-700 space-y-1">
+      <div className="bg-blue-50 border border-blue-100 rounded-xl px-3 py-2 text-xs text-blue-700 space-y-1">
         <p>Parcela, na ktorej je iba budova, patrí <strong>len sem (medzi Budovy)</strong> — nezadávajte ju medzi Pozemky.</p>
         <p>Ak je na parcele budova aj nezastavaný pozemok, zaraďte ju podľa toho, čo na nej prevažuje (dominantné využitie) — buď medzi Budovy, alebo medzi Pozemky.</p>
       </div>

@@ -77,7 +77,7 @@ function sheetPozemky(areal: Areal): (string | number)[][] {
     'Pozemok', 'Parcela', 'Využitie', 'Celková výmera (m²)', 'Plocha bez budov (m²)',
     'Odvod – jednotná kanal. (%)', 'Odvod – splašková kanal. (%)', 'Odvod – zrážková kanal. (%)',
     'Odvod – vodný tok (%)', 'Odvod – vsakovanie (%)', 'Odvod – retenčná nádrž (%)', 'Odvod – neriešený (%)',
-    'Priepustná plocha (m²)', 'Polopriepustná plocha (m²)', 'Spevnená plocha (m²)',
+    'Prírodný (vsakovací) povrch (m²)', 'Spevnený (polopriepustný) povrch (m²)', 'Nepriepustný povrch (m²)',
     'Stromy – podiel mladých (%)', 'Stromy – podiel nezdravých (%)',
     'Dažďová záhrada – plocha (m²)', 'Dažďová záhrada – hĺbka (cm)',
     'Dažďová záhrada – plocha strechy (m²)', 'Dažďová záhrada – plocha terénu (m²)',
@@ -136,7 +136,7 @@ function sheetBudovy(areal: Areal): (string | number)[][] {
     // Zelená infra
     'Zelená strecha celkom (m²)', 'ZS extenzívna plochá (m²)', 'ZS extenzívna šikmá (m²)',
     'ZS intenzívna (m²)', 'ZS modrozelená (m²)', 'ZS štrková (m²)',
-    'Zelená stena budovy (m²)', 'Solárne panely (m²)',
+    'Zelená stena budovy (m²)', 'Solárne kolektory (m²)',
     // Stav
     'Celkový stav budovy',
   ];

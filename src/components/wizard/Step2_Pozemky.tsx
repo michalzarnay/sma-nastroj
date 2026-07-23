@@ -29,8 +29,8 @@ export function Step2_Pozemky({ pozemky, addPozemok, updatePozemok, removePozemo
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 pb-3 border-b border-gray-100">
-        <div className="w-10 h-10 bg-[#2D7D46]/10 rounded-lg flex items-center justify-center">
-          <Trees className="w-5 h-5 text-[#2D7D46]" />
+        <div className="w-10 h-10 bg-[#52A8DE]/10 rounded-xl flex items-center justify-center">
+          <Trees className="w-5 h-5 text-[#52A8DE]" />
         </div>
         <div>
           <h2 className="text-lg font-bold text-gray-800">Pozemok</h2>
@@ -41,7 +41,7 @@ export function Step2_Pozemky({ pozemky, addPozemok, updatePozemok, removePozemo
       </div>
 
       {/* Nápoveda k rozhodnutiu, kam zaradiť parcelu (pozri issue #37). */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-xs text-amber-800 space-y-1">
+      <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 text-xs text-amber-800 space-y-1">
         <p><strong>Čo patrí sem (Pozemky):</strong> nezastavané parcely — trávnaté plochy, parkoviská, chodníky, dvory, záhrady.</p>
         <p><strong>Čo patrí do Budov:</strong> parcely, na ktorých stojí budova — zadajte ich v kroku Budovy (pole Parcela).</p>
         <p><strong>Parcela len so stavbou</strong> patrí len medzi Budovy — nezadávajte ju medzi Pozemky.</p>

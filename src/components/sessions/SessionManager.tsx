@@ -71,7 +71,7 @@ export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: Sessi
       <button
         type="button"
         onClick={() => setOtvoreny(true)}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
       >
         <FolderOpen className="w-4 h-4" />
         <span className="hidden sm:inline">Relácie</span>
@@ -102,7 +102,7 @@ export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: Sessi
                 type="button"
                 onClick={() => setRezim('ulozit')}
                 className={`flex-1 px-4 py-2.5 text-sm font-medium transition-colors ${
-                  rezim === 'ulozit' ? 'text-[#2D7D46] border-b-2 border-[#2D7D46]' : 'text-gray-500 hover:text-gray-700'
+                  rezim === 'ulozit' ? 'text-[#52A8DE] border-b-2 border-[#52A8DE]' : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
                 <Save className="w-4 h-4 inline mr-1.5" />
@@ -112,7 +112,7 @@ export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: Sessi
                 type="button"
                 onClick={() => setRezim('nacitat')}
                 className={`flex-1 px-4 py-2.5 text-sm font-medium transition-colors ${
-                  rezim === 'nacitat' ? 'text-[#2D7D46] border-b-2 border-[#2D7D46]' : 'text-gray-500 hover:text-gray-700'
+                  rezim === 'nacitat' ? 'text-[#52A8DE] border-b-2 border-[#52A8DE]' : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
                 <FolderOpen className="w-4 h-4 inline mr-1.5" />
@@ -131,18 +131,18 @@ export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: Sessi
                       onChange={(e) => setNazov(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && ulozit()}
                       placeholder={areal.nazov || 'napr. ZŠ Lipová – terénny prieskum'}
-                      className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#2D7D46]"
+                      className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#52A8DE]"
                       autoFocus
                     />
                   </div>
 
                   {chyba && <p className="text-sm text-red-600">{chyba}</p>}
-                  {potvrdenie && <p className="text-sm text-[#2D7D46]">{potvrdenie}</p>}
+                  {potvrdenie && <p className="text-sm text-[#52A8DE]">{potvrdenie}</p>}
 
                   <button
                     type="button"
                     onClick={ulozit}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#2D7D46] text-white rounded-lg text-sm font-medium hover:bg-[#256939] transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#52A8DE] text-white rounded-xl text-sm font-medium hover:bg-[#52A8DE]/90 transition-colors"
                   >
                     <Save className="w-4 h-4" />
                     Uložiť aktuálny stav
@@ -153,7 +153,7 @@ export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: Sessi
                     <button
                       type="button"
                       onClick={() => importRef.current?.click()}
-                      className="flex items-center gap-2 text-sm text-gray-600 hover:text-[#2D7D46] transition-colors"
+                      className="flex items-center gap-2 text-sm text-gray-600 hover:text-[#52A8DE] transition-colors"
                     >
                       <Upload className="w-4 h-4" />
                       Importovať zo súboru…
@@ -232,7 +232,7 @@ function SessionKarta({
         onClick={onNacitat}
         className="w-full flex items-start gap-3 p-3 hover:bg-gray-50 transition-colors text-left"
       >
-        <FolderOpen className="w-4 h-4 text-[#2D7D46] flex-shrink-0 mt-0.5" />
+        <FolderOpen className="w-4 h-4 text-[#52A8DE] flex-shrink-0 mt-0.5" />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-gray-800 truncate">{session.nazov}</p>
           <div className="flex items-center gap-1 text-xs text-gray-400 mt-0.5">
@@ -258,7 +258,7 @@ function SessionKarta({
           <button
             type="button"
             onClick={onNacitat}
-            className="flex items-center gap-1 text-xs text-[#2D7D46] hover:underline"
+            className="flex items-center gap-1 text-xs text-[#52A8DE] hover:underline"
           >
             <FolderOpen className="w-3 h-3" />
             Načítať

@@ -22,7 +22,7 @@ export function EntityTabBar({
             onClick={() => onSelect(index)}
             className={`px-3 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap
               ${activeIndex === index
-                ? 'border-[#2D7D46] text-[#2D7D46]'
+                ? 'border-[#52A8DE] text-[#52A8DE]'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
           >
@@ -43,7 +43,7 @@ export function EntityTabBar({
       <button
         type="button"
         onClick={onAdd}
-        className="flex items-center gap-1 px-3 py-2 text-sm text-[#2D7D46] hover:bg-[#2D7D46]/5 rounded-t transition-colors flex-shrink-0"
+        className="flex items-center gap-1 px-3 py-2 text-sm text-[#52A8DE] hover:bg-[#52A8DE]/5 rounded-t transition-colors flex-shrink-0"
       >
         <Plus className="w-4 h-4" />
         {addLabel}

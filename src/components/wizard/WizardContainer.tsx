@@ -100,7 +100,7 @@ export function WizardContainer() {
                   wizard.goToStep(1);
                 }
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
             >
               <FilePlus className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Nový areál</span>

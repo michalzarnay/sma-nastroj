@@ -77,7 +77,7 @@ export const REGIONS = [
 
 // Colors
 export const COLORS = {
-  primary: '#2D7D46',
+  primary: '#52A8DE',
   primaryLight: '#4CAF50',
   primaryDark: '#1B5E20',
   secondary: '#2196F3',
@@ -85,6 +85,8 @@ export const COLORS = {
   secondaryDark: '#1565C0',
   warning: '#F59E0B',
   danger: '#DC2626',
+  // Dekoratívne brand farby (komunikačný manuál INOVIA) – iba pre vizuálne/dekoratívne prvky (#80)
+  brandDots: ['#52A8DE', '#E95D5F', '#9CC764', '#FBBB4B'],
   score: {
     cervena: '#DC2626',
     oranzova: '#EA580C',

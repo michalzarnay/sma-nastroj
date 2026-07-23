@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Building2, MapPin, Camera, ClipboardList, Globe, Loader2, Gauge } from 'lucide-react';
-import { Areal, MediaItem } from '../../types/areal';
+import { Areal, MediaItem, KategoriaObjektu, KATEGORIE_OBJEKTU, TYP_OBJEKTU_OPTIONS, FIRMA_TYPY_S_KAPACITOU } from '../../types/areal';
 import { TextInput } from '../ui/TextInput';
 import { NumberInput } from '../ui/NumberInput';
 import { ComboboxInput } from '../ui/ComboboxInput';
@@ -71,7 +71,7 @@ async function fetchKlimatickeUdaje(
 }
 
 const selectClasses =
-  'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none';
+  'w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none';
 
 export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMedia, mediaReady }: Step1Props) {
   const [fetchLoading, setFetchLoading] = useState(false);
@@ -89,6 +89,16 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
 
   const isSlovak = areal.krajina === 'Slovensko';
   const isCzech = areal.krajina === 'Česká republika';
+
+  const kat = areal.kategoriaObjektu;
+  const showOrganizacia = kat !== 'sukromne';
+  const showKapacita =
+    kat !== 'sukromne' &&
+    (kat !== 'firma' || FIRMA_TYPY_S_KAPACITOU.includes(areal.typObjektu as typeof FIRMA_TYPY_S_KAPACITOU[number]));
+  const showZamestnanci = kat !== 'sukromne';
+  const organizaciaLabel = kat === 'firma' ? 'Prevádzkovateľ' : 'Organizácia (zriaďovateľská pôsobnosť)';
+  const organizaciaPlaceholder = kat === 'firma' ? 'napr. ABC s.r.o.' : 'napr. Žilinský samosprávny kraj';
+  const typOptions = kat ? TYP_OBJEKTU_OPTIONS[kat] : [];
 
   const handleAddressSelect = (result: { ulica: string; obec: string; okres: string; kraj: string }) => {
     const update: Partial<Areal> = { adresa: result.ulica };
@@ -129,19 +139,34 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
   return (
     <div className="space-y-6">
       {/* Welcome */}
-      <div className="text-center space-y-2 pb-4 border-b border-gray-100">
-        <div className="w-16 h-16 bg-[#2D7D46]/10 rounded-full flex items-center justify-center mx-auto">
-          <Building2 className="w-8 h-8 text-[#2D7D46]" />
+      <div className="space-y-2 pb-4 border-b border-gray-100">
+        <div className="flex justify-end">
+          <div className="flex items-center gap-1.5 text-[10px] text-gray-400">
+            <img
+              src="/INOVIA_Logo_Final_RGB.jpg"
+              alt="INOVIA"
+              className="w-4 h-4 rounded-full object-cover object-left"
+            />
+            <span>V spolupráci s INOVIA</span>
+          </div>
         </div>
-        <h2 className="text-xl font-bold text-gray-800">Identifikácia areálu</h2>
-        <p className="text-sm text-gray-500 max-w-md mx-auto">
-          Zadajte základné údaje o areáli, ktorý chcete vyhodnotiť.
-          Areál je súvislé územie s pozemkami a budovami, ktoré patria k sebe.
-        </p>
+        <div className="text-center space-y-2">
+          <div className="relative w-16 h-16 mx-auto">
+            <div className="w-16 h-16 bg-[#52A8DE]/10 rounded-full flex items-center justify-center">
+              <Building2 className="w-8 h-8 text-[#52A8DE]" />
+            </div>
+            <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-[#FBBB4B]" aria-hidden="true" />
+          </div>
+          <h2 className="text-xl font-bold text-gray-800">Identifikácia areálu</h2>
+          <p className="text-sm text-gray-500 max-w-md mx-auto">
+            Zadajte základné údaje o areáli, ktorý chcete vyhodnotiť.
+            Areál je súvislé územie s pozemkami a budovami, ktoré patria k sebe.
+          </p>
+        </div>
       </div>
 
       {/* Presné hodnoty vs. odhady */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3">
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3">
         <Gauge className="w-5 h-5 text-[#2196F3] flex-shrink-0 mt-0.5" />
         <div className="text-xs text-blue-800 space-y-1">
           <p className="font-semibold">Presné hodnoty vs. odhady</p>
@@ -155,7 +180,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
       </div>
 
       {/* Workflow info */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
         <p className="text-xs font-semibold text-amber-800 mb-2">Odporúčaný postup mapovania</p>
         <ol className="text-xs text-amber-700 space-y-1 list-decimal list-inside">
           <li>Vyplňte polia dostupné z internetu (zrážky, slnečný svit, katastrálna mapa)</li>
@@ -174,6 +199,40 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
           placeholder="napr. Základná škola Lipová"
           tooltipText="Zvoľte ľubovoľný názov, ktorý vám pomôže areál identifikovať."
         />
+
+        {/* Kategória a typ objektu */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">Kategória areálu</label>
+            <select
+              value={areal.kategoriaObjektu ?? ''}
+              onChange={(e) => updateAreal({
+                kategoriaObjektu: (e.target.value as KategoriaObjektu) || undefined,
+                typObjektu: undefined,
+              })}
+              className={selectClasses}
+            >
+              <option value="">– vyberte kategóriu –</option>
+              {KATEGORIE_OBJEKTU.map((k) => (
+                <option key={k.value} value={k.value}>{k.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">Typ objektu</label>
+            <select
+              value={areal.typObjektu ?? ''}
+              onChange={(e) => updateAreal({ typObjektu: e.target.value || undefined })}
+              disabled={!kat}
+              className={selectClasses}
+            >
+              <option value="">{kat ? '– vyberte typ –' : '– najprv vyberte kategóriu –'}</option>
+              {typOptions.map((t) => (
+                <option key={t.value} value={t.value}>{t.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
 
         {/* Krajina */}
         <div className="flex flex-col gap-1">
@@ -278,7 +337,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
               type="button"
               onClick={handleFetchKlima}
               disabled={fetchLoading || (!areal.adresa && !areal.obec)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#2D7D46] border border-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/5 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#52A8DE] border border-[#52A8DE] rounded-xl hover:bg-[#52A8DE]/5 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               title="Načíta priemerné zrážky z Open-Meteo a potenciál slnečného svitu z PVGIS podľa zadanej adresy"
             >
               {fetchLoading
@@ -311,16 +370,18 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
       {/* Záznam z obhliadky */}
       <div className="space-y-4 pt-2 border-t border-gray-100">
         <div className="flex items-center gap-2">
-          <ClipboardList className="w-4 h-4 text-[#2D7D46]" />
+          <ClipboardList className="w-4 h-4 text-[#52A8DE]" />
           <h3 className="text-sm font-semibold text-gray-800">Záznam z obhliadky</h3>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <TextInput
-            label="Organizácia (zriaďovateľská pôsobnosť)"
-            value={areal.organizaciaVZriadovatelskejPobnonosti}
-            onChange={(v) => updateAreal({ organizaciaVZriadovatelskejPobnonosti: v })}
-            placeholder="napr. Žilinský samosprávny kraj"
-          />
+        <div className={`grid grid-cols-1 ${showOrganizacia ? 'sm:grid-cols-2' : ''} gap-4`}>
+          {showOrganizacia && (
+            <TextInput
+              label={organizaciaLabel}
+              value={areal.organizaciaVZriadovatelskejPobnonosti}
+              onChange={(v) => updateAreal({ organizaciaVZriadovatelskejPobnonosti: v })}
+              placeholder={organizaciaPlaceholder}
+            />
+          )}
           <TextInput
             label="Obhliadku vykonal"
             value={areal.obhliadkuVykonal}
@@ -342,35 +403,43 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
             placeholder="Mená účastníkov"
           />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <TextInput
-            label="Kapacita zariadenia"
-            value={areal.kapacitaZariadenia}
-            onChange={(v) => updateAreal({ kapacitaZariadenia: v })}
-            placeholder="napr. 450 žiakov"
-            tooltipText="Maximálna kapacita zariadenia – koľko ľudí sa doň zmestí naraz najviac (žiaci, pacienti, návštevníci…)."
-          />
-          <NumberInput
-            label="Aktuálna obsadenosť klientov/žiakov"
-            value={areal.aktualnaObsadenost}
-            onChange={(v) => updateAreal({ aktualnaObsadenost: v })}
-            unit="%"
-            max={100}
-            tooltipText="Obsadenosť klientmi, pacientmi alebo žiakmi v čase mapovania, vyjadrená ako % z kapacity zariadenia. Ak sa obsadenosť v čase mapovania mení, uveďte priemer za príslušné obdobie. Nezahŕňa zamestnancov."
-          />
-          <NumberInput
-            label="Počet zamestnancov"
-            value={areal.pocetZamestnancov}
-            onChange={(v) => updateAreal({ pocetZamestnancov: v })}
-            tooltipText="Priemerný počet zamestnancov prítomných v areáli počas prevádzky. Slúži na výpočet KPI spotreby energií a vody – klienti/žiaci a zamestnanci majú spravidla rôznu spotrebu (napr. v sociálnych zariadeniach je spotreba klientov výrazne vyššia ako zamestnancov)."
-          />
-        </div>
+        {(showKapacita || showZamestnanci) && (
+          <div className={`grid grid-cols-1 ${showKapacita && showZamestnanci ? 'sm:grid-cols-3' : ''} gap-4`}>
+            {showKapacita && (
+              <TextInput
+                label="Kapacita zariadenia"
+                value={areal.kapacitaZariadenia}
+                onChange={(v) => updateAreal({ kapacitaZariadenia: v })}
+                placeholder="napr. 450 žiakov"
+                tooltipText="Maximálna kapacita zariadenia – koľko ľudí sa doň zmestí naraz najviac (žiaci, pacienti, návštevníci…)."
+              />
+            )}
+            {showKapacita && (
+              <NumberInput
+                label="Aktuálna obsadenosť klientov/žiakov"
+                value={areal.aktualnaObsadenost}
+                onChange={(v) => updateAreal({ aktualnaObsadenost: v })}
+                unit="%"
+                max={100}
+                tooltipText="Obsadenosť klientmi, pacientmi alebo žiakmi v čase mapovania, vyjadrená ako % z kapacity zariadenia. Ak sa obsadenosť v čase mapovania mení, uveďte priemer za príslušné obdobie. Nezahŕňa zamestnancov."
+              />
+            )}
+            {showZamestnanci && (
+              <NumberInput
+                label="Počet zamestnancov"
+                value={areal.pocetZamestnancov}
+                onChange={(v) => updateAreal({ pocetZamestnancov: v })}
+                tooltipText="Priemerný počet zamestnancov prítomných v areáli počas prevádzky. Slúži na výpočet KPI spotreby energií a vody – klienti/žiaci a zamestnanci majú spravidla rôznu spotrebu (napr. v sociálnych zariadeniach je spotreba klientov výrazne vyššia ako zamestnancov)."
+              />
+            )}
+          </div>
+        )}
       </div>
 
       {/* Foto a video materiál */}
       <div className="space-y-3 pt-2 border-t border-gray-100">
         <div className="flex items-center gap-2">
-          <Camera className="w-4 h-4 text-[#2D7D46]" />
+          <Camera className="w-4 h-4 text-[#52A8DE]" />
           <h3 className="text-sm font-semibold text-gray-800">Foto a video materiál</h3>
           <span className="text-xs text-gray-400">(terénny prieskum)</span>
         </div>
@@ -387,7 +456,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
       </div>
 
       {/* Info box */}
-      <div className="bg-blue-50 rounded-lg p-4 flex gap-3">
+      <div className="bg-blue-50 rounded-xl p-4 flex gap-3">
         <MapPin className="w-5 h-5 text-[#2196F3] flex-shrink-0 mt-0.5" />
         <div className="text-sm text-blue-800">
           <p className="font-medium">V ďalších krokoch budete postupne zadávať:</p>

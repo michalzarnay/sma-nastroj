@@ -47,7 +47,7 @@ export function Tooltip({ glossaryKey, text, example, whereToFind }: TooltipProp
         <HelpCircle className="w-4 h-4" />
       </button>
       {isOpen && (
-        <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 sm:w-80 bg-white rounded-lg shadow-lg border border-gray-200 p-3 text-sm text-gray-700">
+        <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 sm:w-80 bg-white rounded-xl shadow-lg border border-gray-200 p-3 text-sm text-gray-700">
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
             <div className="w-3 h-3 bg-white border-r border-b border-gray-200 transform rotate-45 -translate-y-1.5" />
           </div>

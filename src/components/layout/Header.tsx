@@ -19,7 +19,7 @@ export function Header({ currentStep, totalSteps, visitedSteps, onGoTo, extraAct
         {/* Top row */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#2D7D46] rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 bg-[#52A8DE] rounded-xl flex items-center justify-center flex-shrink-0">
               <Leaf className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -44,11 +44,11 @@ export function Header({ currentStep, totalSteps, visitedSteps, onGoTo, extraAct
                   onClick={() => isClickable && onGoTo(step.id)}
                   disabled={!isClickable}
                   title={step.nazov}
-                  className={`flex items-center gap-1 w-full rounded-lg px-1.5 py-1 text-left transition-colors min-w-0
+                  className={`flex items-center gap-1 w-full rounded-xl px-1.5 py-1 text-left transition-colors min-w-0
                     ${isActive
-                      ? 'bg-[#2D7D46] text-white cursor-default'
+                      ? 'bg-[#52A8DE] text-white cursor-default'
                       : isVisited
-                        ? 'bg-[#2D7D46]/10 text-[#2D7D46] hover:bg-[#2D7D46]/20 cursor-pointer'
+                        ? 'bg-[#52A8DE]/10 text-[#52A8DE] hover:bg-[#52A8DE]/20 cursor-pointer'
                         : 'bg-gray-100 text-gray-400 cursor-default'
                     }`}
                 >
@@ -66,7 +66,7 @@ export function Header({ currentStep, totalSteps, visitedSteps, onGoTo, extraAct
         {/* Progress bar */}
         <div className="w-full bg-gray-200 rounded-full h-1">
           <div
-            className="bg-[#2D7D46] h-1 rounded-full transition-all duration-500 ease-out"
+            className="bg-[#52A8DE] h-1 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${Math.max((currentStep / totalSteps) * 100, 5)}%` }}
           />
         </div>
