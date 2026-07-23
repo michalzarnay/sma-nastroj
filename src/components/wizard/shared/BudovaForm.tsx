@@ -262,7 +262,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
             <select
               value={budova.povodnovoRiziko}
               onChange={(e) => onChange({ povodnovoRiziko: Number(e.target.value) })}
-              className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none"
+              className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none"
             >
               <option value={0}>— nevyplnené —</option>
               <option value={1}>1 – žiadne riziko (mimo záplavovej zóny / Q1000)</option>
@@ -981,7 +981,7 @@ function PDSection({ num, nazov, onNazov, uroven, onUroven, rok, onRok, forma, o
             <select
               value={uroven}
               onChange={(e) => onUroven(Number(e.target.value))}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none"
+              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none"
             >
               {PD_LEVELS.map((l) => (
                 <option key={l.value} value={l.value}>{l.label}</option>
@@ -998,7 +998,7 @@ function PDSection({ num, nazov, onNazov, uroven, onUroven, rok, onRok, forma, o
             <select
               value={forma}
               onChange={(e) => onForma(Number(e.target.value) as 1 | 2)}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none"
+              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none"
             >
               {PD_FORMS.map((f) => (
                 <option key={f.value} value={f.value}>{f.label}</option>

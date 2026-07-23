@@ -39,7 +39,7 @@ export function NumberInput({
           placeholder={placeholder || '0'}
           disabled={disabled}
           style={unit ? { paddingRight: `${unit.length * 0.6 + 1.5}rem` } : undefined}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-right text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none disabled:bg-gray-100 disabled:text-gray-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-right text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none disabled:bg-gray-100 disabled:text-gray-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         {unit && (
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">

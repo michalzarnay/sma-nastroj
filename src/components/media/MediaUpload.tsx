@@ -148,7 +148,7 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
       <div
         onDrop={onDrop}
         onDragOver={(e) => e.preventDefault()}
-        className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-[#2D7D46] transition-colors"
+        className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-[#52A8DE] transition-colors"
       >
         <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
         <p className="text-sm text-gray-600 font-medium">Pretiahnite súbory sem alebo</p>
@@ -156,7 +156,7 @@ export function MediaUpload({ media, onAdd, onUpdate, onRemove, mediaReady = tru
           <button
             type="button"
             onClick={() => fotoRef.current?.click()}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#2D7D46] border border-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/5"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#52A8DE] border border-[#52A8DE] rounded-lg hover:bg-[#52A8DE]/5"
           >
             <Camera className="w-3.5 h-3.5" />
             Pridať foto
@@ -345,7 +345,7 @@ function MediaCard({
           value={item.popis}
           onChange={(e) => onPopis(e.target.value)}
           placeholder="Popis…"
-          className="w-full text-xs border border-gray-200 rounded px-1.5 py-1 focus:outline-none focus:border-[#2D7D46]"
+          className="w-full text-xs border border-gray-200 rounded px-1.5 py-1 focus:outline-none focus:border-[#52A8DE]"
         />
       </div>
     </div>

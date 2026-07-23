@@ -71,7 +71,7 @@ async function fetchKlimatickeUdaje(
 }
 
 const selectClasses =
-  'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none';
+  'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none';
 
 export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMedia, mediaReady }: Step1Props) {
   const [fetchLoading, setFetchLoading] = useState(false);
@@ -130,8 +130,8 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
     <div className="space-y-6">
       {/* Welcome */}
       <div className="text-center space-y-2 pb-4 border-b border-gray-100">
-        <div className="w-16 h-16 bg-[#2D7D46]/10 rounded-full flex items-center justify-center mx-auto">
-          <Building2 className="w-8 h-8 text-[#2D7D46]" />
+        <div className="w-16 h-16 bg-[#52A8DE]/10 rounded-full flex items-center justify-center mx-auto">
+          <Building2 className="w-8 h-8 text-[#52A8DE]" />
         </div>
         <h2 className="text-xl font-bold text-gray-800">Identifikácia areálu</h2>
         <p className="text-sm text-gray-500 max-w-md mx-auto">
@@ -278,7 +278,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
               type="button"
               onClick={handleFetchKlima}
               disabled={fetchLoading || (!areal.adresa && !areal.obec)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#2D7D46] border border-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/5 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#52A8DE] border border-[#52A8DE] rounded-lg hover:bg-[#52A8DE]/5 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               title="Načíta priemerné zrážky z Open-Meteo a potenciál slnečného svitu z PVGIS podľa zadanej adresy"
             >
               {fetchLoading
@@ -311,7 +311,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
       {/* Záznam z obhliadky */}
       <div className="space-y-4 pt-2 border-t border-gray-100">
         <div className="flex items-center gap-2">
-          <ClipboardList className="w-4 h-4 text-[#2D7D46]" />
+          <ClipboardList className="w-4 h-4 text-[#52A8DE]" />
           <h3 className="text-sm font-semibold text-gray-800">Záznam z obhliadky</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -370,7 +370,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
       {/* Foto a video materiál */}
       <div className="space-y-3 pt-2 border-t border-gray-100">
         <div className="flex items-center gap-2">
-          <Camera className="w-4 h-4 text-[#2D7D46]" />
+          <Camera className="w-4 h-4 text-[#52A8DE]" />
           <h3 className="text-sm font-semibold text-gray-800">Foto a video materiál</h3>
           <span className="text-xs text-gray-400">(terénny prieskum)</span>
         </div>

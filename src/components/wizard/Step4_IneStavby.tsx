@@ -48,7 +48,7 @@ export function Step4_IneStavby({ ineStavby, addInaStavba, updateInaStavba, remo
           <button
             type="button"
             onClick={handleAdd}
-            className="px-4 py-2 text-sm font-medium text-[#2D7D46] border border-[#2D7D46] rounded-lg hover:bg-[#2D7D46]/5 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-[#52A8DE] border border-[#52A8DE] rounded-lg hover:bg-[#52A8DE]/5 transition-colors"
           >
             Pridať inú stavbu
           </button>
