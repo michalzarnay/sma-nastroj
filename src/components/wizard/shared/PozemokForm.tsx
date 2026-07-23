@@ -318,7 +318,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
 
         {/* Zelená strecha na pozemkoch */}
         <div className="space-y-3 border border-gray-100 rounded-lg p-3">
-          <h4 className="text-xs font-semibold text-gray-700">Zelená strecha na pozemkoch (napr. prístrešok)</h4>
+          <h4 className="text-xs font-semibold text-gray-700">Vegetačná strecha na doplnkových stavbách na pozemku (napr. prístrešok, altánok a pod.)</h4>
           <NumberInput label="Celková plocha" value={pozemok.zelenaStrechaPlocha}
             onChange={(v) => onChange({ zelenaStrechaPlocha: v })} unit="m²" tooltipKey="zelenaStrechaDef" />
           <ConditionalSection title="Rozdelenie podľa typu" show={pozemok.zelenaStrechaPlocha > 0}>
