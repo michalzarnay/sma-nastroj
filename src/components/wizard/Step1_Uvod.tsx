@@ -145,7 +145,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
             <img
               src="/INOVIA_Logo_Final_RGB.jpg"
               alt="INOVIA"
-              className="w-4 h-4 rounded-full object-cover"
+              className="w-4 h-4 rounded-full object-cover object-left"
             />
             <span>V spolupráci s INOVIA</span>
           </div>
