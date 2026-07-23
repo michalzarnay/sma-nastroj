@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Building2, MapPin, Camera, ClipboardList, Globe, Loader2, Gauge } from 'lucide-react';
-import { Areal, MediaItem } from '../../types/areal';
+import { Areal, MediaItem, KategoriaObjektu, KATEGORIE_OBJEKTU, TYP_OBJEKTU_OPTIONS, FIRMA_TYPY_S_KAPACITOU } from '../../types/areal';
 import { TextInput } from '../ui/TextInput';
 import { NumberInput } from '../ui/NumberInput';
 import { ComboboxInput } from '../ui/ComboboxInput';
@@ -89,6 +89,16 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
 
   const isSlovak = areal.krajina === 'Slovensko';
   const isCzech = areal.krajina === 'Česká republika';
+
+  const kat = areal.kategoriaObjektu;
+  const showOrganizacia = kat !== 'sukromne';
+  const showKapacita =
+    kat !== 'sukromne' &&
+    (kat !== 'firma' || FIRMA_TYPY_S_KAPACITOU.includes(areal.typObjektu as typeof FIRMA_TYPY_S_KAPACITOU[number]));
+  const showZamestnanci = kat !== 'sukromne';
+  const organizaciaLabel = kat === 'firma' ? 'Prevádzkovateľ' : 'Organizácia (zriaďovateľská pôsobnosť)';
+  const organizaciaPlaceholder = kat === 'firma' ? 'napr. ABC s.r.o.' : 'napr. Žilinský samosprávny kraj';
+  const typOptions = kat ? TYP_OBJEKTU_OPTIONS[kat] : [];
 
   const handleAddressSelect = (result: { ulica: string; obec: string; okres: string; kraj: string }) => {
     const update: Partial<Areal> = { adresa: result.ulica };
@@ -189,6 +199,40 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
           placeholder="napr. Základná škola Lipová"
           tooltipText="Zvoľte ľubovoľný názov, ktorý vám pomôže areál identifikovať."
         />
+
+        {/* Kategória a typ objektu */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">Kategória areálu</label>
+            <select
+              value={areal.kategoriaObjektu ?? ''}
+              onChange={(e) => updateAreal({
+                kategoriaObjektu: (e.target.value as KategoriaObjektu) || undefined,
+                typObjektu: undefined,
+              })}
+              className={selectClasses}
+            >
+              <option value="">– vyberte kategóriu –</option>
+              {KATEGORIE_OBJEKTU.map((k) => (
+                <option key={k.value} value={k.value}>{k.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium text-gray-700">Typ objektu</label>
+            <select
+              value={areal.typObjektu ?? ''}
+              onChange={(e) => updateAreal({ typObjektu: e.target.value || undefined })}
+              disabled={!kat}
+              className={selectClasses}
+            >
+              <option value="">{kat ? '– vyberte typ –' : '– najprv vyberte kategóriu –'}</option>
+              {typOptions.map((t) => (
+                <option key={t.value} value={t.value}>{t.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
 
         {/* Krajina */}
         <div className="flex flex-col gap-1">
@@ -329,13 +373,15 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
           <ClipboardList className="w-4 h-4 text-[#52A8DE]" />
           <h3 className="text-sm font-semibold text-gray-800">Záznam z obhliadky</h3>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <TextInput
-            label="Organizácia (zriaďovateľská pôsobnosť)"
-            value={areal.organizaciaVZriadovatelskejPobnonosti}
-            onChange={(v) => updateAreal({ organizaciaVZriadovatelskejPobnonosti: v })}
-            placeholder="napr. Žilinský samosprávny kraj"
-          />
+        <div className={`grid grid-cols-1 ${showOrganizacia ? 'sm:grid-cols-2' : ''} gap-4`}>
+          {showOrganizacia && (
+            <TextInput
+              label={organizaciaLabel}
+              value={areal.organizaciaVZriadovatelskejPobnonosti}
+              onChange={(v) => updateAreal({ organizaciaVZriadovatelskejPobnonosti: v })}
+              placeholder={organizaciaPlaceholder}
+            />
+          )}
           <TextInput
             label="Obhliadku vykonal"
             value={areal.obhliadkuVykonal}
@@ -357,29 +403,37 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
             placeholder="Mená účastníkov"
           />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <TextInput
-            label="Kapacita zariadenia"
-            value={areal.kapacitaZariadenia}
-            onChange={(v) => updateAreal({ kapacitaZariadenia: v })}
-            placeholder="napr. 450 žiakov"
-            tooltipText="Maximálna kapacita zariadenia – koľko ľudí sa doň zmestí naraz najviac (žiaci, pacienti, návštevníci…)."
-          />
-          <NumberInput
-            label="Aktuálna obsadenosť klientov/žiakov"
-            value={areal.aktualnaObsadenost}
-            onChange={(v) => updateAreal({ aktualnaObsadenost: v })}
-            unit="%"
-            max={100}
-            tooltipText="Obsadenosť klientmi, pacientmi alebo žiakmi v čase mapovania, vyjadrená ako % z kapacity zariadenia. Ak sa obsadenosť v čase mapovania mení, uveďte priemer za príslušné obdobie. Nezahŕňa zamestnancov."
-          />
-          <NumberInput
-            label="Počet zamestnancov"
-            value={areal.pocetZamestnancov}
-            onChange={(v) => updateAreal({ pocetZamestnancov: v })}
-            tooltipText="Priemerný počet zamestnancov prítomných v areáli počas prevádzky. Slúži na výpočet KPI spotreby energií a vody – klienti/žiaci a zamestnanci majú spravidla rôznu spotrebu (napr. v sociálnych zariadeniach je spotreba klientov výrazne vyššia ako zamestnancov)."
-          />
-        </div>
+        {(showKapacita || showZamestnanci) && (
+          <div className={`grid grid-cols-1 ${showKapacita && showZamestnanci ? 'sm:grid-cols-3' : ''} gap-4`}>
+            {showKapacita && (
+              <TextInput
+                label="Kapacita zariadenia"
+                value={areal.kapacitaZariadenia}
+                onChange={(v) => updateAreal({ kapacitaZariadenia: v })}
+                placeholder="napr. 450 žiakov"
+                tooltipText="Maximálna kapacita zariadenia – koľko ľudí sa doň zmestí naraz najviac (žiaci, pacienti, návštevníci…)."
+              />
+            )}
+            {showKapacita && (
+              <NumberInput
+                label="Aktuálna obsadenosť klientov/žiakov"
+                value={areal.aktualnaObsadenost}
+                onChange={(v) => updateAreal({ aktualnaObsadenost: v })}
+                unit="%"
+                max={100}
+                tooltipText="Obsadenosť klientmi, pacientmi alebo žiakmi v čase mapovania, vyjadrená ako % z kapacity zariadenia. Ak sa obsadenosť v čase mapovania mení, uveďte priemer za príslušné obdobie. Nezahŕňa zamestnancov."
+              />
+            )}
+            {showZamestnanci && (
+              <NumberInput
+                label="Počet zamestnancov"
+                value={areal.pocetZamestnancov}
+                onChange={(v) => updateAreal({ pocetZamestnancov: v })}
+                tooltipText="Priemerný počet zamestnancov prítomných v areáli počas prevádzky. Slúži na výpočet KPI spotreby energií a vody – klienti/žiaci a zamestnanci majú spravidla rôznu spotrebu (napr. v sociálnych zariadeniach je spotreba klientov výrazne vyššia ako zamestnancov)."
+              />
+            )}
+          </div>
+        )}
       </div>
 
       {/* Foto a video materiál */}
