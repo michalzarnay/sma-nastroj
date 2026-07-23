@@ -171,7 +171,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
             onChange={(v) => onChange({ vyuzitieEnergiaPercent: v })}
             unit="%"
             max={100}
-            tooltipText="Aký podiel dní v roku sa v budove spotrebováva väčšina energie."
+            tooltipText="Podiel dní v roku, keď budova beží na plný výkon (napr. len pracovné dni = cca 70 %). Ak je prevádzka rovnaká celý rok, zadajte 100 %."
           />
         </div>
       </Section>
@@ -710,7 +710,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
             value={budova.vyrobaElektriny}
             onChange={(v) => onChange({ vyrobaElektriny: v })}
             unit="kWh"
-            tooltipText="Ak máte fotovoltiku alebo iný zdroj vlastnej elektriny."
+            tooltipText="Celkové množstvo elektriny vyrobenej z vlastných zdrojov za minulý rok (FVE, veterník). Nájdete vo výkaze inštalovaného systému alebo v zmluve s výkupcom prebytkov."
           />
         </div>
         <SelectCard
@@ -876,7 +876,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
           value={budova.zelenaStenaBudov}
           onChange={(v) => onChange({ zelenaStenaBudov: v })}
           unit="m²"
-          tooltipText="Plocha vegetačnej zelenej steny na fasáde budovy."
+          tooltipText="Fasáda pokrytá rastlinami (napr. brečtan, popínavé rastliny na konštrukcii). Zadajte plochu v m². Zelená stena zlepšuje izoláciu a ochladzuje fasádu v lete."
         />
       </Section>
     </div>
