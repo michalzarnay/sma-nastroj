@@ -203,10 +203,11 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
           placeholder="napr. žb panel, krov drevo, betónové panely"
         />
         <SelectCard
-          label="Zrealizovaná obnova strechy so zateplením (posledných max. 10 rokov)"
+          label="Zrealizovaná obnova strechy so zateplením alebo novostavba (v posledných maximálne 10 rokoch)"
           options={INSULATION_LEVELS}
           value={budova.strechaZateplenie}
           onChange={(v) => onChange({ strechaZateplenie: v as 0 | 1 | 2 })}
+          tooltipText="Platí rovnako pre zrekonštruovanú strechu so zateplením aj pre novostavbu — obe majú na túto otázku rovnaký vplyv."
         />
         <ConditionalSection title="Detail plochej strechy" show={budova.strechaTyp === 1}>
           <NumberInput
