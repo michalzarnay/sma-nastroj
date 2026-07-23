@@ -76,7 +76,7 @@ function featureToResult(f: PhotonFeature): PhotonResult {
 }
 
 const inputClasses =
-  'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#2D7D46] focus:ring-2 focus:ring-[#2D7D46]/20 focus:outline-none';
+  'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none';
 
 export function AddressAutocomplete({
   value,
@@ -193,7 +193,7 @@ export function AddressAutocomplete({
           {results.map((r, i) => (
             <li
               key={i}
-              className="px-3 py-2 text-sm cursor-pointer hover:bg-[#2D7D46]/10 hover:text-[#2D7D46]"
+              className="px-3 py-2 text-sm cursor-pointer hover:bg-[#52A8DE]/10 hover:text-[#52A8DE]"
               onClick={() => handleSelect(r)}
             >
               <div className="font-medium">{r.displayPrimary}</div>

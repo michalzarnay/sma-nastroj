@@ -77,7 +77,7 @@ export const REGIONS = [
 
 // Colors
 export const COLORS = {
-  primary: '#2D7D46',
+  primary: '#52A8DE',
   primaryLight: '#4CAF50',
   primaryDark: '#1B5E20',
   secondary: '#2196F3',
