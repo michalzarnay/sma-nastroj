@@ -236,7 +236,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
               tooltipText="Koľko percent všetkých stromov sú mladé (menej ako 10–15 rokov)."
             />
             <NumberInput
-              label="Podiel nezdravých stromov"
+              label="Podiel poškodených stromov"
               value={pozemok.stromyPodielNezdravych}
               onChange={(v) => onChange({ stromyPodielNezdravych: v })}
               unit="%" max={100}
