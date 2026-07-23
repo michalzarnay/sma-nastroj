@@ -71,7 +71,7 @@ async function fetchKlimatickeUdaje(
 }
 
 const selectClasses =
-  'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none';
+  'w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none';
 
 export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMedia, mediaReady }: Step1Props) {
   const [fetchLoading, setFetchLoading] = useState(false);
@@ -130,8 +130,11 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
     <div className="space-y-6">
       {/* Welcome */}
       <div className="text-center space-y-2 pb-4 border-b border-gray-100">
-        <div className="w-16 h-16 bg-[#52A8DE]/10 rounded-full flex items-center justify-center mx-auto">
-          <Building2 className="w-8 h-8 text-[#52A8DE]" />
+        <div className="relative w-16 h-16 mx-auto">
+          <div className="w-16 h-16 bg-[#52A8DE]/10 rounded-full flex items-center justify-center">
+            <Building2 className="w-8 h-8 text-[#52A8DE]" />
+          </div>
+          <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-[#FBBB4B]" aria-hidden="true" />
         </div>
         <h2 className="text-xl font-bold text-gray-800">Identifikácia areálu</h2>
         <p className="text-sm text-gray-500 max-w-md mx-auto">
@@ -141,7 +144,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
       </div>
 
       {/* Presné hodnoty vs. odhady */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3">
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3">
         <Gauge className="w-5 h-5 text-[#2196F3] flex-shrink-0 mt-0.5" />
         <div className="text-xs text-blue-800 space-y-1">
           <p className="font-semibold">Presné hodnoty vs. odhady</p>
@@ -155,7 +158,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
       </div>
 
       {/* Workflow info */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
         <p className="text-xs font-semibold text-amber-800 mb-2">Odporúčaný postup mapovania</p>
         <ol className="text-xs text-amber-700 space-y-1 list-decimal list-inside">
           <li>Vyplňte polia dostupné z internetu (zrážky, slnečný svit, katastrálna mapa)</li>
@@ -278,7 +281,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
               type="button"
               onClick={handleFetchKlima}
               disabled={fetchLoading || (!areal.adresa && !areal.obec)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#52A8DE] border border-[#52A8DE] rounded-lg hover:bg-[#52A8DE]/5 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#52A8DE] border border-[#52A8DE] rounded-xl hover:bg-[#52A8DE]/5 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               title="Načíta priemerné zrážky z Open-Meteo a potenciál slnečného svitu z PVGIS podľa zadanej adresy"
             >
               {fetchLoading
@@ -387,7 +390,7 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
       </div>
 
       {/* Info box */}
-      <div className="bg-blue-50 rounded-lg p-4 flex gap-3">
+      <div className="bg-blue-50 rounded-xl p-4 flex gap-3">
         <MapPin className="w-5 h-5 text-[#2196F3] flex-shrink-0 mt-0.5" />
         <div className="text-sm text-blue-800">
           <p className="font-medium">V ďalších krokoch budete postupne zadávať:</p>

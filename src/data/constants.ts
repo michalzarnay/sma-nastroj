@@ -85,6 +85,8 @@ export const COLORS = {
   secondaryDark: '#1565C0',
   warning: '#F59E0B',
   danger: '#DC2626',
+  // Dekoratívne brand farby (komunikačný manuál INOVIA) – iba pre vizuálne/dekoratívne prvky (#80)
+  brandDots: ['#52A8DE', '#E95D5F', '#9CC764', '#FBBB4B'],
   score: {
     cervena: '#DC2626',
     oranzova: '#EA580C',

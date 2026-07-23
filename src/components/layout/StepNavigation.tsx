@@ -55,7 +55,7 @@ export function StepNavigation({ currentStep, totalSteps, onNext, onPrev, onGoTo
           type="button"
           onClick={onPrev}
           disabled={currentStep === 1}
-          className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Späť{prevName ? <span className="hidden sm:inline"> – {prevName}</span> : null}</span>
@@ -65,7 +65,7 @@ export function StepNavigation({ currentStep, totalSteps, onNext, onPrev, onGoTo
           <button
             type="button"
             onClick={() => onGoTo(1)}
-            className="flex items-center gap-1 px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="flex items-center gap-1 px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
           >
             <ChevronsLeft className="w-3.5 h-3.5" />
             Na začiatok
@@ -76,7 +76,7 @@ export function StepNavigation({ currentStep, totalSteps, onNext, onPrev, onGoTo
           type="button"
           onClick={onNext}
           disabled={!canProceed}
-          className="flex items-center gap-1.5 px-6 py-2 text-sm font-medium text-white bg-[#52A8DE] rounded-lg hover:bg-[#52A8DE]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-1.5 px-6 py-2 text-sm font-medium text-white bg-[#52A8DE] rounded-xl hover:bg-[#52A8DE]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {isLast ? 'Zobraziť výsledky' : <>Ďalej{nextName ? <span className="hidden sm:inline"> – {nextName}</span> : null}</>}
           {!isLast && <ChevronRight className="w-4 h-4" />}

@@ -19,7 +19,7 @@ export function Header({ currentStep, totalSteps, visitedSteps, onGoTo, extraAct
         {/* Top row */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#52A8DE] rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 bg-[#52A8DE] rounded-xl flex items-center justify-center flex-shrink-0">
               <Leaf className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -44,7 +44,7 @@ export function Header({ currentStep, totalSteps, visitedSteps, onGoTo, extraAct
                   onClick={() => isClickable && onGoTo(step.id)}
                   disabled={!isClickable}
                   title={step.nazov}
-                  className={`flex items-center gap-1 w-full rounded-lg px-1.5 py-1 text-left transition-colors min-w-0
+                  className={`flex items-center gap-1 w-full rounded-xl px-1.5 py-1 text-left transition-colors min-w-0
                     ${isActive
                       ? 'bg-[#52A8DE] text-white cursor-default'
                       : isVisited

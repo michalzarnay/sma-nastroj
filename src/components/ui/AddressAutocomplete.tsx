@@ -76,7 +76,7 @@ function featureToResult(f: PhotonFeature): PhotonResult {
 }
 
 const inputClasses =
-  'w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none';
+  'w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none';
 
 export function AddressAutocomplete({
   value,
@@ -187,7 +187,7 @@ export function AddressAutocomplete({
       </div>
       {isOpen && results.length > 0 && (
         <ul
-          className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-64 overflow-y-auto"
+          className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-xl shadow-lg mt-1 max-h-64 overflow-y-auto"
           onMouseDown={(e) => e.preventDefault()}
         >
           {results.map((r, i) => (
