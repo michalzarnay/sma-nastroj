@@ -129,18 +129,30 @@ export function Step1_Uvod({ areal, updateAreal, addMedia, updateMedia, removeMe
   return (
     <div className="space-y-6">
       {/* Welcome */}
-      <div className="text-center space-y-2 pb-4 border-b border-gray-100">
-        <div className="relative w-16 h-16 mx-auto">
-          <div className="w-16 h-16 bg-[#52A8DE]/10 rounded-full flex items-center justify-center">
-            <Building2 className="w-8 h-8 text-[#52A8DE]" />
+      <div className="space-y-2 pb-4 border-b border-gray-100">
+        <div className="flex justify-end">
+          <div className="flex items-center gap-1.5 text-[10px] text-gray-400">
+            <img
+              src="/INOVIA_Logo_Final_RGB.jpg"
+              alt="INOVIA"
+              className="w-4 h-4 rounded-full object-cover"
+            />
+            <span>V spolupráci s INOVIA</span>
           </div>
-          <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-[#FBBB4B]" aria-hidden="true" />
         </div>
-        <h2 className="text-xl font-bold text-gray-800">Identifikácia areálu</h2>
-        <p className="text-sm text-gray-500 max-w-md mx-auto">
-          Zadajte základné údaje o areáli, ktorý chcete vyhodnotiť.
-          Areál je súvislé územie s pozemkami a budovami, ktoré patria k sebe.
-        </p>
+        <div className="text-center space-y-2">
+          <div className="relative w-16 h-16 mx-auto">
+            <div className="w-16 h-16 bg-[#52A8DE]/10 rounded-full flex items-center justify-center">
+              <Building2 className="w-8 h-8 text-[#52A8DE]" />
+            </div>
+            <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-[#FBBB4B]" aria-hidden="true" />
+          </div>
+          <h2 className="text-xl font-bold text-gray-800">Identifikácia areálu</h2>
+          <p className="text-sm text-gray-500 max-w-md mx-auto">
+            Zadajte základné údaje o areáli, ktorý chcete vyhodnotiť.
+            Areál je súvislé územie s pozemkami a budovami, ktoré patria k sebe.
+          </p>
+        </div>
       </div>
 
       {/* Presné hodnoty vs. odhady */}
