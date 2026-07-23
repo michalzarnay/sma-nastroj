@@ -8,6 +8,7 @@ import { ConditionalSection } from '../../ui/ConditionalSection';
 import { Tooltip } from '../../ui/Tooltip';
 import { PDFUploadButton } from '../../ui/PDFUploadButton';
 import { ParsedDocument } from '../../../utils/pdfParser';
+import { getStrechaOrientovanaPlochaLabel, getStrechaOrientovanaPlochaTooltip } from '../../../utils/roofOrientationText';
 import { useState } from 'react';
 import { MapPin, Loader2 } from 'lucide-react';
 
@@ -236,11 +237,11 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
         <h4 className="text-xs font-semibold text-gray-600 mt-4">Orientácia na juh</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <NumberInput
-            label="Využiteľná plocha strechy orient. na J/JV/JZ"
+            label={getStrechaOrientovanaPlochaLabel(budova.strechaTyp)}
             value={budova.strechaOrientovanaPlochaNaJuh}
             onChange={(v) => onChange({ strechaOrientovanaPlochaNaJuh: v })}
             unit="m²"
-            tooltipText="Plocha strechy orientovaná na juh, juhovýchod alebo juhozápad, vhodná napr. na montáž solárnych panelov."
+            tooltipText={getStrechaOrientovanaPlochaTooltip(budova.strechaTyp)}
           />
           <NumberInput
             label="Fasáda orientovaná na J/JV/JZ"
