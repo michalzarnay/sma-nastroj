@@ -7,19 +7,19 @@ export interface GlossaryEntry {
 
 export const glossary: Record<string, GlossaryEntry> = {
   priepustnaPlochaDef: {
-    term: 'Priepustná plocha',
+    term: 'Prírodný (vsakovací) povrch',
     definition: 'Povrch, cez ktorý môže voda voľne vsiaknuť do zeme.',
     example: 'Trávnik, záhon, holá pôda, nezhutnená zemina.',
     whereToFind: 'Odhadnite podľa toho, koľko vášho pozemku tvorí trávnik, záhrady alebo prirodzená pôda.',
   },
   polopriepustnaPlochaDef: {
-    term: 'Polopriepustná plocha',
+    term: 'Spevnený (polopriepustný) povrch',
     definition: 'Povrch, ktorý čiastočne prepúšťa vodu – časť vsiakne, časť odtečie.',
     example: 'Zatrávňovacia dlažba, štrkový chodník, priepustný asfalt, vodopriepustná dlažba.',
-    whereToFind: 'Pozrite sa na chodníky, parkoviská alebo terasy – ak medzi dlaždicami rastie tráva alebo je viditeľný štrk, ide o polopriepustnú plochu.',
+    whereToFind: 'Pozrite sa na chodníky, parkoviská alebo terasy – ak medzi dlaždicami rastie tráva alebo je viditeľný štrk, ide o spevnený (polopriepustný) povrch.',
   },
   spevnenaPlochaDef: {
-    term: 'Spevnená plocha',
+    term: 'Nepriepustný povrch',
     definition: 'Nepriepustný povrch, ktorý vodu neprepúšťa – voda po ňom steká.',
     example: 'Asfalt, betón, klasická dlažba, budovy.',
   },
