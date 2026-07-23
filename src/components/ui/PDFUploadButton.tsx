@@ -79,7 +79,7 @@ export function PDFUploadButton({
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={status === 'loading'}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-purple-700 border border-purple-300 rounded-lg hover:bg-purple-50 disabled:opacity-50 transition-colors"
+        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-purple-700 border border-purple-300 rounded-xl hover:bg-purple-50 disabled:opacity-50 transition-colors"
       >
         {status === 'loading' ? (
           <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -130,7 +130,7 @@ export function PDFUploadButton({
 
             {/* Warning: wrong type */}
             {wrongType && (
-              <div className="mx-4 mt-3 flex items-start gap-2 text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2">
+              <div className="mx-4 mt-3 flex items-start gap-2 text-xs text-amber-700 bg-amber-50 rounded-xl px-3 py-2">
                 <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <span>
                   Dokument vyzerá ako <strong>{DOC_TYPE_LABELS[parsed.typ]}</strong>, nie ako
@@ -142,7 +142,7 @@ export function PDFUploadButton({
 
             {/* Unknown type */}
             {parsed.typ === 'neznamy' && (
-              <div className="mx-4 mt-3 flex items-start gap-2 text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2">
+              <div className="mx-4 mt-3 flex items-start gap-2 text-xs text-gray-500 bg-gray-50 rounded-xl px-3 py-2">
                 <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 Typ dokumentu sa nepodarilo rozoznať. Skontroluj extrahované hodnoty.
               </div>
@@ -176,7 +176,7 @@ export function PDFUploadButton({
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex-1 px-3 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50"
+                className="flex-1 px-3 py-2 text-sm text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50"
               >
                 Zrušiť
               </button>
@@ -184,7 +184,7 @@ export function PDFUploadButton({
                 type="button"
                 onClick={handleConfirm}
                 disabled={fields.length === 0}
-                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium text-white bg-purple-600 rounded-xl hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <CheckCircle className="w-4 h-4" />
                 Vyplniť formulár

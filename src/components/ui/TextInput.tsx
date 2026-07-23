@@ -14,7 +14,7 @@ interface TextInputProps {
 export function TextInput({
   label, value, onChange, placeholder, tooltipKey, tooltipText, multiline = false, className = '',
 }: TextInputProps) {
-  const inputClasses = "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none";
+  const inputClasses = "w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none";
 
   return (
     <div className={`flex flex-col gap-1 ${className}`}>

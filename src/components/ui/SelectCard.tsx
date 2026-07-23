@@ -28,7 +28,7 @@ export function SelectCard({
               key={String(option.value)}
               type="button"
               onClick={() => onChange(option.value)}
-              className={`flex-1 min-w-[80px] rounded-lg border-2 px-3 py-2 text-sm text-left transition-all
+              className={`flex-1 min-w-[80px] rounded-xl border-2 px-3 py-2 text-sm text-left transition-all
                 ${isSelected
                   ? 'border-[#52A8DE] bg-[#52A8DE]/5 text-[#52A8DE] font-medium'
                   : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'

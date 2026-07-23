@@ -264,7 +264,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
             <select
               value={budova.povodnovoRiziko}
               onChange={(e) => onChange({ povodnovoRiziko: Number(e.target.value) })}
-              className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none"
+              className="flex-1 rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none"
             >
               <option value={0}>— nevyplnené —</option>
               <option value={1}>1 – žiadne riziko (mimo záplavovej zóny / Q1000)</option>
@@ -278,7 +278,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
               onClick={fetchSvpRiziko}
               disabled={svpLoading}
               title="Načítať povodňové riziko zo SVP"
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-blue-700 border border-blue-300 rounded-lg hover:bg-blue-50 disabled:opacity-50 transition-colors whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-blue-700 border border-blue-300 rounded-xl hover:bg-blue-50 disabled:opacity-50 transition-colors whitespace-nowrap"
             >
               {svpLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <MapPin className="w-3.5 h-3.5" />}
               {svpLoading ? 'načítava…' : 'zistiť zo SVP'}
@@ -439,7 +439,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
             <span className="group-open:rotate-90 transition-transform inline-block">▶</span>
             Ako odhadnúť ročnú spotrebu?
           </summary>
-          <div className="mt-2 text-xs text-gray-600 bg-blue-50 rounded-lg p-3 space-y-1.5">
+          <div className="mt-2 text-xs text-gray-600 bg-blue-50 rounded-xl p-3 space-y-1.5">
             <p><strong>Zemný plyn:</strong> m³ × 10,55 = kWh &nbsp;·&nbsp; alebo pozrite „spotreba v kWh" priamo na ročnom vyúčtovaní</p>
             <p><strong>Elektrina:</strong> kWh je uvedené priamo na faktúre</p>
             <p><strong>CZT (diaľkové teplo):</strong> GJ × 277,78 = kWh &nbsp;·&nbsp; MWh × 1 000 = kWh</p>
@@ -542,7 +542,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
         </HeatingSource>
 
         {/* Uhlie/Drevo */}
-        <div className="border border-gray-200 rounded-lg p-4 space-y-3">
+        <div className="border border-gray-200 rounded-xl p-4 space-y-3">
           <SelectCard
             label="Kúrenie uhlím alebo drevom"
             options={COAL_WOOD_TYPES}
@@ -583,7 +583,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
         </div>
 
         {/* CZT */}
-        <div className="border border-gray-200 rounded-lg p-4 space-y-3">
+        <div className="border border-gray-200 rounded-xl p-4 space-y-3">
           <SelectCard
             label="CZT (Centrálne zásobovanie teplom)"
             options={YES_NO}
@@ -613,7 +613,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
 
         {/* Total */}
         {(budova.celkovaSpotreba ?? 0) > 0 && (
-          <div className="text-sm font-medium text-gray-800 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+          <div className="text-sm font-medium text-gray-800 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
             Celková spotreba všetkých zdrojov kúrenia: <span className="text-amber-700">
               {Math.round(budova.celkovaSpotreba!).toLocaleString('sk')} kWh/rok
             </span>
@@ -887,7 +887,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
 
 function Section({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="space-y-4 border border-gray-100 rounded-lg p-4">
+    <div className="space-y-4 border border-gray-100 rounded-xl p-4">
       <div className="flex items-center justify-between border-b border-gray-100 pb-2">
         <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
         {action}
@@ -919,7 +919,7 @@ function HeatingSource({
   spotreba, onSpotreba, spotrebaUnit, spotrebaLabel, spotrebaTooltip, tooltipKey, children,
 }: HeatingSourceProps) {
   return (
-    <div className="border border-gray-200 rounded-lg p-4 space-y-3">
+    <div className="border border-gray-200 rounded-xl p-4 space-y-3">
       <div className="flex items-center gap-2">
         <SelectCard
           label={title}
@@ -983,7 +983,7 @@ function PDSection({ num, nazov, onNazov, uroven, onUroven, rok, onRok, forma, o
             <select
               value={uroven}
               onChange={(e) => onUroven(Number(e.target.value))}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none"
+              className="rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none"
             >
               {PD_LEVELS.map((l) => (
                 <option key={l.value} value={l.value}>{l.label}</option>
@@ -1000,7 +1000,7 @@ function PDSection({ num, nazov, onNazov, uroven, onUroven, rok, onRok, forma, o
             <select
               value={forma}
               onChange={(e) => onForma(Number(e.target.value) as 1 | 2)}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none"
+              className="rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-[#52A8DE] focus:ring-2 focus:ring-[#52A8DE]/20 focus:outline-none"
             >
               {PD_FORMS.map((f) => (
                 <option key={f.value} value={f.value}>{f.label}</option>

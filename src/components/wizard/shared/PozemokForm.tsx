@@ -76,7 +76,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
           />
         </div>
         {/* Nápoveda k rozhodnutiu, kam zaradiť parcelu (pozri issue #37). */}
-        <div className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-xs text-blue-700 space-y-1">
+        <div className="bg-blue-50 border border-blue-100 rounded-xl px-3 py-2 text-xs text-blue-700 space-y-1">
           <p>Pozor: pozemok (parcela) <strong>nezahŕňa</strong> zastavanú plochu budov. Údaje o budovách zadajte v kroku Budovy.</p>
           <p>Parcela len so stavbou sem <strong>nepatrí</strong> — zadajte ju len medzi Budovy. Ak je na parcele budova aj nezastavaný pozemok, zaraďte ju tam, kde prevažuje dominantné využitie.</p>
         </div>
@@ -258,7 +258,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </h3>
 
         {/* Dažďová záhrada */}
-        <div className="space-y-3 border border-gray-100 rounded-lg p-3">
+        <div className="space-y-3 border border-gray-100 rounded-xl p-3">
           <h4 className="text-xs font-semibold text-gray-700">Dažďová záhrada</h4>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <NumberInput label="Plocha" value={pozemok.dazdovaZahradaPlocha}
@@ -275,7 +275,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </div>
 
         {/* Jazierko */}
-        <div className="space-y-3 border border-gray-100 rounded-lg p-3">
+        <div className="space-y-3 border border-gray-100 rounded-xl p-3">
           <h4 className="text-xs font-semibold text-gray-700">Jazierko</h4>
           <div className="grid grid-cols-2 gap-3">
             <NumberInput label="Plocha" value={pozemok.jazierkoPlocha}
@@ -296,7 +296,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </div>
 
         {/* Nádrže */}
-        <div className="space-y-3 border border-gray-100 rounded-lg p-3">
+        <div className="space-y-3 border border-gray-100 rounded-xl p-3">
           <h4 className="text-xs font-semibold text-gray-700">Nádrže na dažďovú vodu</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <NumberInput label="Nadzemné nádrže – objem" value={pozemok.nadzemneNadobyObjem}
@@ -317,7 +317,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </div>
 
         {/* Zelená strecha na pozemkoch */}
-        <div className="space-y-3 border border-gray-100 rounded-lg p-3">
+        <div className="space-y-3 border border-gray-100 rounded-xl p-3">
           <h4 className="text-xs font-semibold text-gray-700">Vegetačná strecha na doplnkových stavbách na pozemku (napr. prístrešok, altánok a pod.)</h4>
           <NumberInput label="Celková plocha" value={pozemok.zelenaStrechaPlocha}
             onChange={(v) => onChange({ zelenaStrechaPlocha: v })} unit="m²" tooltipKey="zelenaStrechaDef" />
@@ -340,7 +340,7 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
         </div>
 
         {/* Vsakovacie priehlbne */}
-        <div className="space-y-3 border border-gray-100 rounded-lg p-3">
+        <div className="space-y-3 border border-gray-100 rounded-xl p-3">
           <h4 className="text-xs font-semibold text-gray-700">Vsakovacie priehlbne</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <NumberInput label="S bezpečnostným prepadom" value={pozemok.vsakovaciaPrehlbenaBezpecnostnyPrepad}

@@ -71,7 +71,7 @@ export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: Sessi
       <button
         type="button"
         onClick={() => setOtvoreny(true)}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
       >
         <FolderOpen className="w-4 h-4" />
         <span className="hidden sm:inline">Relácie</span>
@@ -131,7 +131,7 @@ export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: Sessi
                       onChange={(e) => setNazov(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && ulozit()}
                       placeholder={areal.nazov || 'napr. ZŠ Lipová – terénny prieskum'}
-                      className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#52A8DE]"
+                      className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#52A8DE]"
                       autoFocus
                     />
                   </div>
@@ -142,7 +142,7 @@ export function SessionManager({ areal, onLoad, onNew, isDirty, onSaved }: Sessi
                   <button
                     type="button"
                     onClick={ulozit}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#52A8DE] text-white rounded-lg text-sm font-medium hover:bg-[#52A8DE]/90 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#52A8DE] text-white rounded-xl text-sm font-medium hover:bg-[#52A8DE]/90 transition-colors"
                   >
                     <Save className="w-4 h-4" />
                     Uložiť aktuálny stav

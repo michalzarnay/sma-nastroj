@@ -14,7 +14,7 @@ export function ConditionalSection({ title, show, defaultOpen = true, children }
   if (!show) return null;
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="border border-gray-200 rounded-xl overflow-hidden">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
