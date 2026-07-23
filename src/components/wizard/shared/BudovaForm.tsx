@@ -242,11 +242,11 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
             tooltipText="Plocha strechy orientovaná na juh, juhovýchod alebo juhozápad, vhodná napr. na montáž solárnych panelov."
           />
           <NumberInput
-            label="Fasáda orientovaná na juh"
+            label="Fasáda orientovaná na J/JV/JZ"
             value={budova.fasadaOrientovanaNaJuh}
             onChange={(v) => onChange({ fasadaOrientovanaNaJuh: v })}
             unit="m²"
-            tooltipText="Plocha fasády (vrátane otvorov) orientovanej na juh – dôležité pre pasívne solárne zisky."
+            tooltipText="Plocha fasády (vrátane otvorov) orientovanej na juh, juhovýchod alebo juhozápad – dôležité pre pasívne solárne zisky."
           />
         </div>
       </Section>
