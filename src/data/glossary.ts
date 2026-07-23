@@ -135,11 +135,13 @@ export const glossary: Record<string, GlossaryEntry> = {
   },
   PCsietDef: {
     term: 'Počítačová sieť (LAN/Wi-Fi)',
-    definition: 'Prítomnosť dátovej siete v budove. Dôležité pre budúce inteligentné riadenie spotreby energie (smart grid).',
+    definition: 'Prítomnosť dátovej siete v budove. Existencia siete je predpokladom pre inštaláciu inteligentných meračov a diaľkového riadenia kúrenia alebo osvetlenia.',
+    example: 'Kabeláž s routerom alebo Wi-Fi prístupový bod dostupný v kanceláriách či technickej miestnosti.',
   },
   normovanaSpotreba: {
     term: 'Normovaná spotreba budovy',
-    definition: 'Štandardizovaná hodnota spotreby energie budovy prepočítaná na štandardné klimatické podmienky. Umožňuje porovnávať budovy medzi sebou.',
+    definition: 'Štandardizovaná hodnota spotreby energie budovy prepočítaná na štandardné klimatické podmienky. Umožňuje porovnávať budovy medzi sebou bez ohľadu na to, či bol rok chladnejší alebo teplejší.',
+    example: 'Budova A spotrebuje 80 kWh/m²/rok normovane — to je lepší výsledok ako budova B so 120 kWh/m²/rok, aj keď reálne merania môžu vyzerať inak kvôli počasiu.',
   },
   listVlastnictvaDef: {
     term: 'List vlastníctva',
@@ -154,6 +156,7 @@ export const glossary: Record<string, GlossaryEntry> = {
   projektovaDokumentaciaDef: {
     term: 'Projektová dokumentácia',
     definition: 'Súbor výkresov, technických správ a výpočtov, podľa ktorých sa budova stavia alebo rekonštruuje.',
+    whereToFind: 'U správcu budovy, v archíve organizácie alebo na príslušnom stavebnom úrade. Staršie budovy nemusia mať dokumentáciu v digitálnej podobe.',
   },
   BGOpatreniaDef: {
     term: 'B&G opatrenia',
