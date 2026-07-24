@@ -142,11 +142,11 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
             onChange={(key, value) => onChange({ [key]: value })}
           />
           <NumberInput
-            label="Časť zatienená stromami"
+            label="Časť zatienená drevinami"
             value={pozemok.priepustnaPlochaZatienena}
             onChange={(v) => onChange({ priepustnaPlochaZatienena: v })}
             unit="%" max={100}
-            tooltipText="Koľko percent prírodného (vsakovacieho) povrchu je zatienených korunami stromov."
+            tooltipText="Koľko percent prírodného (vsakovacieho) povrchu je zatienených drevinami. Dreviny zahŕňajú aj stromy, aj kry."
           />
         </ConditionalSection>
       </div>
