@@ -172,7 +172,11 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
               { key: 'polopriepustnaVodopriepustnaDlazba', label: 'vodopriepustná dlažba', tooltipKey: 'priepustnaDlazbaDef' },
               { key: 'polopriepustnaZivicaKremicityStrk', label: 'živica a kremičitý štrk' },
               { key: 'polopriepustnaMlatovyPovrch', label: 'mlatový povrch' },
-              { key: 'polopriepustnaStered', label: 'materiál STERED ID 250/05' },
+              {
+                key: 'polopriepustnaStered',
+                label: 'geomreža / priepustná dlažba (napr. STERED, Aquadesk)',
+                tooltipText: 'Priepustná plastová dlažba alebo geomreža umožňuje vsakovanie dažďovej vody. Komerčné názvy: STERED, Aquadesk a pod.',
+              },
               { key: 'polopriepustnaInyPovrch', label: 'iný povrch' },
             ]}
             values={{
