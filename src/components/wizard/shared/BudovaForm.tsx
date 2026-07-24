@@ -258,7 +258,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
         <div className="flex flex-col gap-1">
           <label className="text-sm font-medium text-gray-700 flex items-center gap-1">
             Povodňové riziko lokality
-            <Tooltip text="Ohodnoťte mieru povodňového rizika podľa polohy budovy: 1 = žiadne riziko (vysoko nad vodným tokom, nezáplavová zóna), 5 = vysoké riziko (blízko vodného toku, v záplavovej zóne Q100). Zdroj: mapy SVP (mpt.svp.sk)." />
+            <Tooltip text="Ohodnoťte mieru povodňového rizika podľa polohy budovy: 1 = žiadne riziko (vysoko nad vodným tokom, nezáplavová zóna), 5 = vysoké riziko (blízko vodného toku, v záplavovej zóne Q100). Zdroj: mapy SVP (mpt.svp.sk) – platí len pre budovy na Slovensku, pre budovy mimo SR (napr. v Česku) ohodnoťte riziko odhadom podľa miestnych podkladov." />
           </label>
           <div className="flex items-center gap-2">
             <select
@@ -277,7 +277,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
               type="button"
               onClick={fetchSvpRiziko}
               disabled={svpLoading}
-              title="Načítať povodňové riziko zo SVP"
+              title="Načítať povodňové riziko zo SVP (len pre budovy na Slovensku)"
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-blue-700 border border-blue-300 rounded-xl hover:bg-blue-50 disabled:opacity-50 transition-colors whitespace-nowrap"
             >
               {svpLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <MapPin className="w-3.5 h-3.5" />}
