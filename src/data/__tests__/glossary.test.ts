@@ -11,4 +11,11 @@ describe('glossary', () => {
     expect(glossary.polopriepustnaPlochaDef.term).toBe('Spevnený (polopriepustný) povrch');
     expect(glossary.spevnenaPlochaDef.term).toBe('Nepriepustný povrch');
   });
+
+  it('vyspádovanie má názov "Spevnená plocha vo svahu s sklonom" a nezmenené vysvetlenie (issue #109)', () => {
+    expect(glossary.vyspadovanyPozemokDef.term).toBe('Spevnená plocha vo svahu s sklonom');
+    expect(glossary.vyspadovanyPozemokDef.definition).toBe(
+      'Pozemok, ktorý nie je rovný – má svah alebo sklon. Voda po ňom steká smerom nadol.'
+    );
+  });
 });
