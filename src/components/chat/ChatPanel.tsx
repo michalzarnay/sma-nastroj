@@ -276,20 +276,37 @@ export function ChatPanel({ currentStep }: ChatPanelProps) {
     if (!text.trim()) return;
 
     const cas = new Date().toLocaleTimeString('sk', { hour: '2-digit', minute: '2-digit' });
+    const textOtazky = text.trim();
+    const textOdpovede = najdiOdpoved(textOtazky);
 
     const novaSprava: Sprava = {
       id: crypto.randomUUID(),
       odosielatel: 'user',
-      text: text.trim(),
+      text: textOtazky,
       cas,
     };
 
     const odpoved: Sprava = {
       id: crypto.randomUUID(),
       odosielatel: 'bot',
-      text: najdiOdpoved(text),
+      text: textOdpovede,
       cas,
     };
+
+    // Ak asistent nevie odpovedať, zaznamenaj otázku do Google Sheetu
+    if (textOdpovede.startsWith('Prepáčte')) {
+      fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: textOtazky,
+          step: currentStep,
+          timestamp: new Date().toISOString(),
+        }),
+      }).catch(() => {
+        // fire-and-forget – chyba nezobrazí sa používateľovi
+      });
+    }
 
     setSpravy((prev) => [...prev, novaSprava, odpoved]);
     setVstup('');
