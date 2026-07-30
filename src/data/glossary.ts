@@ -24,7 +24,7 @@ export const glossary: Record<string, GlossaryEntry> = {
     example: 'Asfalt, betón, klasická dlažba, budovy.',
   },
   vyspadovanyPozemokDef: {
-    term: 'Vyspádovaný pozemok',
+    term: 'Spevnená plocha vo svahu s sklonom',
     definition: 'Pozemok, ktorý nie je rovný – má svah alebo sklon. Voda po ňom steká smerom nadol.',
     example: 'Ak položíte loptu na zem a sama sa rozkotúľa, pozemok je vyspádovaný.',
   },

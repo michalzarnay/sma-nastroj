@@ -1,4 +1,5 @@
 import { Tooltip } from './Tooltip';
+import { FeedbackButton } from './FeedbackButton';
 
 interface NumberInputProps {
   label: string;
@@ -24,6 +25,7 @@ export function NumberInput({
       <label className="flex items-center text-sm font-medium text-gray-700">
         {label}
         {(tooltipKey || tooltipText) && <Tooltip glossaryKey={tooltipKey} text={tooltipText} />}
+        <FeedbackButton fieldLabel={label} />
       </label>
       <div className="relative">
         <input
