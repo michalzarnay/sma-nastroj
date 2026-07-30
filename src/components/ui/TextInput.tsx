@@ -1,4 +1,5 @@
 import { Tooltip } from './Tooltip';
+import { FeedbackButton } from './FeedbackButton';
 
 interface TextInputProps {
   label: string;
@@ -21,6 +22,7 @@ export function TextInput({
       <label className="flex items-center text-sm font-medium text-gray-700">
         {label}
         {(tooltipKey || tooltipText) && <Tooltip glossaryKey={tooltipKey} text={tooltipText} />}
+        <FeedbackButton fieldLabel={label} />
       </label>
       {multiline ? (
         <textarea
