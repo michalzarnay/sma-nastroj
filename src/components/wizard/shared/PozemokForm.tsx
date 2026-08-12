@@ -128,13 +128,11 @@ export function PozemokForm({ pozemok, onChange }: PozemokFormProps) {
             title="Podiel typov vegetácie na prírodnom (vsakovacom) povrchu"
             tooltipText="Rozdeľte prírodný (vsakovací) povrch podľa typu vegetácie. Súčet musí byť 100%."
             fields={[
-              { key: 'priepustnaPlochaHolaPoda', label: 'holá pôda' },
-              { key: 'priepustnaPlochaByliny', label: 'byliny (trávnik, lúka)' },
+              { key: 'priepustnaPlochaByliny', label: 'byliny (trávnik, lúka, príp. holá pôda dočasne)' },
               { key: 'priepustnaPlochaKry', label: 'kry' },
               { key: 'priepustnaPlochaStromy', label: 'stromy' },
             ]}
             values={{
-              priepustnaPlochaHolaPoda: pozemok.priepustnaPlochaHolaPoda,
               priepustnaPlochaByliny: pozemok.priepustnaPlochaByliny,
               priepustnaPlochaKry: pozemok.priepustnaPlochaKry,
               priepustnaPlochaStromy: pozemok.priepustnaPlochaStromy,

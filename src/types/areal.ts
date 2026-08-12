@@ -118,7 +118,7 @@ export interface Pozemok {
 
   // Priepustna plocha
   priepustnaPlochaCelkom: number; // m2
-  priepustnaPlochaHolaPoda: number; // %
+  priepustnaPlochaHolaPoda: number; // %, skryté z formulára (issue #128) — ponechané pre kompatibilitu dát a exportu
   priepustnaPlochaByliny: number; // %
   priepustnaPlochaKry: number; // %
   priepustnaPlochaStromy: number; // %
