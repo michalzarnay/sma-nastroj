@@ -6,7 +6,7 @@ function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
 
-function calculateMZI(areal: Areal): MZIScore {
+export function calculateMZI(areal: Areal): MZIScore {
   const pozemky = areal.pozemky;
   if (pozemky.length === 0) return { celkove: 0, podielPriepustnychPloch: 0, existujuceOpatrenia: 0, stavZelene: 0, potencialZlepsenia: 0 };
 
@@ -52,7 +52,7 @@ function calculateMZI(areal: Areal): MZIScore {
       // Trees and shrubs bonus
       zeleneScore += (p.priepustnaPlochaStromy / 100) * 8 * weight;
       zeleneScore += (p.priepustnaPlochaKry / 100) * 5 * weight;
-      zeleneScore += (p.priepustnaPlochaByliny / 100) * 3 * weight;
+      zeleneScore += ((p.priepustnaPlochaByliny + p.priepustnaPlochaHolaPoda) / 100) * 3 * weight;
       // Young trees bonus
       if (p.stromyPodielMladych > 20) zeleneScore += 3 * weight;
       // Penalty for unhealthy trees
