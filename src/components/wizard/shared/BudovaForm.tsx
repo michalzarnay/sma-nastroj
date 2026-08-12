@@ -428,7 +428,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
           value={budova.objemVyvetranehoPrezduchu}
           onChange={(v) => onChange({ objemVyvetranehoPrezduchu: v })}
           unit="m³/deň"
-          tooltipText="Celkový objem vzduchu, ktorý sa vymení vetraním za deň (projektovaná hodnota alebo meranie)."
+          tooltipText="Celkový objem vzduchu, ktorý sa vymení vetraním za deň. Reálna hodnota závisí od nastavenia (denný/nočný režim, s bypasom/bez bypasu a pod.) – zadajte priemerný odhad podľa bežného používania, nie projektované maximum."
         />
       </Section>
 
