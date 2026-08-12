@@ -18,4 +18,9 @@ describe('glossary', () => {
       'Pozemok, ktorý nie je rovný – má svah alebo sklon. Voda po ňom steká smerom nadol.'
     );
   });
+
+  it('kúrenie elektrinou vysvetľuje, že bivalentné dokurovanie pri tepelnom čerpadle sa nepočíta ako kúrenie elektrinou (issue #113)', () => {
+    expect(glossary.kurenieElektrinouDef.definition).toContain('tepelné čerpadlo');
+    expect(glossary.kurenieElektrinouDef.definition).toContain('NEPOVAŽUJE');
+  });
 });

@@ -475,6 +475,7 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
           onSpotreba={(v) => onChange({ kurenieElektrinaSpotreba: v })}
           spotrebaUnit="kWh"
           spotrebaTooltip="Uveďte iba ak sa elektrinou vykuruje. Ak sa nedá odlíšiť spotreba na vykurovanie, uveďte celkovú spotrebu."
+          tooltipKey="kurenieElektrinouDef"
         />
 
         {/* Tepelne cerpadlo */}
