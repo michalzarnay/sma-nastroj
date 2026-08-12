@@ -36,6 +36,8 @@ export function PDFUploadButton({
   const [status, setStatus] = useState<'idle' | 'loading' | 'preview' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [parsed, setParsed] = useState<ParsedDocument | null>(null);
+  // Indexy vybraných parciel z LV (checkboxy) – na začiatku žiadna nie je zaškrtnutá.
+  const [selectedParcely, setSelectedParcely] = useState<Set<number>>(new Set());
 
   const handleFile = async (file: File) => {
     if (file.type !== 'application/pdf') {
@@ -48,6 +50,7 @@ export function PDFUploadButton({
     try {
       const doc = await parseDocument(file);
       setParsed(doc);
+      setSelectedParcely(new Set());
       setStatus('preview');
     } catch (e) {
       console.error(e);
@@ -58,18 +61,42 @@ export function PDFUploadButton({
     if (inputRef.current) inputRef.current.value = '';
   };
 
+  const toggleParcela = (index: number) => {
+    setSelectedParcely((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
+  };
+
+  const toggleAllParcely = () => {
+    const count = parsed?.lv?.parcely.length ?? 0;
+    setSelectedParcely((prev) =>
+      prev.size === count ? new Set() : new Set(Array.from({ length: count }, (_, i) => i))
+    );
+  };
+
   const handleConfirm = () => {
-    if (parsed) onParsed(parsed);
+    if (parsed) {
+      const doc = parsed.lv
+        ? { ...parsed, lv: { ...parsed.lv, parcely: parsed.lv.parcely.filter((_, i) => selectedParcely.has(i)) } }
+        : parsed;
+      onParsed(doc);
+    }
     setStatus('idle');
     setParsed(null);
+    setSelectedParcely(new Set());
   };
 
   const handleClose = () => {
     setStatus('idle');
     setParsed(null);
+    setSelectedParcely(new Set());
   };
 
   const fields = parsed ? buildPreview(parsed) : [];
+  const parcely = parsed?.lv?.parcely ?? [];
   const wrongType =
     parsed && acceptTypes && !acceptTypes.includes(parsed.typ) && parsed.typ !== 'neznamy';
 
@@ -150,7 +177,7 @@ export function PDFUploadButton({
 
             {/* Extracted fields */}
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
-              {fields.length === 0 ? (
+              {fields.length === 0 && parcely.length === 0 ? (
                 <p className="text-sm text-gray-400 text-center py-4">
                   Z dokumentu sa nepodarilo extrahovať žiadne štruktúrované údaje.
                   <br />
@@ -158,15 +185,55 @@ export function PDFUploadButton({
                 </p>
               ) : (
                 <>
-                  <p className="text-xs text-gray-500 mb-2">
-                    Nasledujúce hodnoty sa vyplnia do formulára:
-                  </p>
-                  {fields.map((f, i) => (
-                    <div key={i} className="flex items-start justify-between gap-2 py-1.5 border-b border-gray-50 last:border-0">
-                      <span className="text-xs text-gray-500 flex-shrink-0">{f.label}</span>
-                      <span className="text-xs font-medium text-gray-800 text-right">{f.value}</span>
+                  {fields.length > 0 && (
+                    <>
+                      <p className="text-xs text-gray-500 mb-2">
+                        Nasledujúce hodnoty sa vyplnia do formulára:
+                      </p>
+                      {fields.map((f, i) => (
+                        <div key={i} className="flex items-start justify-between gap-2 py-1.5 border-b border-gray-50 last:border-0">
+                          <span className="text-xs text-gray-500 flex-shrink-0">{f.label}</span>
+                          <span className="text-xs font-medium text-gray-800 text-right">{f.value}</span>
+                        </div>
+                      ))}
+                    </>
+                  )}
+
+                  {parcely.length > 0 && (
+                    <div className={fields.length > 0 ? 'pt-3 mt-3 border-t border-gray-100' : ''}>
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-xs text-gray-500">
+                          Vyber parcely, ktoré sa majú vyplniť do formulára:
+                        </p>
+                        <button
+                          type="button"
+                          onClick={toggleAllParcely}
+                          className="text-xs font-medium text-purple-600 hover:text-purple-700 flex-shrink-0"
+                        >
+                          {selectedParcely.size === parcely.length ? 'Zrušiť výber' : 'Vybrať všetky'}
+                        </button>
+                      </div>
+                      <div className="space-y-1 max-h-40 overflow-y-auto border border-gray-100 rounded-xl p-2">
+                        {parcely.map((p, i) => (
+                          <label
+                            key={i}
+                            className="flex items-center gap-2 py-1 px-1 rounded-lg hover:bg-gray-50 cursor-pointer"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedParcely.has(i)}
+                              onChange={() => toggleParcela(i)}
+                              className="w-3.5 h-3.5 rounded border-gray-300 text-purple-600 focus:ring-purple-500 flex-shrink-0"
+                            />
+                            <span className="text-xs font-medium text-gray-800">{p.cislo}</span>
+                            <span className="text-xs text-gray-400">
+                              {p.vymeraMsq.toLocaleString('sk')} m² – {p.druh}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
                     </div>
-                  ))}
+                  )}
                 </>
               )}
             </div>
@@ -183,7 +250,7 @@ export function PDFUploadButton({
               <button
                 type="button"
                 onClick={handleConfirm}
-                disabled={fields.length === 0}
+                disabled={fields.length === 0 && parcely.length === 0}
                 className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium text-white bg-purple-600 rounded-xl hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <CheckCircle className="w-4 h-4" />
@@ -209,9 +276,6 @@ function buildPreview(doc: ParsedDocument): FieldPreview[] {
     if (lv.obec) fields.push({ label: 'Obec', value: lv.obec });
     if (lv.okres) fields.push({ label: 'Okres', value: lv.okres });
     if (lv.katastralneUzemie) fields.push({ label: 'Katastrálne územie', value: lv.katastralneUzemie });
-    lv.parcely.forEach((p) =>
-      fields.push({ label: `Parcela ${p.cislo}`, value: `${p.vymeraMsq.toLocaleString('sk')} m² – ${p.druh}` })
-    );
   }
 
   if (doc.certifikat) {
