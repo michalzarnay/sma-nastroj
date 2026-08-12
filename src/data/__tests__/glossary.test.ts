@@ -23,4 +23,10 @@ describe('glossary', () => {
     expect(glossary.kurenieElektrinouDef.definition).toContain('tepelné čerpadlo');
     expect(glossary.kurenieElektrinouDef.definition).toContain('NEPOVAŽUJE');
   });
+
+  it('trieda energetickej hospodárnosti má vysvetlivku so škálou A0–G (issue #117)', () => {
+    expect(glossary.energetickaTriedaDef.term).toBe('Trieda energetickej hospodárnosti');
+    expect(glossary.energetickaTriedaDef.definition).toContain('A0');
+    expect(glossary.energetickaTriedaDef.definition).toContain('G');
+  });
 });

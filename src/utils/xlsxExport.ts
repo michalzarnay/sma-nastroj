@@ -109,6 +109,7 @@ function sheetPozemky(areal: Areal): (string | number)[][] {
 function sheetBudovy(areal: Areal): (string | number)[][] {
   const header = [
     'Budova', 'Parcela', 'Plocha pôdorysu (m²)', 'NUS (m²)', 'Kategória',
+    'Trieda energetickej hospodárnosti',
     // Povodne
     'Povodňové riziko (1–5)',
     'Zaplavená v posl. rokoch', 'Časť pod terénom', 'Tech. zariadenia v suteréne',
@@ -146,6 +147,7 @@ function sheetBudovy(areal: Areal): (string | number)[][] {
   const rows = areal.budovy.map((b, i) => [
     b.nazov || `Budova ${i + 1}`, b.parcela, b.plochaPodorysu, b.uzitkovaPlochaNUS,
     b.kategoriaBudovy ?? '',
+    b.energetickaTrieda ?? '',
     b.povodnovoRiziko || '',
     yn(b.budovaZaplavenaPoslednychRokov), yn(b.castPodTerenomBezOdcerpania),
     yn(b.technologickeZariadenieSuteren), yn(b.kanalizacneVpusteNadSuterenom),
