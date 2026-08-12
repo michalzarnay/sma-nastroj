@@ -1,8 +1,10 @@
+import { useMemo } from 'react';
 import { Header } from '../layout/Header';
 import { Footer } from '../layout/Footer';
 import { StepNavigation } from '../layout/StepNavigation';
 import { useWizard } from '../../hooks/useWizard';
 import { useArealState } from '../../hooks/useArealState';
+import { useRecommendations } from '../../hooks/useRecommendations';
 import { Step1_Uvod } from './Step1_Uvod';
 import { Step2_Pozemky } from './Step2_Pozemky';
 import { Step3_Budovy } from './Step3_Budovy';
@@ -17,6 +19,13 @@ import { FilePlus } from 'lucide-react';
 export function WizardContainer() {
   const wizard = useWizard();
   const arealState = useArealState();
+  const recommendations = useRecommendations(arealState.areal);
+  const step6Unlocked = recommendations.length > 0;
+  const effectiveVisitedSteps = useMemo(() => {
+    const steps = new Set([...wizard.visitedSteps, 1, 2, 3, 4, 5]);
+    if (step6Unlocked) steps.add(6);
+    return [...steps];
+  }, [wizard.visitedSteps, step6Unlocked]);
 
   const renderStep = () => {
     switch (wizard.currentStep) {
@@ -86,7 +95,8 @@ export function WizardContainer() {
         progress={wizard.progress}
         currentStep={wizard.currentStep}
         totalSteps={wizard.totalSteps}
-        visitedSteps={wizard.visitedSteps}
+        visitedSteps={effectiveVisitedSteps}
+        stepTooltips={step6Unlocked ? undefined : { 6: 'Vyplňte aspoň jeden pozemok alebo budovu – po zadaní dát sa karta odomkne.' }}
         onGoTo={wizard.goToStep}
         extraActions={
           <>
@@ -125,7 +135,7 @@ export function WizardContainer() {
             onNext={wizard.nextStep}
             onPrev={wizard.prevStep}
             onGoTo={wizard.goToStep}
-            visitedSteps={wizard.visitedSteps}
+            visitedSteps={effectiveVisitedSteps}
             canProceed={wizard.currentStep !== 1 || step1CanProceed(arealState.areal)}
           />
         </div>

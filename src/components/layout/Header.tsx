@@ -10,9 +10,10 @@ interface HeaderProps {
   visitedSteps: number[];
   onGoTo: (step: number) => void;
   extraActions?: ReactNode;
+  stepTooltips?: Record<number, string>;
 }
 
-export function Header({ currentStep, totalSteps, visitedSteps, onGoTo, extraActions }: HeaderProps) {
+export function Header({ currentStep, totalSteps, visitedSteps, onGoTo, extraActions, stepTooltips }: HeaderProps) {
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
       <div className="max-w-4xl mx-auto px-4 py-3 space-y-2">
@@ -43,7 +44,7 @@ export function Header({ currentStep, totalSteps, visitedSteps, onGoTo, extraAct
                 <button
                   onClick={() => isClickable && onGoTo(step.id)}
                   disabled={!isClickable}
-                  title={step.nazov}
+                  title={stepTooltips?.[step.id] ?? step.nazov}
                   className={`flex items-center gap-1 w-full rounded-xl px-1.5 py-1 text-left transition-colors min-w-0
                     ${isActive
                       ? 'bg-[#52A8DE] text-white cursor-default'
