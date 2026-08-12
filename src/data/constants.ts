@@ -69,6 +69,19 @@ export const PD_FORMS = [
   { value: 2, label: 'elektronická' },
 ] as const;
 
+// Energy performance classes (podľa energetického certifikátu)
+export const ENERGY_CLASSES = [
+  { value: '', label: 'neuvedené' },
+  { value: 'A0', label: 'A0' },
+  { value: 'A1', label: 'A1' },
+  { value: 'B', label: 'B' },
+  { value: 'C', label: 'C' },
+  { value: 'D', label: 'D' },
+  { value: 'E', label: 'E' },
+  { value: 'F', label: 'F' },
+  { value: 'G', label: 'G' },
+] as const;
+
 // Slovak regions
 export const REGIONS = [
   'Bratislava', 'Záhorie', 'Podunajsko', 'Považie', 'Ponitrie',

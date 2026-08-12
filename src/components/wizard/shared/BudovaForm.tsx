@@ -1,5 +1,5 @@
 import { Budova } from '../../../types/areal';
-import { ROOF_TYPES, INSULATION_LEVELS, YES_NO, SEWAGE_TYPES, GUTTER_TYPES, COAL_WOOD_TYPES, PD_LEVELS, PD_FORMS, FUEL_CONVERSIONS } from '../../../data/constants';
+import { ROOF_TYPES, INSULATION_LEVELS, YES_NO, SEWAGE_TYPES, GUTTER_TYPES, COAL_WOOD_TYPES, PD_LEVELS, PD_FORMS, ENERGY_CLASSES, FUEL_CONVERSIONS } from '../../../data/constants';
 import { TextInput } from '../../ui/TextInput';
 import { NumberInput } from '../../ui/NumberInput';
 import { SelectCard } from '../../ui/SelectCard';
@@ -36,6 +36,7 @@ function applyDocToBudova(doc: ParsedDocument, onChange: (data: Partial<Budova>)
   if (doc.certifikat) {
     const c = doc.certifikat;
     if (c.celkovaPlochaMsq) updates.uzitkovaPlochaNUS = c.celkovaPlochaMsq;
+    if (c.energetickaTrieda) updates.energetickaTrieda = c.energetickaTrieda;
   }
 
   if (doc.audit) {
@@ -760,6 +761,13 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
               label="Číslo energetického certifikátu"
               value={budova.energetickyCertifikatCislo}
               onChange={(v) => onChange({ energetickyCertifikatCislo: v })}
+            />
+            <SelectCard
+              label="Trieda energetickej hospodárnosti"
+              options={ENERGY_CLASSES}
+              value={budova.energetickaTrieda ?? ''}
+              onChange={(v) => onChange({ energetickaTrieda: v === '' ? undefined : String(v) })}
+              tooltipKey="energetickaTriedaDef"
             />
           </ConditionalSection>
         </div>

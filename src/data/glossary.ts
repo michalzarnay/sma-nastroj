@@ -62,6 +62,12 @@ export const glossary: Record<string, GlossaryEntry> = {
     definition: 'Odborné posúdenie energetickej spotreby budovy s návrhmi na zníženie spotreby.',
     whereToFind: 'Ak bol spracovaný, nájdete ho u správcu budovy alebo v archíve projektovej dokumentácie.',
   },
+  energetickaTriedaDef: {
+    term: 'Trieda energetickej hospodárnosti',
+    definition: 'Zaradenie budovy podľa energetického certifikátu na škále A0 (najúspornejšia, napr. pasívny dom) až G (najnáročnejšia).',
+    example: 'Pasívny dom má mernú potrebu tepla na vykurovanie približne 15–20 kWh/m²/rok (trieda A0), nízkoenergetický dom okolo 30 kWh/m²/rok (trieda A1/B).',
+    whereToFind: 'Nájdete ju na titulnej strane energetického certifikátu budovy.',
+  },
   retenciaVodyDef: {
     term: 'Retencia vody',
     definition: 'Schopnosť areálu zadržať dažďovú vodu a spomaliť jej odtok do kanalizácie alebo vodného toku.',

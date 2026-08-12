@@ -67,6 +67,8 @@ export function useRecommendations(areal: Areal): Odporucanie[] {
     let hasUhlieDrevo = false;
     let hasBezLED = false;
     let hasBezTermohlavic = false;
+    let hasPoorEnergyClass = false;
+    let poorEnergyClassLabel = '';
 
     for (const b of areal.budovy) {
       totalStrechaPlochaBudov += b.plochaPodorysu;
@@ -85,6 +87,10 @@ export function useRecommendations(areal: Areal): Odporucanie[] {
       if (b.kurenieUhlimDrevom > 0) hasUhlieDrevo = true;
       if (b.osvetlenieLED < 50) hasBezLED = true;
       if (b.termohlavice === 0 && (b.kurenePlynom === 1 || b.tepelneCerpadlo === 1)) hasBezTermohlavic = true;
+      if (b.energetickaTrieda && ['D', 'E', 'F', 'G'].includes(b.energetickaTrieda)) {
+        hasPoorEnergyClass = true;
+        poorEnergyClassLabel = b.energetickaTrieda;
+      }
 
       // Check for old heating
       if (b.kurenePlynom === 1 && b.kureniePlynRokInstalacie > 0) {
@@ -126,8 +132,13 @@ export function useRecommendations(areal: Areal): Odporucanie[] {
       addRec(recs, 'solarne-kolektory', 'stredná', 'Areál nevyužíva solárne kolektory na ohrev vody.');
     }
 
-    if (!hasTC && (hasStareKurenie || hasUhlieDrevo)) {
-      addRec(recs, 'tepelne-cerpadlo-vzduch', 'vysoká', hasUhlieDrevo ? 'Areál používa uhlie/drevo na vykurovanie.' : 'Vykurovací systém je starší ako 15 rokov.');
+    if (!hasTC && (hasStareKurenie || hasUhlieDrevo || hasPoorEnergyClass)) {
+      const dovod = hasUhlieDrevo
+        ? 'Areál používa uhlie/drevo na vykurovanie.'
+        : hasStareKurenie
+          ? 'Vykurovací systém je starší ako 15 rokov.'
+          : `Budova je podľa energetického certifikátu v triede ${poorEnergyClassLabel}.`;
+      addRec(recs, 'tepelne-cerpadlo-vzduch', 'vysoká', dovod);
     }
 
     if (hasExistingFV && !hasBateria) {
@@ -135,8 +146,11 @@ export function useRecommendations(areal: Areal): Odporucanie[] {
     }
 
     // Energia recommendations
-    if (hasBezZateplenia) {
-      addRec(recs, 'zateplenie-fasady', 'vysoká', 'Niektoré budovy nemajú zateplenú fasádu.');
+    if (hasBezZateplenia || hasPoorEnergyClass) {
+      const dovod = hasBezZateplenia
+        ? 'Niektoré budovy nemajú zateplenú fasádu.'
+        : `Budova je podľa energetického certifikátu v triede ${poorEnergyClassLabel}.`;
+      addRec(recs, 'zateplenie-fasady', 'vysoká', dovod);
     }
 
     // Roof insulation
@@ -148,16 +162,22 @@ export function useRecommendations(areal: Areal): Odporucanie[] {
       addRec(recs, 'zateplenie-strechy', 'vysoká', 'Niektoré budovy nemajú zateplenú strechu.');
     }
 
-    if (hasStareOkna) {
-      addRec(recs, 'vymena-okien', 'vysoká', 'Niektoré budovy majú menej ako 50% termoizolačných okien.');
+    if (hasStareOkna || hasPoorEnergyClass) {
+      const dovod = hasStareOkna
+        ? 'Niektoré budovy majú menej ako 50% termoizolačných okien.'
+        : `Budova je podľa energetického certifikátu v triede ${poorEnergyClassLabel}.`;
+      addRec(recs, 'vymena-okien', 'vysoká', dovod);
     }
 
     if (hasBezRekuperacie) {
       addRec(recs, 'rekuperacia', 'stredná', 'Niektoré budovy nemajú rekuperáciu vzduchu.');
     }
 
-    if (hasStareKurenie) {
-      addRec(recs, 'vymena-vykurovania', 'vysoká', 'Vykurovací systém je starší ako 15 rokov.');
+    if (hasStareKurenie || hasPoorEnergyClass) {
+      const dovod = hasStareKurenie
+        ? 'Vykurovací systém je starší ako 15 rokov.'
+        : `Budova je podľa energetického certifikátu v triede ${poorEnergyClassLabel}.`;
+      addRec(recs, 'vymena-vykurovania', 'vysoká', dovod);
     }
 
     if (hasBezTermohlavic) {

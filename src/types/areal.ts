@@ -316,6 +316,7 @@ export interface Budova {
   // Projektová dokumentácia
   energetickyCertifikat: 0 | 1;
   energetickyCertifikatCislo: string;
+  energetickaTrieda?: string; // A0–G, voliteľné, podľa energetického certifikátu
   energetickyAudit: 0 | 1;
   energetickyAuditRok: number;
   pd1Nazov: string; pd1Uroven: number; pd1Rok: number; pd1Forma: 1 | 2;
