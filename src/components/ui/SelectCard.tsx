@@ -1,3 +1,5 @@
+import { Tooltip } from './Tooltip';
+
 interface SelectOption {
   value: number | string;
   label: string;
@@ -15,11 +17,14 @@ interface SelectCardProps {
 }
 
 export function SelectCard({
-  label, options, value, onChange, layout = 'horizontal',
+  label, options, value, onChange, tooltipKey, tooltipText, layout = 'horizontal',
 }: SelectCardProps) {
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
+      <label className="block text-sm font-medium text-gray-700 flex items-center">
+        {label}
+        {(tooltipKey || tooltipText) && <Tooltip glossaryKey={tooltipKey} text={tooltipText} />}
+      </label>
       <div className={`flex gap-2 ${layout === 'vertical' ? 'flex-col' : 'flex-wrap'}`}>
         {options.map((option) => {
           const isSelected = value === option.value;

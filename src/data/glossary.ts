@@ -43,6 +43,10 @@ export const glossary: Record<string, GlossaryEntry> = {
     definition: 'Panely, ktoré zachytávajú teplo slnečného žiarenia a používajú ho na ohrev vody. Na rozdiel od fotovoltiky nevyrábajú elektrinu, ale teplo.',
     example: 'Tmavé panely na streche napojené na bojler – slnko ohrieva vodu na kúpanie alebo vykurovanie.',
   },
+  kurenieElektrinouDef: {
+    term: 'Kúrenie elektrinou',
+    definition: "Zaškrtnite 'kúrenie elektrikou' len ak má nehnuteľnosť samostatný elektrický zdroj kúrenia (napr. priamovýhrevné panely, elektrické kotly, akumulačné kachle) mimo tepelného čerpadla. Ak má nehnuteľnosť tepelné čerpadlo s bivalentným elektrickým dokurovaním (bežné napr. pri veľkých mrazoch alebo dezinfekcii TÚV), toto sa NEPOVAŽUJE za 'kúrenie elektrikou' — počíta sa ako tepelné čerpadlo.",
+  },
   tepelneCerpadloDef: {
     term: 'Tepelné čerpadlo',
     definition: 'Zariadenie, ktoré odoberá teplo z okolitého prostredia (vzduch, zem, voda) a používa ho na vykurovanie budovy alebo ohrev vody.',
