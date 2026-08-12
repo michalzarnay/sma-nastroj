@@ -15,9 +15,9 @@ export const BUILDING_CATEGORIES = {
 
 // Roof types
 export const ROOF_TYPES = [
-  { value: 1, label: 'plochá strecha (do 10°)', description: 'Strecha so sklonom do 10 stupňov' },
-  { value: 2, label: 'šikmá strecha (10° – 45°)', description: 'Strecha so sklonom medzi 10 a 45 stupňami' },
-  { value: 3, label: 'strmá strecha (nad 45°)', description: 'Strecha so sklonom nad 45 stupňov' },
+  { value: 1, label: 'plochá alebo málo šikmá strecha (do 15°)', description: 'Strecha so sklonom do 15 stupňov' },
+  { value: 2, label: 'šikmá strecha (16° – 35°)', description: 'Strecha so sklonom medzi 16 a 35 stupňami' },
+  { value: 3, label: 'strmá strecha (nad 35°)', description: 'Strecha so sklonom nad 35 stupňov' },
 ] as const;
 
 // Insulation levels
