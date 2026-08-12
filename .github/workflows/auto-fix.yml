@@ -66,7 +66,13 @@ jobs:
 
             Ak je problém aj po spresnení nejednoznačný alebo zasahuje zakázanú
             oblasť, neopravuj — iba napíš do issue komentár a počkaj na človeka.
-          claude_args: "--max-turns 50 --allowedTools Read,Edit,Write,Bash(gh:*),Bash(git:*),Bash(npm:*)"
+
+            DÔLEŽITÉ: Tento beh je jednorazový a neinteraktívny — nikto ho
+            nebude "budiť" ani naň nadväzovať. NEPOUŽÍVAJ nástroje na
+            spúšťanie subagentov na pozadí ani plánovanie ďalšieho behu
+            (napr. Agent, Task, ScheduleWakeup, Workflow). Prieskum kódu
+            rob priamo cez Read/Grep/Glob/Bash v tomto behu.
+          claude_args: "--max-turns 50 --allowedTools Read,Edit,Write,Bash(gh:*),Bash(git:*),Bash(npm:*) --disallowedTools Agent,Task,ScheduleWakeup,Workflow"
           show_full_output: true
 
       - name: Pridaj skip-e2e ak len textové zmeny
