@@ -91,6 +91,7 @@ function migrateBudova(raw: unknown): Budova {
     zelenaStrechaBudovModrozelena: d.zelenaStrechaBudovModrozelena ?? 0,
     zelenaStrechaBudovStrkova: d.zelenaStrechaBudovStrkova ?? 0,
     zelenaStenaBudov: d.zelenaStenaBudov ?? 0,
+    vystavbaPred1980: d.vystavbaPred1980 ?? 0,
   };
 }
 

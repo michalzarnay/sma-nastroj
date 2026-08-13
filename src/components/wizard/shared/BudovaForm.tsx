@@ -144,6 +144,13 @@ export function BudovaForm({ budova, onChange, arealAdresa }: BudovaFormProps) {
             {budova.kategoriaBudovy === 'L' && ' (nad 1 500 m²)'}
           </div>
         )}
+        <SelectCard
+          label="Je rok výstavby budovy pred rokom 1980?"
+          options={YES_NO}
+          value={budova.vystavbaPred1980}
+          onChange={(v) => onChange({ vystavbaPred1980: v as 0 | 1 })}
+          tooltipText="Staršie budovy (pred rokom 1980) majú spravidla vyšší potenciál na zníženie energetickej náročnosti."
+        />
 
         <h4 className="text-xs font-semibold text-gray-600 mt-4">Využitie objektu</h4>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
