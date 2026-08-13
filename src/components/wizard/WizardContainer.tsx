@@ -14,11 +14,14 @@ import { Step6_Vysledky } from './Step6_Vysledky';
 import { ChatPanel } from '../chat/ChatPanel';
 import { step1CanProceed } from '../../utils/stepValidation';
 import { SessionManager } from '../sessions/SessionManager';
-import { FilePlus } from 'lucide-react';
+import { AreaComparisonView } from '../comparison/AreaComparisonView';
+import { FilePlus, GitCompare } from 'lucide-react';
+import { useState } from 'react';
 
 export function WizardContainer() {
   const wizard = useWizard();
   const arealState = useArealState();
+  const [zobrazitPorovnanie, setZobrazitPorovnanie] = useState(false);
   const recommendations = useRecommendations(arealState.areal);
   const step6Unlocked = recommendations.length > 0;
   const effectiveVisitedSteps = useMemo(() => {
@@ -122,9 +125,25 @@ export function WizardContainer() {
               isDirty={arealState.isDirty}
               onSaved={arealState.markSaved}
             />
+            <button
+              type="button"
+              title="Porovnanie areálov"
+              onClick={() => setZobrazitPorovnanie(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+            >
+              <GitCompare className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Porovnanie areálov</span>
+            </button>
           </>
         }
       />
+
+      {zobrazitPorovnanie && (
+        <AreaComparisonView
+          aktualnyAreal={arealState.areal}
+          onClose={() => setZobrazitPorovnanie(false)}
+        />
+      )}
 
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-6">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">

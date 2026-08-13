@@ -319,6 +319,7 @@ export interface Budova {
   energetickaTrieda?: string; // A0–G, voliteľné, podľa energetického certifikátu
   energetickyAudit: 0 | 1;
   energetickyAuditRok: number;
+  vystavbaPred1980: 0 | 1; // rok výstavby budovy pred rokom 1980 (voliteľné)
   pd1Nazov: string; pd1Uroven: number; pd1Rok: number; pd1Forma: 1 | 2;
   pd2Nazov: string; pd2Uroven: number; pd2Rok: number; pd2Forma: 1 | 2;
   pd3Nazov: string; pd3Uroven: number; pd3Rok: number; pd3Forma: 1 | 2;
@@ -524,6 +525,7 @@ export function createEmptyBudova(): Budova {
     energetickyCertifikatCislo: '',
     energetickyAudit: 0,
     energetickyAuditRok: 0,
+    vystavbaPred1980: 0,
     pd1Nazov: '', pd1Uroven: 0, pd1Rok: 0, pd1Forma: 1,
     pd2Nazov: '', pd2Uroven: 0, pd2Rok: 0, pd2Forma: 1,
     pd3Nazov: '', pd3Uroven: 0, pd3Rok: 0, pd3Forma: 1,
